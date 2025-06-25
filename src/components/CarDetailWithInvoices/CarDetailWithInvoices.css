@@ -1,0 +1,581 @@
+.car-detail-page {
+  padding: 2rem 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+}
+
+/* Filter Options Buttons */
+.car-filter-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+}
+
+.filter-button {
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(135deg, #0062cc, #0099ff);
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(0, 98, 204, 0.2);
+  min-width: 140px;
+  text-align: center;
+}
+
+.filter-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 98, 204, 0.3);
+}
+
+.filter-button.active {
+  background: linear-gradient(135deg, #004a99, #0056b3);
+}
+
+/* Modal specific button */
+.filter-button.modal {
+  background: linear-gradient(135deg, #9c27b0, #673ab7);
+}
+
+.filter-button.modal:hover, .filter-button.modal.active {
+  background: linear-gradient(135deg, #7b1fa2, #512da8);
+}
+
+/* Colors specific button */
+.filter-button.colors {
+  background: linear-gradient(135deg, #ff9800, #f44336);
+}
+
+.filter-button.colors:hover, .filter-button.colors.active {
+  background: linear-gradient(135deg, #f57c00, #d32f2f);
+}
+
+/* Loan specific button */
+.filter-button.loan {
+  background: linear-gradient(135deg, #4caf50, #009688);
+}
+
+.filter-button.loan:hover, .filter-button.loan.active {
+  background: linear-gradient(135deg, #388e3c, #00796b);
+}
+
+@media (max-width: 768px) {
+  .car-filter-options {
+    gap: 0.8rem;
+  }
+  
+  .filter-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 576px) {
+  .car-filter-options {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.6rem;
+  }
+  
+  .filter-button {
+    width: 100%;
+  }
+}
+
+.car-detail-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.car-detail-container.elevated {
+  margin-top: -20px; /* Shift upward for better layout balance */
+  transform: translateY(-10px);
+}
+
+.car-image-section {
+  flex: 1;
+  min-width: 300px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.car-detail-image {
+  width: 100%;
+  max-width: 500px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+}
+
+.car-name {
+  margin-top: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+}
+
+/* Invoice Section */
+.invoice-section {
+  flex: 2;
+  min-width: 550px;
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+}
+
+.invoice-header {
+  text-align: center;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #ccc;
+  margin-bottom: 1.5rem;
+}
+
+.invoice-header h2 {
+  font-size: 1.6rem;
+  color: #333;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+/* Bank Selection Styles */
+.bank-selection {
+  margin-bottom: 1.5rem;
+}
+
+.bank-selection h3 {
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: #333;
+}
+
+.bank-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+/* Updated bank button styles with different colors */
+.bank-button {
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  min-width: 110px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* SBI Bank button (blue) */
+.bank-button:nth-child(1) {
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+}
+
+.bank-button:nth-child(1):hover, 
+.bank-button:nth-child(1).active {
+  background: linear-gradient(135deg, #1e40af, #1e3a8a);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.25);
+}
+
+/* AU Bank button (orange) */
+.bank-button:nth-child(2) {
+  background: linear-gradient(135deg, #d97706, #b45309);
+}
+
+.bank-button:nth-child(2):hover,
+.bank-button:nth-child(2).active {
+  background: linear-gradient(135deg, #b45309, #92400e);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(217, 119, 6, 0.25);
+}
+
+/* Union Bank button (green) */
+.bank-button:nth-child(3) {
+  background: linear-gradient(135deg, #059669, #047857);
+}
+
+.bank-button:nth-child(3):hover,
+.bank-button:nth-child(3).active {
+  background: linear-gradient(135deg, #047857, #065f46);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(5, 150, 105, 0.25);
+}
+
+/* IndusInd Bank button (purple) */
+.bank-button:nth-child(4) {
+  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+}
+
+.bank-button:nth-child(4):hover,
+.bank-button:nth-child(4).active {
+  background: linear-gradient(135deg, #6d28d9, #5b21b6);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(124, 58, 237, 0.25);
+}
+
+.invoice-content {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.invoice-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.invoice-table td {
+  padding: 0.7rem 1rem;
+  border: 1px solid #ddd;
+  font-size: 0.95rem;
+}
+
+.invoice-table tr:nth-child(even) {
+  background-color: #f5f5f5;
+}
+
+/* Special styling for highlighted rows */
+.invoice-model-row {
+  background-color: #f0f8ff !important;
+}
+
+.highlight-cell {
+  background-color: #e6f7c4;
+  font-weight: 600;
+}
+
+.roi-row td:last-child {
+  background-color: #e6e6fa;
+  color: #0056b3;
+  font-weight: 600;
+}
+
+.on-road-row td:last-child {
+  color: #0056b3;
+  font-weight: 600;
+}
+
+.offers-row {
+  background-color: #e6ffe6 !important;
+}
+
+.emi-row {
+  background-color: #fff2cc !important;
+}
+
+.emi-row td:last-child {
+  font-weight: 700;
+  color: #d32f2f;
+}
+
+/* Car variants section */
+.car-variants-section {
+  margin-top: 2rem;
+}
+
+.car-variants-section h3 {
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.car-variants-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.variant-card {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.variant-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+}
+
+.variant-card.active {
+  border: 2px solid #0056b3;
+}
+
+.variant-image-container {
+  height: 130px;
+  overflow: hidden;
+}
+
+.variant-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.variant-card:hover img {
+  transform: scale(1.05);
+}
+
+.variant-details {
+  padding: 1rem;
+}
+
+.variant-details h4 {
+  margin: 0;
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.variant-details p {
+  margin: 0.5rem 0 0;
+  color: #0056b3;
+  font-weight: 500;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  font-size: 1.5rem;
+  color: #666;
+}
+
+/* Loading overlay and spinner */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 86, 179, 0.2);
+  border-top-color: #0056b3;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .car-detail-container {
+    flex-direction: column;
+  }
+  
+  .car-image-section, .invoice-section {
+    width: 100%;
+  }
+  
+  .invoice-section {
+    min-width: 100%;
+  }
+  
+  .bank-buttons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .invoice-table td {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.85rem;
+  }
+  
+  .car-variants-grid {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  }
+  
+  .bank-button {
+    padding: 0.5rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .car-variants-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+  
+  .bank-buttons {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+}
+
+/* Loading spinner animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Download Section Styles */
+.download-section {
+  margin: 1.5rem 0 0 0;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+}
+
+.download-section h3 {
+  color: #1e293b;
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.download-section h3::before {
+  content: '⬇️';
+  font-size: 0.9rem;
+}
+
+.download-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.download-button {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.download-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.download-button:not(:disabled):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.pdf-button {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  color: white;
+  border: 2px solid transparent;
+}
+
+.pdf-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+  border-color: #fca5a5;
+}
+
+.excel-button {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  color: white;
+  border: 2px solid transparent;
+}
+
+.excel-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+  border-color: #6ee7b7;
+}
+
+
+
+.download-icon {
+  font-size: 1.1rem;
+  display: inline-block;
+}
+
+.download-spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid #ffffff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Responsive styles for download buttons */
+@media (max-width: 768px) {
+  .download-buttons {
+    gap: 0.5rem;
+  }
+  
+  .download-button {
+    min-width: 90px;
+  }
+  
+  .download-section {
+    margin: 1rem 0 0 0;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .download-section h3 {
+    font-size: 0.9rem;
+  }
+  
+  .download-button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+    min-width: 80px;
+  }
+  
+  .download-buttons {
+    gap: 0.5rem;
+  }
+} 

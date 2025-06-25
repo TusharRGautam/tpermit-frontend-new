@@ -1,0 +1,34 @@
+.logos-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  background-color: #f8f9fa;
+}
+
+.logos-section {
+  flex: 1;
+  min-width: 300px;
+}
+
+/* Override individual section backgrounds */
+.logos-section .brand-logos-section,
+.logos-section .bank-logos-section {
+  background-color: transparent;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .logos-container {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .logos-section {
+    width: 100%;
+  }
+} 

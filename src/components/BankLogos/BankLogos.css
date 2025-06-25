@@ -1,0 +1,97 @@
+.bank-logos-section {
+  padding: 2rem 0;
+  background-color: #f8f9fa;
+}
+
+.bank-logos-section .section-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.bank-logos-section .section-subtitle {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  text-align: center;
+  position: relative;
+  display: inline-block;
+}
+
+.bank-logos-section .section-subtitle::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -8px;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background-color: #0056b3;
+}
+
+.bank-logos-section .brands-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.bank-logos-section .brand-logo {
+  width: 100px;
+  height: 60px;
+  padding: 0.5rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bank-logos-section .brand-logo:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.bank-logos-section .brand-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: grayscale(0.3);
+  transition: filter 0.3s ease;
+}
+
+.bank-logos-section .brand-logo:hover img {
+  filter: grayscale(0);
+}
+
+@media (max-width: 768px) {
+  .bank-logos-section .section-subtitle {
+    font-size: 1.5rem;
+  }
+
+  .bank-logos-section .brand-logo {
+    width: 80px;
+    height: 50px;
+  }
+  
+  .bank-logos-section .brands-container {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .bank-logos-section .brand-logo {
+    width: 70px;
+    height: 45px;
+  }
+  
+  .bank-logos-section .brands-container {
+    gap: 1rem;
+  }
+} 
