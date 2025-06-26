@@ -1,5 +1,13 @@
 // Central API service for all backend communications
-const API_BASE_URL = 'http://localhost:5000/api';
+
+// OLD: Localhost configuration (commented out)
+// const API_BASE_URL = 'http://localhost:5000/api';
+
+// NEW: Production configuration with backend subdomain
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 
+                     (window.location.origin.includes('localhost') ? 
+                     'http://localhost:5000/api' : 
+                     'https://backend.aswcars.com/api');
 
 class ApiService {
   constructor() {
@@ -45,7 +53,7 @@ class ApiService {
       
       // Enhanced error handling
       if (error.message.includes('Failed to fetch')) {
-        throw new Error('Backend server is not accessible. Please ensure the backend is running on port 5000.');
+        throw new Error('Backend server is not accessible. Please ensure the backend is running on backend.aswcars.com.');
       } else if (error.message.includes('status: 404')) {
         throw new Error('API endpoint not found. Please check the backend server configuration.');
       } else if (error.message.includes('status: 500')) {

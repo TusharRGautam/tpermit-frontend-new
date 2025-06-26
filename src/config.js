@@ -2,10 +2,17 @@
 
 // API configuration
 export const API_CONFIG = {
+  // OLD: Localhost configuration (commented out)
+  // BASE_URL: process.env.REACT_APP_API_BASE_URL || 
+  //           (window.location.origin.includes('localhost') ? 
+  //           'http://localhost:5000/api' : 
+  //           `${window.location.origin}/api`),
+  
+  // NEW: Production configuration with backend subdomain
   BASE_URL: process.env.REACT_APP_API_BASE_URL || 
             (window.location.origin.includes('localhost') ? 
             'http://localhost:5000/api' : 
-            `${window.location.origin}/api`),
+            'https://backend.aswcars.com/api'),
   TIMEOUT: 10000, // 10 seconds
 };
 
