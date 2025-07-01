@@ -26,19 +26,44 @@ const BannerSection: React.FC = () => {
     {
       id: 1,
       image: '/Website-Images/Banners/Ertiga.png',
-      alt: 'Maruti Suzuki Ertiga'
+      alt: 'Maruti Suzuki Ertiga',
+      title: 'Maruti Suzuki Ertiga',
+      price: '₹8,64,000',
+      downPayment: '₹86,400',
+      emi: '₹12,456/month',
+      cta: 'View More'
     },
     {
       id: 2,
       image: '/Website-Images/Banners/AURA.png',
-      alt: 'Hyundai Aura'
+      alt: 'Hyundai Aura',
+      title: 'Hyundai Aura',
+      price: '₹6,49,000',
+      downPayment: '₹64,900',
+      emi: '₹9,340/month',
+      cta: 'Explore More'
     },
     {
       id: 3,
       image: '/Website-Images/Banners/Rumion.png',
-      alt: 'Maruti Suzuki Rumion'
+      alt: 'Maruti Suzuki Rumion',
+      title: 'Maruti Suzuki Rumion',
+      price: '₹7,74,000',
+      downPayment: '₹77,400',
+      emi: '₹11,128/month',
+      cta: 'Learn More'
     }
   ];
+
+  const scrollToFindYourCar = () => {
+    const findYourCarSection = document.querySelector('.find-your-car-section');
+    if (findYourCarSection) {
+      findYourCarSection.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  };
 
   return (
     <section className="banner-section">
@@ -58,15 +83,39 @@ const BannerSection: React.FC = () => {
       >
         {banners.map(banner => (
           <div key={banner.id} className="banner-slide">
-            <img 
-              src={banner.image} 
-              alt={banner.alt} 
-              loading="eager"
-              onError={(e) => {
-                console.error(`Failed to load banner image: ${banner.image}`);
-                e.currentTarget.style.display = 'none';
-              }}
-            />
+            <div className="banner-container">
+              <div className="banner-image-box">
+                <img 
+                  src={banner.image} 
+                  alt={banner.alt} 
+                  loading="eager"
+                  onError={(e) => {
+                    console.error(`Failed to load banner image: ${banner.image}`);
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
+              <div className="banner-content-box">
+                <div className="banner-content">
+                  <h1 className="banner-title">{banner.title}</h1>
+                  <div className="price-details">
+                    <div className="price-row">
+                      <span className="price-label">Starting Price:</span>
+                      <span className="price-value">{banner.price}</span>
+                    </div>
+                    <div className="downpayment-highlight">
+                      <span className="downpayment-label">Down Payment:</span>
+                      <span className="downpayment-value">{banner.downPayment}</span>
+                    </div>
+                    <div className="emi-row">
+                      <span className="emi-label">EMI from:</span>
+                      <span className="emi-value">{banner.emi}</span>
+                    </div>
+                  </div>
+                  <button onClick={scrollToFindYourCar} className="banner-btn">{banner.cta}</button>
+                </div>
+              </div>
+            </div>
           </div>
         ))}
       </Carousel>

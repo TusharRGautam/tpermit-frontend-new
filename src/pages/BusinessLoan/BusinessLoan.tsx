@@ -1,4 +1,5 @@
 import React from 'react';
+import OptimizedImage from '../../components/OptimizedImage/OptimizedImage';
 import './BusinessLoan.css';
 
 const BusinessLoan: React.FC = () => {
@@ -78,7 +79,7 @@ const BusinessLoan: React.FC = () => {
   const bankDetails = [
     {
       name: "State Bank of India",
-      logo: "/Website-Images/Banks/SBI.png",
+      logo: "/Website-Images/Banks/SBI.webp",
       interestRate: "10.15%",
       approvalRate: "85%",
       note: "Largest public sector bank with competitive rates for established businesses. Offers collateral-free loans up to ₹1 crore for MSME.",
@@ -94,7 +95,7 @@ const BusinessLoan: React.FC = () => {
     },
     {
       name: "IndusInd Bank",
-      logo: "/Website-Images/Banks/Indusind.png",
+      logo: "/Website-Images/Banks/Indusind.webp",
       interestRate: "12.5%",
       approvalRate: "90%",
       note: "Private bank with faster processing and digital-first approach. Best for tech-savvy businesses needing quick funds.",
@@ -154,7 +155,11 @@ const BusinessLoan: React.FC = () => {
           <div className="stat-card sbi-card">
             <div className="stat-header">
               <div className="bank-logo-small">
-                <img src="/Website-Images/Banks/SBI.png" alt="SBI" />
+                <OptimizedImage 
+                  src="/Website-Images/Banks/SBI.webp" 
+                  alt="SBI"
+                  loading="lazy"
+                />
               </div>
               <h3>State Bank of India</h3>
             </div>
@@ -175,7 +180,11 @@ const BusinessLoan: React.FC = () => {
           <div className="stat-card union-card">
             <div className="stat-header">
               <div className="bank-logo-small">
-                <img src="/Website-Images/Banks/Union Bank.png" alt="Union Bank" />
+                <OptimizedImage 
+                  src="/Website-Images/Banks/Union Bank.webp" 
+                  alt="Union Bank"
+                  loading="lazy"
+                />
               </div>
               <h3>Union Bank of India</h3>
             </div>
@@ -196,7 +205,11 @@ const BusinessLoan: React.FC = () => {
           <div className="stat-card indusind-card">
             <div className="stat-header">
               <div className="bank-logo-small">
-                <img src="/Website-Images/Banks/Indusind.png" alt="IndusInd Bank" />
+                <OptimizedImage 
+                  src="/Website-Images/Banks/Indusind.webp" 
+                  alt="IndusInd Bank"
+                  loading="lazy"
+                />
               </div>
               <h3>IndusInd Bank</h3>
             </div>
@@ -217,7 +230,11 @@ const BusinessLoan: React.FC = () => {
           <div className="stat-card au-card">
             <div className="stat-header">
               <div className="bank-logo-small">
-                <img src="/Website-Images/Banks/AU BANk.jpg" alt="AU Small Finance Bank" />
+                <OptimizedImage 
+                  src="/Website-Images/Banks/AU BANk.jpg" 
+                  alt="AU Small Finance Bank"
+                  loading="lazy"
+                />
               </div>
               <h3>AU Small Finance Bank</h3>
             </div>
@@ -247,7 +264,11 @@ const BusinessLoan: React.FC = () => {
           {bankDetails.map((bank, index) => (
             <div key={index} className="bank-card">
               <div className="bank-logo">
-                <img src={bank.logo} alt={bank.name} />
+                <OptimizedImage 
+                  src={bank.logo} 
+                  alt={bank.name}
+                  loading="lazy"
+                />
               </div>
               <div className="bank-info">
                 <h3>{bank.name}</h3>

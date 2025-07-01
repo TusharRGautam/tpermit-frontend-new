@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import OptimizedImage from '../../components/OptimizedImage/OptimizedImage';
 import './NewCars.css';
 
 interface CarVariant {
@@ -135,7 +136,11 @@ const NewCars: React.FC = () => {
           <div key={car.id} className="car-model-section">
             <div className="car-model-header">
               <div className="car-model-image">
-                <img src={car.image} alt={car.name} />
+                <OptimizedImage 
+                  src={car.image} 
+                  alt={car.name}
+                  loading="lazy"
+                />
               </div>
               <div className="car-model-info">
                 <h2>{car.name}</h2>

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './redux/store';
+import { preloadCriticalImages } from './utils/imagePreloader';
 import './App.css';
 import Header from './components/Header/Header';
 import BannerSection from './components/BannerSection/BannerSection';
@@ -38,6 +39,11 @@ const ScrollToTop: React.FC = () => {
 
 // App component - root component of the application
 const App: React.FC = () => {
+  useEffect(() => {
+    // Preload critical images when the app starts
+    preloadCriticalImages();
+  }, []);
+
   return (
     <Provider store={store}>
       <GlobalStateProvider>

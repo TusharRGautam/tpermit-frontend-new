@@ -27,6 +27,11 @@ code {
 img {
   max-width: 100%;
   height: auto;
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  display: block;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 a {
@@ -123,4 +128,37 @@ p {
   h4 {
     font-size: 1.2rem;
   }
+}
+
+/* WebP image support fallback */
+.webp img[src$=".webp"] {
+  image-rendering: auto;
+}
+
+/* Optimize for modern browsers */
+@supports (object-fit: cover) {
+  img {
+    object-fit: cover;
+  }
+}
+
+/* Lazy loading shimmer effect for better UX */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.image-loading-placeholder {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Improve font loading performance */
+* {
+  font-display: swap;
 }

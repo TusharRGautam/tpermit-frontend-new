@@ -1,4 +1,5 @@
 import React from 'react';
+import OptimizedImage from '../../components/OptimizedImage/OptimizedImage';
 import './AboutUs.css';
 
 const AboutUs: React.FC = () => {
@@ -25,7 +26,7 @@ const AboutUs: React.FC = () => {
             <div className="stat-label">Established Since</div>
           </div>
           <div className="stat-item">
-            <div className="stat-number">1000+</div>
+            <div className="stat-number">4000+</div>
             <div className="stat-label">Happy Customers</div>
           </div>
         </div>
@@ -50,7 +51,12 @@ const AboutUs: React.FC = () => {
         <h2>Meet Our Proprietor</h2>
         <div className="proprietor-container">
           <div className="proprietor-image">
-            <img src="/Website-Images/Proprietor-owner/Proprietor.png" alt="ASW Cars Proprietor" />
+            <OptimizedImage 
+              src="/Website-Images/Proprietor-owner/Proprietor.webp" 
+              alt="ASW Cars Proprietor"
+              loading="eager"
+              priority={true}
+            />
           </div>
           <div className="proprietor-content">
             <h3>Leadership & Vision</h3>
@@ -69,23 +75,39 @@ const AboutUs: React.FC = () => {
 
       <div className="team-grid">
           <div className="team-member">
-            <img src="/Website-Images/Team members/Prakash madal.png" alt="Prakash Madal - ASW Cars Team" />
+            <OptimizedImage 
+              src="/Website-Images/Team members/Prakash madal.webp" 
+              alt="Prakash Madal - ASW Cars Team"
+              loading="lazy"
+            />
             <h3>Prakash Madal</h3>
             <p>Sales & Customer Relations</p>
           </div>
           
           <div className="team-member">
-            <img src="/Website-Images/Team members/Mithilesh Mandal.png" alt="Mithilesh Mandal - ASW Cars Team" />
+            <OptimizedImage 
+              src="/Website-Images/Team members/Mithilesh Mandal.webp" 
+              alt="Mithilesh Mandal - ASW Cars Team"
+              loading="lazy"
+            />
             <h3>Mithilesh Mandal</h3>
             <p>Finance & Documentation</p>
           </div>
           <div className="team-member">
-            <img src="/Website-Images/Team members/Manikant mandal.png" alt="Manikant mandal - ASW Cars Team" />
+            <OptimizedImage 
+              src="/Website-Images/Team members/Manikant mandal.webp" 
+              alt="Manikant mandal - ASW Cars Team"
+              loading="lazy"
+            />
             <h3>Manikant mandal</h3>
             <p>Finance Advisor</p>
           </div>
           <div className="team-member">
-            <img src="/Website-Images/Team members/Pintu Varma.png" alt="Pintu Varma- ASW Cars Team" />
+            <OptimizedImage 
+              src="/Website-Images/Team members/Pintu Varma.webp" 
+              alt="Pintu Varma- ASW Cars Team"
+              loading="lazy"
+            />
             <h3>Pintu Varma</h3>
             <p>Finance Manager</p>
           </div>

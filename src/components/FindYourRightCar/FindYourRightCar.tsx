@@ -36,6 +36,7 @@ interface CarCardProps {
 
 const CarCard: React.FC<CarCardProps> = ({ id, image, name, downPayment, monthlyEmi, variants }) => (
   <div className="car-card">
+    <div className="todays-offers-badge">Today's Offers</div>
     <Link to={`/car/${id}`} className="car-link">
       <div className="car-image">
         <img src={image} alt={name} loading="lazy" />
@@ -165,4 +166,4 @@ const FindYourRightCar: React.FC = () => {
   );
 };
 
-export default FindYourRightCar; 
+export default FindYourRightCar;

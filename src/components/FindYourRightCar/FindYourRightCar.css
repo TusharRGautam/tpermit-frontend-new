@@ -89,6 +89,23 @@
   border: 1px solid rgba(226, 232, 240, 0.8);
 }
 
+/* Today's Offers Badge */
+.todays-offers-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #dc2626;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 10;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .car-card::before {
   content: '';
   position: absolute;
@@ -258,7 +275,7 @@
 }
 
 .payment-value {
-  font-size: 0.9rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--primary-color);
   background: var(--gradient-blue-purple);
@@ -396,7 +413,7 @@
   }
   
   .payment-value {
-    font-size: 0.85rem;
+    font-size: 1rem;
   }
   
   .section-subtitle {
@@ -462,7 +479,7 @@
   }
   
   .payment-value {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
   }
 }
 

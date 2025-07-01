@@ -1,78 +1,127 @@
 .banner-section {
-  width: 100vw; /* Full viewport width */
-  margin-left: calc(-50vw + 50%); /* Center full width within any container */
-  margin-right: calc(-50vw + 50%);
-  margin-bottom: 2rem;
+  width: 100%;
+  margin: 0 0 2rem 0;
+  padding: 0;
   overflow: hidden;
   border-radius: 0;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   position: relative;
 }
 
-.banner-section::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 20px;
-  background: linear-gradient(to top, rgba(255, 255, 255, 0.8), transparent);
-  z-index: 5;
-  pointer-events: none;
-  border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+.banner-slide {
+  background-color: #f8f9fa;
+  border-radius: 0;
+  overflow: hidden;
 }
 
-.banner-slide {
-  height: auto;
-  position: relative;
+.banner-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 450px;
+  max-height: 550px;
+  gap: 1.5rem;
+  padding: 1rem 2rem;
+}
+
+.banner-image-box {
+  flex: 0 0 65%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f8f9fa;
+  height: 100%;
+  border-radius: var(--border-radius-md);
+  overflow: hidden;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
 }
 
-.banner-slide img {
+.banner-image-box img {
   width: 100%;
-  height: auto;
+  height: 480px;
   object-fit: cover;
-  max-width: 100%;
-  min-height: 400px; /* Reduced minimum height */
-  max-height: 550px; /* Reduced maximum height */
+  object-position: center;
   display: block;
   filter: brightness(1.03) contrast(1.05);
   transition: all 0.8s ease;
+  border-radius: var(--border-radius-md);
 }
 
-.banner-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.2));
+.banner-image-box img:hover {
+  transform: scale(1.02);
+}
+
+.banner-content-box {
+  flex: 1;
   display: flex;
-  flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding-left: 10%;
+  padding: 1.5rem 0.8rem;
+  height: 100%;
 }
 
 .banner-content {
-  max-width: 600px;
-  color: white;
-  animation: fadeInLeft 1s ease;
+  max-width: 500px;
+  color: #333;
+  text-align: left;
+  animation: fadeInRight 1s ease;
 }
 
 .banner-title {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   font-weight: 700;
-  margin-bottom: 1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin-bottom: 1.5rem;
+  color: var(--primary-color);
+  line-height: 1.2;
 }
 
-.banner-subtitle {
+.price-details {
+  margin-bottom: 2rem;
+}
+
+.price-row, .emi-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.8rem;
+  padding: 0.5rem 0;
+}
+
+.downpayment-highlight {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+  border-radius: var(--border-radius-md);
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  transform: scale(1.02);
+}
+
+.price-label, .emi-label {
+  font-size: 1rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.downpayment-label {
+  font-size: 1.1rem;
+  color: white;
+  font-weight: 600;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.price-value, .emi-value {
   font-size: 1.2rem;
-  margin-bottom: 1.5rem;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.downpayment-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .banner-btn {
@@ -81,25 +130,29 @@
   background-color: var(--primary-color);
   color: white;
   text-decoration: none;
+  border: none;
   border-radius: var(--border-radius-full);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   transition: var(--transition);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  font-size: 1rem;
 }
 
 .banner-btn:hover {
   background-color: var(--primary-dark);
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Override carousel arrow styles */
+/* Carousel Controls */
 .carousel .control-arrow {
-  opacity: 0.8 !important;
-  background: rgba(0, 0, 0, 0.2) !important;
-  height: 50px !important;
-  width: 50px !important;
+  opacity: 0.7 !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+  height: 45px !important;
+  width: 45px !important;
   top: 50% !important;
   transform: translateY(-50%) !important;
   border-radius: 50% !important;
@@ -107,14 +160,15 @@
   align-items: center !important;
   justify-content: center !important;
   transition: var(--transition) !important;
+  z-index: 10 !important;
 }
 
 .carousel .control-prev.control-arrow {
-  left: 20px !important;
+  left: 15px !important;
 }
 
 .carousel .control-next.control-arrow {
-  right: 20px !important;
+  right: 15px !important;
 }
 
 .carousel .control-arrow:hover {
@@ -122,47 +176,48 @@
   opacity: 1 !important;
 }
 
-/* Override carousel indicators */
+.carousel .control-arrow:before {
+  font-size: 18px !important;
+  color: white !important;
+}
+
+/* Carousel Indicators */
 .carousel .control-dots {
-  margin: 10px 0 !important;
-  padding: 10px 0 !important;
+  margin: 15px 0 5px 0 !important;
+  padding: 0 !important;
 }
 
 .carousel .control-dots .dot {
-  width: 12px !important;
-  height: 12px !important;
-  background: white !important;
-  box-shadow: var(--box-shadow) !important;
-  opacity: 0.8 !important;
+  width: 10px !important;
+  height: 10px !important;
+  background: #ccc !important;
+  box-shadow: none !important;
+  opacity: 0.6 !important;
   transition: var(--transition) !important;
+  margin: 0 4px !important;
 }
 
 .carousel .control-dots .dot.selected {
   background: var(--primary-color) !important;
   opacity: 1 !important;
-  transform: scale(1.2) !important;
+  transform: scale(1.3) !important;
 }
 
-/* Ensure carousel container preserves aspect ratio */
 .carousel .slider-wrapper {
   height: auto !important;
-  max-height: 550px; /* Reduced for compact design */
-  min-height: 400px; /* Reduced for compact design */
+  max-height: 550px !important;
+  min-height: 450px !important;
 }
 
 .carousel .slider {
   height: auto !important;
-  min-height: 400px; /* Reduced for compact design */
+  min-height: 450px !important;
 }
 
-.carousel .slider-wrapper ul.slider {
-  height: auto !important;
-}
-
-@keyframes fadeInLeft {
+@keyframes fadeInRight {
   from {
     opacity: 0;
-    transform: translateX(-30px);
+    transform: translateX(30px);
   }
   to {
     opacity: 1;
@@ -170,128 +225,463 @@
   }
 }
 
-/* Responsive adjustments for all screen sizes */
-@media (max-width: 1400px) {
-  .banner-section {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    margin-right: calc(-50vw + 50%);
-  }
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
+/* Responsive Design */
 @media (max-width: 1200px) {
-  .banner-slide img {
-    max-height: 480px;
-    min-height: 320px;
+  .banner-container {
+    min-height: 400px;
+    max-height: 500px;
+    gap: 1.3rem;
+    padding: 1rem 1.5rem;
   }
   
-  .carousel .slider-wrapper {
-    max-height: 480px;
-    min-height: 320px;
+  .banner-image-box {
+    flex: 0 0 62%;
   }
   
-  .carousel .slider {
-    min-height: 320px;
+  .banner-image-box img {
+    height: 420px;
+  }
+  
+  .banner-content-box {
+    padding: 1.3rem 0.7rem;
+  }
+  
+  .banner-title {
+    font-size: 2rem;
+    margin-bottom: 1.2rem;
+  }
+  
+  .price-details {
+    margin-bottom: 1.5rem;
+  }
+  
+  .downpayment-highlight {
+    padding: 0.8rem;
+  }
+  
+  .downpayment-value {
+    font-size: 1.3rem;
   }
 }
 
 @media (max-width: 992px) {
-  .banner-slide img {
-    max-height: 400px;
-    min-height: 280px;
+  .banner-container {
+    min-height: 350px;
+    max-height: 450px;
+    gap: 1.2rem;
+    padding: 1rem 1rem;
   }
   
-  .carousel .slider-wrapper {
-    max-height: 400px;
-    min-height: 280px;
+  .banner-image-box {
+    flex: 0 0 58%;
   }
   
-  .carousel .slider {
-    min-height: 280px;
+  .banner-image-box img {
+    height: 360px;
+  }
+  
+  .banner-content-box {
+    padding: 1.2rem 0.5rem;
+  }
+  
+  .banner-title {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+  }
+  
+  .price-details {
+    margin-bottom: 1.3rem;
+  }
+  
+  .price-label, .emi-label {
+    font-size: 0.9rem;
+  }
+  
+  .downpayment-label {
+    font-size: 1rem;
+  }
+  
+  .price-value, .emi-value {
+    font-size: 1.1rem;
+  }
+  
+  .downpayment-value {
+    font-size: 1.2rem;
+  }
+  
+  .downpayment-highlight {
+    padding: 0.8rem;
   }
 }
 
 @media (max-width: 768px) {
+  .banner-section {
+    margin-bottom: 1.5rem;
+  }
+  
+  .banner-container {
+    flex-direction: column;
+    min-height: auto;
+    max-height: none;
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .banner-image-box {
+    flex: none;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    border-radius: var(--border-radius-md);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+  }
+  
+  .banner-image-box img {
+    height: 280px;
+    width: 100%;
+    min-height: 280px;
+    object-fit: cover;
+    border-radius: var(--border-radius-md);
+  }
+  
+  .banner-content-box {
+    flex: none;
+    width: 100%;
+    padding: 1rem 0.5rem;
+  }
+  
+  .banner-content {
+    text-align: center;
+    max-width: 100%;
+  }
+  
+  .banner-title {
+    font-size: 1.7rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
+  }
+  
+  .price-details {
+    margin-bottom: 1.5rem;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .price-row, .emi-row {
+    padding: 0.7rem 0;
+    font-size: 1rem;
+  }
+  
+  .downpayment-highlight {
+    padding: 1.2rem;
+    margin-bottom: 1rem;
+    border-radius: var(--border-radius-md);
+  }
+  
+  .price-label, .emi-label {
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  .downpayment-label {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  .price-value, .emi-value {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  
+  .downpayment-value {
+    font-size: 1.4rem;
+    font-weight: 800;
+  }
+  
+  .banner-btn {
+    padding: 14px 28px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+  }
+  
   .carousel .control-arrow {
     height: 40px !important;
     width: 40px !important;
   }
   
-  .banner-slide img {
-    height: auto;
-    min-height: 240px;
-    max-height: 320px;
-    object-fit: cover;
+  .carousel .control-prev.control-arrow {
+    left: 15px !important;
+  }
+  
+  .carousel .control-next.control-arrow {
+    right: 15px !important;
   }
   
   .carousel .slider-wrapper {
-    max-height: 320px;
-    min-height: 240px;
+    max-height: none !important;
+    min-height: auto !important;
   }
   
   .carousel .slider {
-    min-height: 240px;
+    min-height: auto !important;
+  }
+}
+
+@media (max-width: 576px) {
+  .banner-container {
+    padding: 0.8rem;
+    gap: 1rem;
+  }
+  
+  .banner-image-box {
+    max-width: none;
+    width: 100%;
+  }
+  
+  .banner-image-box img {
+    height: 250px;
+    min-height: 250px;
+    width: 100%;
+    object-fit: cover;
+  }
+  
+  .banner-content-box {
+    padding: 1rem 0.5rem;
   }
   
   .banner-title {
-    font-size: 2rem;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    font-weight: 700;
   }
   
-  .banner-subtitle {
+  .price-details {
+    margin-bottom: 1.2rem;
+    max-width: 100%;
+  }
+  
+  .price-row, .emi-row {
+    padding: 0.6rem 0;
+    font-size: 0.95rem;
+  }
+  
+  .downpayment-highlight {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .price-label, .emi-label {
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+  
+  .downpayment-label {
     font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .price-value, .emi-value {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  
+  .downpayment-value {
+    font-size: 1.3rem;
+    font-weight: 800;
+  }
+  
+  .banner-btn {
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+  
+  .carousel .control-arrow {
+    height: 35px !important;
+    width: 35px !important;
+  }
+  
+  .carousel .control-arrow:before {
+    font-size: 16px !important;
+  }
+  
+  .carousel .slider-wrapper {
+    max-height: none !important;
+    min-height: auto !important;
+  }
+  
+  .carousel .slider {
+    min-height: auto !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-container {
+    padding: 0.8rem 0.5rem;
+    gap: 0.8rem;
+  }
+  
+  .banner-image-box {
+    max-width: none;
+    width: 100%;
+  }
+  
+  .banner-image-box img {
+    height: 220px;
+    min-height: 220px;
+    width: 100%;
+    object-fit: cover;
+  }
+  
+  .banner-content-box {
+    padding: 0.8rem 0.3rem;
+  }
+  
+  .banner-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.8rem;
+    font-weight: 700;
+  }
+  
+  .price-details {
+    margin-bottom: 1rem;
+    max-width: 100%;
+  }
+  
+  .price-row, .emi-row {
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+  
+  .downpayment-highlight {
+    padding: 0.9rem;
+    margin-bottom: 0.8rem;
+  }
+  
+  .price-label, .emi-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+  
+  .downpayment-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  
+  .price-value, .emi-value {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  
+  .downpayment-value {
+    font-size: 1.2rem;
+    font-weight: 800;
   }
   
   .banner-btn {
     padding: 10px 20px;
     font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .banner-slide img {
-    min-height: 200px;
-    max-height: 280px;
+    font-weight: 600;
   }
   
-  .carousel .slider-wrapper {
-    max-height: 280px;
-    min-height: 200px;
-  }
-  
-  .carousel .slider {
-    min-height: 200px;
-  }
-
   .carousel .control-arrow {
-    height: 30px !important;
-    width: 30px !important;
+    height: 32px !important;
+    width: 32px !important;
   }
   
-  .carousel .control-prev.control-arrow {
-    left: 10px !important;
-  }
-  
-  .carousel .control-next.control-arrow {
-    right: 10px !important;
-  }
-}
-
-@media (max-width: 480px) {
-  .banner-slide img {
-    min-height: 180px;
-    max-height: 240px;
+  .carousel .control-arrow:before {
+    font-size: 14px !important;
   }
   
   .carousel .slider-wrapper {
-    max-height: 240px;
-    min-height: 180px;
+    max-height: none !important;
+    min-height: auto !important;
   }
   
   .carousel .slider {
-    min-height: 180px;
+    min-height: auto !important;
+  }
+}
+
+/* Extra Small Mobile Devices */
+@media (max-width: 360px) {
+  .banner-container {
+    padding: 0.6rem 0.3rem;
+    gap: 0.6rem;
   }
   
-  .banner-section::after {
-    height: 10px;
+  .banner-image-box img {
+    height: 200px;
+    min-height: 200px;
+  }
+  
+  .banner-content-box {
+    padding: 0.6rem 0.2rem;
+  }
+  
+  .banner-title {
+    font-size: 1.3rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .price-details {
+    margin-bottom: 0.8rem;
+  }
+  
+  .price-row, .emi-row {
+    padding: 0.4rem 0;
+    font-size: 0.85rem;
+  }
+  
+  .downpayment-highlight {
+    padding: 0.8rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .price-label, .emi-label {
+    font-size: 0.8rem;
+  }
+  
+  .downpayment-label {
+    font-size: 0.85rem;
+  }
+  
+  .price-value, .emi-value {
+    font-size: 0.95rem;
+  }
+  
+  .downpayment-value {
+    font-size: 1.1rem;
+  }
+  
+  .banner-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .carousel .control-arrow {
+    height: 28px !important;
+    width: 28px !important;
+  }
+  
+  .carousel .control-arrow:before {
+    font-size: 12px !important;
+  }
+  
+  .carousel .slider-wrapper {
+    max-height: none !important;
+    min-height: auto !important;
+  }
+  
+  .carousel .slider {
+    min-height: auto !important;
   }
 } 

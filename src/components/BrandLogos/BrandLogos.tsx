@@ -1,4 +1,5 @@
 import React from 'react';
+import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './BrandLogos.css';
 
 const BrandLogos: React.FC = () => {
@@ -27,7 +28,11 @@ const BrandLogos: React.FC = () => {
         <div className="brands-container">
           {brandLogos.map(brand => (
             <div className="brand-logo" key={brand.id}>
-              <img src={brand.image} alt={brand.name} />
+              <OptimizedImage 
+                src={brand.image} 
+                alt={brand.name}
+                loading="lazy"
+              />
             </div>
           ))}
         </div>

@@ -39,7 +39,7 @@ const BankLoans: React.FC = () => {
     {
       id: 1,
       name: 'State Bank of India',
-      image: '/Website-Images/Banks/SBI.png',
+      image: '/Website-Images/Banks/SBI.webp',
       interestRate: '7.5% - 9.5%',
       loanAmount: '₹75 Lakhs',
       colorClass: 'apply-sbi'
@@ -47,7 +47,7 @@ const BankLoans: React.FC = () => {
     {
       id: 2,
       name: 'Union Bank',
-      image: '/Website-Images/Banks/Union Bank.png',
+      image: '/Website-Images/Banks/Union Bank.webp',
       interestRate: '7.7% - 9.8%',
       loanAmount: '₹80 Lakhs',
       colorClass: 'apply-union'
@@ -63,7 +63,7 @@ const BankLoans: React.FC = () => {
     {
       id: 4,
       name: 'IndusInd Bank',
-      image: '/Website-Images/Banks/Indusind.png',
+      image: '/Website-Images/Banks/Indusind.webp',
       interestRate: '8.1% - 10.5%',
       loanAmount: '₹85 Lakhs',
       colorClass: 'apply-indusind'

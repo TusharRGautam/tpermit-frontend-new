@@ -1,4 +1,5 @@
 import React from 'react';
+import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './BankLogos.css';
 
 const BankLogos: React.FC = () => {
@@ -6,12 +7,12 @@ const BankLogos: React.FC = () => {
     {
       id: 1,
       name: 'State Bank of India',
-      image: '/Website-Images/Banks/SBI.png'
+      image: '/Website-Images/Banks/SBI.webp'
     },
     {
       id: 2,
       name: 'Union Bank',
-      image: '/Website-Images/Banks/Union Bank.png'
+      image: '/Website-Images/Banks/Union Bank.webp'
     },
     {
       id: 3,
@@ -21,7 +22,7 @@ const BankLogos: React.FC = () => {
     {
       id: 4,
       name: 'IndusInd Bank',
-      image: '/Website-Images/Banks/Indusind.png'
+      image: '/Website-Images/Banks/Indusind.webp'
     }
   ];
 
@@ -32,7 +33,11 @@ const BankLogos: React.FC = () => {
         <div className="brands-container">
           {bankLogos.map(bank => (
             <div className="brand-logo" key={bank.id}>
-              <img src={bank.image} alt={bank.name} />
+              <OptimizedImage 
+                src={bank.image} 
+                alt={bank.name}
+                loading="lazy"
+              />
             </div>
           ))}
         </div>

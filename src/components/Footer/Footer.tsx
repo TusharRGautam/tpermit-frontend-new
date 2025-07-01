@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
         <div className="footer-bottom">
           <p>
             &copy; {currentYear} ASW Auto. All rights reserved. 
-            <span className="designer"> Designed by ASW Team</span>
+            <span className="designer"> Developed by Zhoop</span>
           </p>
         </div>
       </div>

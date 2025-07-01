@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './Header.css';
 
 const Header: React.FC = () => {
@@ -52,7 +53,12 @@ const Header: React.FC = () => {
     <header className={`header ${scrolled ? 'header-scrolled' : ''} ${mobileMenuOpen ? 'mobile-menu-open' : ''}`}>
       <div className="logo">
         <Link to="/">
-          <img src="/Website-Images/Logo/logo.jpg" alt="ASW Logo" />
+          <OptimizedImage 
+            src="/Website-Images/Logo/logo.jpg" 
+            alt="ASW Logo"
+            loading="eager"
+            priority={true}
+          />
         </Link>
       </div>
       

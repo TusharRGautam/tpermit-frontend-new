@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './GallerySection.css';
 
 const GallerySection: React.FC = () => {
   // Use the Gallery images from the public folder
   const galleryImages = [
-    '/Website-Images/Gallery/A1.jpg',
-    '/Website-Images/Gallery/A2.jpg',
-    '/Website-Images/Gallery/A3.jpg',
-    '/Website-Images/Gallery/A4.jpg',
-    '/Website-Images/Gallery/A5.jpg',
-    '/Website-Images/Gallery/A6.jpg',
-    '/Website-Images/Gallery/A7.jpg',
-    '/Website-Images/Gallery/A8.jpg',
-    '/Website-Images/Gallery/A9.jpg',
-    '/Website-Images/Gallery/A10.jpg',
+    '/Website-Images/Gallery/A1.webp',
+    '/Website-Images/Gallery/A2.webp',
+    '/Website-Images/Gallery/A3.webp',
+    '/Website-Images/Gallery/A4.webp',
+    '/Website-Images/Gallery/A5.webp',
+    '/Website-Images/Gallery/A6.webp',
+    '/Website-Images/Gallery/A7.webp',
+    '/Website-Images/Gallery/A8.webp',
+    '/Website-Images/Gallery/A9.webp',
+    '/Website-Images/Gallery/A10.webp',
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -121,10 +122,11 @@ const GallerySection: React.FC = () => {
                 key={index} 
                 style={{ flex: `0 0 calc(100% / ${imagesPerView})` }}
               >
-                <img 
+                <OptimizedImage 
                   src={image} 
                   alt={`Gallery image ${index + 1}`} 
                   loading={index < 4 ? "eager" : "lazy"} 
+                  priority={index < 2}
                 />
               </div>
             ))}

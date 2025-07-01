@@ -70,14 +70,12 @@ const CarDetailWithInvoices: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [carModel, setCarModel] = useState<string>('');
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
+  const [showFullQuotation, setShowFullQuotation] = useState<boolean>(false);
   const invoiceRef = useRef<HTMLDivElement>(null);
 
-  // Bank options
+  // Bank options - Only SBI bank is supported
   const bankOptions: { [key: string]: BankOption } = {
-    'SBI': { name: 'State Bank of India', roi: '8.45%' },
-    'AU': { name: 'AU Bank', roi: '9.25%' },
-    'Union': { name: 'Union Bank', roi: '7.85%' },
-    'IndusInd': { name: 'IndusInd Bank', roi: '10.15%' }
+    'SBI': { name: 'State Bank of India', roi: '8.45%' }
   };
 
   // Effect to scroll to top when component mounts
@@ -120,18 +118,15 @@ const CarDetailWithInvoices: React.FC = () => {
     return imageMap[carName] || '/Website-Images/Cars/default.jpg';
   };
 
-  // Function to get bank name from quotation data
+  // Function to get bank name from quotation data - Only SBI
   const getBankNameFromQuotation = (quotation: QuotationData): string => {
-    if (quotation.sbi_bank > 0) return 'State Bank of India';
-    if (quotation.union_bank > 0) return 'Union Bank';
-    if (quotation.indusind_bank > 0) return 'IndusInd Bank';
-    if (quotation.au_bank > 0) return 'AU Bank';
+    // Only return SBI bank for all quotations
     return 'State Bank of India';
   };
 
-  // Function to convert quotation to CarVariant
+  // Function to convert quotation to CarVariant - Only SBI data
   const convertQuotationToVariant = (quotation: QuotationData, index: number): CarVariant => {
-    const bankName = getBankNameFromQuotation(quotation);
+    const bankName = 'State Bank of India'; // Always SBI
     const imagePath = getCarImagePath(quotation.car_model);
     
     return {
@@ -169,14 +164,16 @@ const CarDetailWithInvoices: React.FC = () => {
         }
 
         setCarModel(modelName);
-        console.log(`Fetching quotations for: ${modelName}`);
+        console.log(`Fetching SBI bank quotations for: ${modelName}`);
 
-        // Get all quotations for this car model
+        // Get all quotations for this car model - Only SBI bank quotations
         const allQuotations = await quotationService.getAllQuotations();
-        const carQuotations = allQuotations.filter((q: QuotationData) => q.car_model === modelName);
+        const carQuotations = allQuotations.filter((q: QuotationData) => 
+          q.car_model === modelName && q.sbi_bank > 0
+        );
         
         if (carQuotations.length === 0) {
-          setError('No quotations found for this car model');
+          setError('No SBI bank quotations found for this car model');
           navigate('/');
           return;
         }
@@ -198,36 +195,27 @@ const CarDetailWithInvoices: React.FC = () => {
           variantGroups[variantKey].push(variant);
         });
 
-        // Get the best offer (lowest down payment) for each variant
-        const uniqueVariants = Object.values(variantGroups).map(group => {
+        // Select the best variant from each group (lowest down payment)
+        const bestVariants = Object.values(variantGroups).map(group => {
           return group.reduce((best, current) => {
-            const bestPrice = parseFloat(best.downPayment.replace(/₹|,/g, ''));
-            const currentPrice = parseFloat(current.downPayment.replace(/₹|,/g, ''));
-            return currentPrice < bestPrice ? current : best;
+            const bestDownPayment = parseFloat(best.downPayment.replace(/[₹,]/g, ''));
+            const currentDownPayment = parseFloat(current.downPayment.replace(/[₹,]/g, ''));
+            return currentDownPayment < bestDownPayment ? current : best;
           });
         });
 
-        setVariants(uniqueVariants);
+        setVariants(bestVariants);
         
-        if (uniqueVariants.length > 0) {
-          setSelectedVariant(uniqueVariants[0]);
-          
-          // Set initial bank based on the best quotation
-          const bestQuotation = uniqueVariants[0].quotationData;
-          const bankName = getBankNameFromQuotation(bestQuotation);
-          const bankKey = Object.keys(bankOptions).find(key => 
-            bankOptions[key].name === bankName
-          );
-          if (bankKey) {
-            setSelectedBank(bankOptions[bankKey]);
-          }
+        // Set the first variant as selected
+        if (bestVariants.length > 0) {
+          setSelectedVariant(bestVariants[0]);
+          // Always set SBI bank since we only deal with SBI quotations
+          setSelectedBank(bankOptions['SBI']);
         }
 
       } catch (error) {
         console.error('Error fetching car data:', error);
-        setError('Failed to load car data');
-        // Fallback: navigate to home instead of showing empty page
-        setTimeout(() => navigate('/'), 2000);
+        setError('Failed to load car data. Please try again.');
       } finally {
         setIsLoading(false);
       }
@@ -236,215 +224,131 @@ const CarDetailWithInvoices: React.FC = () => {
     fetchCarData();
   }, [carId, navigate]);
 
-  // Function to scroll to the top of the page
   const scrollToTop = () => {
-    pageTopRef.current?.scrollIntoView({ behavior: 'smooth' });
-    // Add extra scroll to move a bit higher than the reference element
-    window.scrollBy({
-      top: -50, // Negative value to scroll up by 50 pixels
-      behavior: 'smooth'
-    });
-  };
-
-  // Function to handle variant selection
-  const handleVariantSelect = (variant: CarVariant) => {
-    setIsLoading(true);
-    setSelectedVariant(variant);
-    
-    // Scroll to top immediately
     window.scrollTo({
       top: 0,
       behavior: 'smooth'
     });
-    
-    // Simulate loading time
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
   };
 
-  // Function to handle bank selection
+  const handleVariantSelect = (variant: CarVariant) => {
+    setSelectedVariant(variant);
+    setShowFullQuotation(false); // Reset quotation expansion when variant changes
+    
+    // Always set SBI bank since we only deal with SBI quotations
+    setSelectedBank(bankOptions['SBI']);
+    
+    scrollToTop();
+  };
+
   const handleBankSelect = (bankKey: string) => {
-    if (!selectedVariant || !selectedVariant.quotationData) return;
-    
-    const bank = bankOptions[bankKey];
-    setSelectedBank(bank);
-    
-    // Find the quotation for the selected variant and bank
-    const currentVariantName = selectedVariant.name;
-    const targetBankField = bankKey.toLowerCase() === 'indusind' ? 'indusind_bank' : `${bankKey.toLowerCase()}_bank`;
-    
-         // Find quotation with matching variant and selected bank
-     const matchingQuotation = quotations.find(q => {
-       const variantName = `${q.car_model.split(' ').slice(-1)[0]} ${q.model_variant}`;
-       const bankValue = q[targetBankField as keyof QuotationData];
-       return variantName === currentVariantName && typeof bankValue === 'number' && bankValue > 0;
-     });
-    
-    if (matchingQuotation) {
-      // Update the selected variant with the new bank's data
-      const updatedVariant = convertQuotationToVariant(matchingQuotation, selectedVariant.id - 1);
-      setSelectedVariant(updatedVariant);
+    // Only SBI bank is supported, so no bank switching needed
+    if (bankKey === 'SBI') {
+      setSelectedBank(bankOptions['SBI']);
     }
   };
 
-  // Download Functions
+  const toggleFullQuotation = () => {
+    setShowFullQuotation(!showFullQuotation);
+  };
+
   const downloadAsPDF = async () => {
     if (!selectedVariant || !invoiceRef.current) return;
     
     try {
       setIsDownloading(true);
       
-      // Create a temporary container for better PDF formatting
-      const printContainer = document.createElement('div');
-      printContainer.style.position = 'absolute';
-      printContainer.style.left = '-9999px';
-      printContainer.style.top = '0';
-      printContainer.style.width = '800px';
-      printContainer.style.backgroundColor = 'white';
-      printContainer.style.padding = '40px';
-      printContainer.style.fontFamily = 'Arial, sans-serif';
+      // Temporarily show full quotation for PDF generation
+      const wasShowingFull = showFullQuotation;
+      setShowFullQuotation(true);
       
-      printContainer.innerHTML = `
-        <div style="text-align: center; margin-bottom: 30px;">
-          <h1 style="color: #1e40af; margin: 0; font-size: 28px;">ASW WHEEL CARS AND FINANCE</h1>
-          <p style="color: #64748b; margin: 5px 0; font-size: 14px;">GB 60, Ground floor, High Street Mall, Kapurbawdi, Thane West, Thane-400607</p>
-          <p style="color: #64748b; margin: 10px 0; font-size: 16px;">Car Quotation Invoice</p>
-        </div>
-        
-        <div style="display: flex; justify-content: space-between; margin-bottom: 30px; align-items: center;">
-          <div>
-            <h2 style="color: #334155; margin: 0; font-size: 24px;">${selectedVariant.modelName}</h2>
-            <p style="color: #64748b; margin: 5px 0;">${selectedVariant.bankName}</p>
-            <p style="color: #059669; margin: 5px 0; font-weight: bold;">ROI: ${selectedVariant.roi}</p>
-          </div>
-          <div style="text-align: right;">
-            <p style="color: #64748b; margin: 0;">Date: ${new Date().toLocaleDateString('en-IN')}</p>
-            <p style="color: #64748b; margin: 5px 0;">Invoice ID: ASW-${Date.now()}</p>
-          </div>
-        </div>
-        
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-          <thead>
-            <tr style="background-color: #f8fafc; border-bottom: 2px solid #e2e8f0;">
-              <th style="padding: 15px; text-align: left; font-weight: 600; color: #374151;">Description</th>
-              <th style="padding: 15px; text-align: right; font-weight: 600; color: #374151;">Amount (₹)</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Cost of the vehicle Ex-Showroom</td>
-              <td style="padding: 12px; text-align: right; font-weight: 500;">₹${selectedVariant.quotationData?.ex_showroom?.toLocaleString('en-IN') || selectedVariant.price}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">TCS</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.tcs?.toLocaleString('en-IN') || '0'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Registration</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.registration?.toLocaleString('en-IN') || '39,500'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Insurance</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.insurance?.toLocaleString('en-IN') || '39,500'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Number Plate + CRTM + Autocard</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.number_plate_crtm_autocard?.toLocaleString('en-IN') || '4,500'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">GPS</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.gps?.toLocaleString('en-IN') || '18,500'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Fastag</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.fastag?.toLocaleString('en-IN') || '600'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Speed Governor</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.speed_governor?.toLocaleString('en-IN') || '0'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Accessories</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.accessories?.toLocaleString('en-IN') || '0'}</td>
-            </tr>
-            <tr style="border-bottom: 2px solid #3b82f6; background-color: #eff6ff;">
-              <td style="padding: 15px; font-weight: 600; color: #1e40af;">On the Road Price</td>
-              <td style="padding: 15px; text-align: right; font-weight: 700; color: #1e40af;">₹${selectedVariant.quotationData?.on_the_road?.toLocaleString('en-IN') || '12,11,105'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Loan Amount</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.loan_amount?.toLocaleString('en-IN') || '10,10,000'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Process Fee</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.process_fee?.toLocaleString('en-IN') || '16,500'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Stamp Duty</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.stamp_duty?.toLocaleString('en-IN') || '6,500'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Handling & Document Charges</td>
-              <td style="padding: 12px; text-align: right;">₹${selectedVariant.quotationData?.handling_document_charge?.toLocaleString('en-IN') || '30,300'}</td>
-            </tr>
-            <tr style="border-bottom: 1px solid #e5e7eb;">
-              <td style="padding: 12px; color: #374151;">Offers</td>
-              <td style="padding: 12px; text-align: right; color: #059669;">-₹${selectedVariant.quotationData?.offers?.toLocaleString('en-IN') || '100'}</td>
-            </tr>
-            <tr style="border-bottom: 2px solid #059669; background-color: #ecfdf5;">
-              <td style="padding: 15px; font-weight: 600; color: #059669;">Final Down Payment</td>
-              <td style="padding: 15px; text-align: right; font-weight: 700; color: #059669;">₹${selectedVariant.quotationData?.final_down_payment?.toLocaleString('en-IN') || selectedVariant.downPayment}</td>
-            </tr>
-            <tr style="background-color: #fef3c7; border: 2px solid #f59e0b;">
-              <td style="padding: 15px; font-weight: 700; color: #92400e;">${selectedVariant.quotationData?.emi_years || 5} Years EMI (${(selectedVariant.quotationData?.emi_years || 5) * 12} Months)</td>
-              <td style="padding: 15px; text-align: right; font-weight: 700; font-size: 18px; color: #92400e;">₹${Math.round(selectedVariant.quotationData?.monthly_emi || 0).toLocaleString('en-IN')}/month</td>
-            </tr>
-          </tbody>
-        </table>
-        
-        <div style="margin-top: 40px; padding-top: 20px; border-top: 2px solid #e5e7eb;">
-          <div style="text-align: center; color: #64748b; font-size: 14px;">
-            <p style="margin: 5px 0;"><strong>ASW WHEEL CARS AND FINANCE</strong></p>
-            <p style="margin: 5px 0;">GB 60, Ground floor, High Street Mall, Kapurbawdi, Thane West, Thane-400607</p>
-            <p style="margin: 5px 0;">Contact: +91 99878 28417 (Shailendra) | Email: asw.cars@gmail.com</p>
-            <p style="margin: 5px 0;">Generated on: ${new Date().toLocaleString('en-IN')}</p>
-          </div>
-        </div>
-      `;
+      // Wait for DOM update
+      await new Promise(resolve => setTimeout(resolve, 100));
       
-      document.body.appendChild(printContainer);
-      
-      const canvas = await html2canvas(printContainer, {
-        scale: 2,
+      const canvas = await html2canvas(invoiceRef.current, {
+        scale: 1.5,
         useCORS: true,
         allowTaint: true,
-        backgroundColor: '#ffffff'
+        backgroundColor: '#ffffff',
+        logging: false,
+        width: invoiceRef.current.offsetWidth,
+        height: invoiceRef.current.offsetHeight,
+        onclone: (clonedDoc) => {
+          const clonedElement = clonedDoc.querySelector('.invoice-content');
+          const headerElement = clonedDoc.querySelector('.invoice-header h2');
+          const tableElement = clonedDoc.querySelector('.invoice-table');
+          const tableCells = clonedDoc.querySelectorAll('.invoice-table td');
+          
+          if (clonedElement) {
+            (clonedElement as HTMLElement).style.backgroundColor = '#ffffff';
+            (clonedElement as HTMLElement).style.padding = '15px';
+            (clonedElement as HTMLElement).style.fontSize = '14px';
+            (clonedElement as HTMLElement).style.lineHeight = '1.4';
+          }
+          
+          // Adjust company heading for PDF
+          if (headerElement) {
+            (headerElement as HTMLElement).style.fontSize = '20px';
+            (headerElement as HTMLElement).style.fontWeight = '700';
+            (headerElement as HTMLElement).style.color = '#2563eb';
+            (headerElement as HTMLElement).style.background = 'none';
+            (headerElement as HTMLElement).style.webkitBackgroundClip = 'unset';
+            (headerElement as HTMLElement).style.webkitTextFillColor = '#2563eb';
+            (headerElement as HTMLElement).style.marginBottom = '15px';
+          }
+          
+          // Reduce table size and improve readability
+          if (tableElement) {
+            (tableElement as HTMLElement).style.fontSize = '12px';
+            (tableElement as HTMLElement).style.width = '100%';
+            (tableElement as HTMLElement).style.maxWidth = '500px';
+            (tableElement as HTMLElement).style.margin = '0 auto';
+          }
+          
+          // Adjust table cell padding for better fit
+          tableCells.forEach(cell => {
+            (cell as HTMLElement).style.padding = '8px 12px';
+            (cell as HTMLElement).style.fontSize = '12px';
+            (cell as HTMLElement).style.lineHeight = '1.3';
+            (cell as HTMLElement).style.color = '#333';
+            (cell as HTMLElement).style.border = '1px solid #ccc';
+          });
+        }
       });
-      
-      document.body.removeChild(printContainer);
-      
+
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
       
-      const imgWidth = 210; // A4 width in mm
-      const pageHeight = 295; // A4 height in mm
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      const imgWidth = canvas.width;
+      const imgHeight = canvas.height;
       
-      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
+      // Calculate ratio to fit content better with margins
+      const maxWidth = pdfWidth - 20; // 10mm margin on each side
+      const maxHeight = pdfHeight - 40; // 20mm margin top and bottom
+      const ratio = Math.min(maxWidth / imgWidth, maxHeight / imgHeight);
       
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
+      const scaledWidth = imgWidth * ratio;
+      const scaledHeight = imgHeight * ratio;
+      const imgX = (pdfWidth - scaledWidth) / 2;
+      const imgY = 20; // Reduced top margin
+
+      pdf.addImage(imgData, 'PNG', imgX, imgY, scaledWidth, scaledHeight);
+      
+      // Add company name as text at the top for better visibility
+      pdf.setFontSize(16);
+      pdf.setTextColor(37, 99, 235); // Blue color
+      pdf.setFont('helvetica', 'bold');
+      const companyName = 'ASW CARS & FINANCE';
+      const textWidth = pdf.getTextWidth(companyName);
+      pdf.text(companyName, (pdfWidth - textWidth) / 2, 15);
       
       const fileName = `ASW_Quotation_${selectedVariant.modelName.replace(/\s+/g, '_')}_${selectedVariant.bankName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
       pdf.save(fileName);
+      
+      // Restore previous quotation state
+      setShowFullQuotation(wasShowingFull);
       
     } catch (error) {
       console.error('Error generating PDF:', error);
@@ -461,39 +365,33 @@ const CarDetailWithInvoices: React.FC = () => {
       setIsDownloading(true);
       
       const quotationData = selectedVariant.quotationData;
-      const worksheetData = [
-        ['ASW WHEEL CARS AND FINANCE'],
-        ['Car Quotation Invoice'],
-        [''],
-        ['Car Model:', selectedVariant.modelName],
-        ['Bank:', selectedVariant.bankName],
-        ['ROI:', selectedVariant.roi],
-        ['Date:', new Date().toLocaleDateString('en-IN')],
-        ['Invoice ID:', `ASW-${Date.now()}`],
-        [''],
-        ['Description', 'Amount (₹)'],
-        ['Cost of vehicle Ex-Showroom', quotationData?.ex_showroom || selectedVariant.price.replace('₹', '').replace(/,/g, '')],
-        ['TCS', quotationData?.tcs || 0],
-        ['Registration', quotationData?.registration || 39500],
-        ['Insurance', quotationData?.insurance || 39500],
-        ['Number Plate + CRTM + Autocard', quotationData?.number_plate_crtm_autocard || 4500],
-        ['GPS', quotationData?.gps || 18500],
-        ['Fastag', quotationData?.fastag || 600],
-        ['Speed Governor', quotationData?.speed_governor || 0],
-        ['Accessories', quotationData?.accessories || 0],
-        ['On the Road Price', quotationData?.on_the_road || 1211105],
-        ['Loan Amount', quotationData?.loan_amount || 1010000],
-        ['Process Fee', quotationData?.process_fee || 16500],
-        ['Stamp Duty', quotationData?.stamp_duty || 6500],
-        ['Handling & Document Charges', quotationData?.handling_document_charge || 30300],
-        ['Offers', quotationData?.offers || 100],
-        ['Final Down Payment', quotationData?.final_down_payment || selectedVariant.downPayment.replace('₹', '').replace(/,/g, '')],
-        [`${quotationData?.emi_years || 5} Years EMI`, Math.round(quotationData?.monthly_emi || 0)],
-        [''],
-        ['Generated on:', new Date().toLocaleString('en-IN')]
-      ];
       
-      const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+      const data = [
+        ['ASW CARS & FINANCE', ''],
+        ['', ''],
+        ['Car Model', selectedVariant.modelName],
+        ['Bank', selectedVariant.bankName],
+        ['ROI', selectedVariant.roi],
+        ['', ''],
+        ['Cost of the vehicle EX Showroom', `₹${quotationData?.ex_showroom?.toLocaleString('en-IN') || selectedVariant.price}`],
+        ['TCS', `₹${quotationData?.tcs?.toLocaleString('en-IN') || '0'}`],
+        ['Registration', `₹${quotationData?.registration?.toLocaleString('en-IN') || '39,500'}`],
+        ['Insurance', `₹${quotationData?.insurance?.toLocaleString('en-IN') || '39,500'}`],
+        ['GPS', `₹${quotationData?.gps?.toLocaleString('en-IN') || '18,500'}`],
+        ['Speed Governor', `₹${quotationData?.speed_governor?.toLocaleString('en-IN') || '0'}`],
+        ['On the road', `₹${quotationData?.on_the_road?.toLocaleString('en-IN') || '12,11,105'}`],
+        ['Loan Amount', `₹${quotationData?.loan_amount?.toLocaleString('en-IN') || '10,10,000'}`],
+        ['Margin (Down payment)', `₹${quotationData?.margin_down_payment?.toLocaleString('en-IN') || '2,01,105'}`],
+        ['Process fee', `₹${quotationData?.process_fee?.toLocaleString('en-IN') || '16,500'}`],
+        ['Stamp duty', `₹${quotationData?.stamp_duty?.toLocaleString('en-IN') || '6,500'}`],
+        ['Handling Loan Services and Document Charge', `₹${quotationData?.handling_document_charge?.toLocaleString('en-IN') || '30,300'}`],
+        ['Down Payment', `₹${quotationData?.down_payment?.toLocaleString('en-IN') || selectedVariant.downPayment}`],
+        ['Offers', `₹${quotationData?.offers?.toLocaleString('en-IN') || '100'}`],
+        ['Final Down Payment', `₹${quotationData?.final_down_payment?.toLocaleString('en-IN') || selectedVariant.downPayment}`],
+        [`${quotationData?.emi_years || 5} years (${(quotationData?.emi_years || 5) * 12} Months)`, `₹${Math.round(quotationData?.monthly_emi || 0).toLocaleString('en-IN')}`]
+      ];
+
+      const worksheet = XLSX.utils.aoa_to_sheet(data);
       const workbook = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(workbook, worksheet, 'Quotation');
       
@@ -579,208 +477,194 @@ const CarDetailWithInvoices: React.FC = () => {
         <div className="car-image-section">
           <img src={selectedVariant.image} alt={selectedVariant.name} className="car-detail-image" />
           <h2 className="car-name">{selectedVariant.name}</h2>
+          
+          {/* Move More Variants section to top below car image */}
+          <div className="car-variants-section-inline">
+            <h3>More Variants</h3>
+            <div className="car-variants-grid-inline">
+              {variants.map(variant => (
+                <div 
+                  key={variant.id}
+                  className={`variant-card-inline ${selectedVariant.id === variant.id ? 'active' : ''}`}
+                  onClick={() => handleVariantSelect(variant)}
+                >
+                  <div className="variant-image-container-inline">
+                    <img src={variant.image} alt={variant.name} />
+                  </div>
+                  <div className="variant-details-inline">
+                    <h4>{variant.name}</h4>
+                    <p className="variant-downpayment">Down: {variant.downPayment}</p>
+                    <p className="variant-emi">EMI: {variant.monthlyPayment}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
         
         <div className="invoice-section">
           <div className="invoice-header">
-            <h2>ASW WHEEL CARS AND FINANCE</h2>
+            <h2>ASW CARS & FINANCE</h2>
           </div>
           
+          {/* Bank Selection - Only SBI Bank supported */}
           <div className="bank-selection">
-            <h3>Select Financing Option:</h3>
-            <div className="bank-buttons">
-              <button 
-                className={`bank-button ${selectedBank.name === bankOptions['SBI'].name ? 'active' : ''}`} 
-                onClick={() => handleBankSelect('SBI')}
-              >
-                SBI Bank
-              </button>
-              <button 
-                className={`bank-button ${selectedBank.name === bankOptions['AU'].name ? 'active' : ''}`} 
-                onClick={() => handleBankSelect('AU')}
-              >
-                AU Bank
-              </button>
-              <button 
-                className={`bank-button ${selectedBank.name === bankOptions['Union'].name ? 'active' : ''}`} 
-                onClick={() => handleBankSelect('Union')}
-              >
-                Union Bank
-              </button>
-              <button 
-                className={`bank-button ${selectedBank.name === bankOptions['IndusInd'].name ? 'active' : ''}`} 
-                onClick={() => handleBankSelect('IndusInd')}
-              >
-                IndusInd Bank
-              </button>
+            <h3>Financing Partner:</h3>
+            <div className="bank-logo-container">
+              <img 
+                src="/Website-Images/Banks/SBI.webp" 
+                alt="State Bank of India" 
+                className="bank-logo larger"
+              />
+              <span className="bank-name">State Bank of India</span>
             </div>
           </div>
           
-          <div className="invoice-content" ref={invoiceRef}>
-            <table className="invoice-table">
-              <tbody>
-                <tr className="invoice-model-row">
-                  <td>car model :</td>
-                  <td className="highlight-cell">{selectedVariant.modelName}</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td>{selectedVariant.bankName}</td>
-                </tr>
-                <tr className="roi-row">
-                  <td></td>
-                  <td>ROI {selectedVariant.roi}</td>
-                </tr>
-                <tr>
-                  <td>Cost of the vehicle EX Showroom</td>
-                  <td>₹{selectedVariant.quotationData?.ex_showroom?.toLocaleString('en-IN') || selectedVariant.price}</td>
-                </tr>
-                <tr>
-                  <td>TCS</td>
-                  <td>₹{selectedVariant.quotationData?.tcs?.toLocaleString('en-IN') || '0'}</td>
-                </tr>
-                <tr>
-                  <td>Registration</td>
-                  <td>₹{selectedVariant.quotationData?.registration?.toLocaleString('en-IN') || '39,500'}</td>
-                </tr>
-                <tr>
-                  <td>Insurance</td>
-                  <td>₹{selectedVariant.quotationData?.insurance?.toLocaleString('en-IN') || '39,500'}</td>
-                </tr>
-                <tr>
-                  <td>NO Plate + CRTM + Autocard</td>
-                  <td>₹{selectedVariant.quotationData?.number_plate_crtm_autocard?.toLocaleString('en-IN') || '4,500'}</td>
-                </tr>
-                <tr>
-                  <td>GPS</td>
-                  <td>₹{selectedVariant.quotationData?.gps?.toLocaleString('en-IN') || '18,500'}</td>
-                </tr>
-                <tr>
-                  <td>Fastag</td>
-                  <td>₹{selectedVariant.quotationData?.fastag?.toLocaleString('en-IN') || '600'}</td>
-                </tr>
-                <tr>
-                  <td>Speed Governor</td>
-                  <td>₹{selectedVariant.quotationData?.speed_governor?.toLocaleString('en-IN') || '0'}</td>
-                </tr>
-                <tr>
-                  <td>Accessories</td>
-                  <td>₹{selectedVariant.quotationData?.accessories?.toLocaleString('en-IN') || '0'}</td>
-                </tr>
-                <tr className="on-road-row">
-                  <td>On the road</td>
-                  <td>₹{selectedVariant.quotationData?.on_the_road?.toLocaleString('en-IN') || '12,11,105'}</td>
-                </tr>
-                <tr>
-                  <td>Loan Amount</td>
-                  <td>₹{selectedVariant.quotationData?.loan_amount?.toLocaleString('en-IN') || '10,10,000'}</td>
-                </tr>
-                <tr>
-                  <td>Margin (Down payment)</td>
-                  <td>₹{selectedVariant.quotationData?.margin_down_payment?.toLocaleString('en-IN') || '2,01,105'}</td>
-                </tr>
-                <tr>
-                  <td>Process fee</td>
-                  <td>₹{selectedVariant.quotationData?.process_fee?.toLocaleString('en-IN') || '16,500'}</td>
-                </tr>
-                <tr>
-                  <td>Stamp duty</td>
-                  <td>₹{selectedVariant.quotationData?.stamp_duty?.toLocaleString('en-IN') || '6,500'}</td>
-                </tr>
-                <tr>
-                  <td>Handling Loan Services and Document Charge</td>
-                  <td>₹{selectedVariant.quotationData?.handling_document_charge?.toLocaleString('en-IN') || '30,300'}</td>
-                </tr>
-                <tr>
-                  <td>Loan Suraksha Insurance</td>
-                  <td>₹{selectedVariant.quotationData?.loan_suraksha_insurance?.toLocaleString('en-IN') || '0'}</td>
-                </tr>
-                <tr>
-                  <td>Down Payment</td>
-                  <td>₹{selectedVariant.quotationData?.down_payment?.toLocaleString('en-IN') || selectedVariant.downPayment}</td>
-                </tr>
-                <tr className="offers-row">
-                  <td>Offers</td>
-                  <td>₹{selectedVariant.quotationData?.offers?.toLocaleString('en-IN') || '100'}</td>
-                </tr>
-                <tr>
-                  <td>Final Down Payment</td>
-                  <td>₹{selectedVariant.quotationData?.final_down_payment?.toLocaleString('en-IN') || selectedVariant.downPayment}</td>
-                </tr>
-                <tr className="emi-row">
-                  <td>{selectedVariant.quotationData?.emi_years || 5} years ({(selectedVariant.quotationData?.emi_years || 5) * 12} Months)</td>
-                  <td>₹{Math.round(selectedVariant.quotationData?.monthly_emi || 0).toLocaleString('en-IN')}</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          
-          {/* Download Section - Moved to end of invoice */}
-          <div className="download-section">
-            <h3>Download Quotation:</h3>
-            <div className="download-buttons">
-              <button 
-                className="download-button pdf-button"
-                onClick={downloadAsPDF}
-                disabled={isDownloading}
-              >
-                {isDownloading ? (
-                  <>
-                    <span className="download-spinner"></span>
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <span className="download-icon">📄</span>
-                    PDF
-                  </>
-                )}
-              </button>
-              
-              <button 
-                className="download-button excel-button"
-                onClick={downloadAsExcel}
-                disabled={isDownloading}
-              >
-                {isDownloading ? (
-                  <>
-                    <span className="download-spinner"></span>
-                    Generating...
-                  </>
-                ) : (
-                  <>
-                    <span className="download-icon">📊</span>
-                    Excel
-                  </>
-                )}
-              </button>
+          {/* Move On-Road Price to right side */}
+          <div className="on-road-price-section">
+            <div className="on-road-price">
+              On-Road Price: ₹{selectedVariant.quotationData?.on_the_road?.toLocaleString('en-IN') || '12,11,105'}
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="car-variants-section">
-        <h3>More Variants</h3>
-        <div className="car-variants-grid">
-          {variants.map(variant => (
-            <div 
-              key={variant.id}
-              className={`variant-card ${selectedVariant.id === variant.id ? 'active' : ''}`}
-              onClick={() => handleVariantSelect(variant)}
+            <button 
+              className="full-quotation-btn"
+              onClick={toggleFullQuotation}
             >
-              <div className="variant-image-container">
-                <img src={variant.image} alt={variant.name} />
-              </div>
-              <div className="variant-details">
-                <h4>{variant.name}</h4>
-                <p>EMI: {variant.monthlyPayment}</p>
+              {showFullQuotation ? 'Hide Full Quotation' : 'Full Quotation'}
+            </button>
+          </div>
+          
+          {/* Full Quotation - Expandable */}
+          <div className={`quotation-container ${showFullQuotation ? 'expanded' : 'collapsed'}`}>
+            <div className="invoice-content" ref={invoiceRef}>
+              <table className="invoice-table">
+                <tbody>
+                  <tr className="invoice-model-row">
+                    <td>car model :</td>
+                    <td className="highlight-cell">{selectedVariant.modelName}</td>
+                  </tr>
+                  <tr>
+                    <td></td>
+                    <td>{selectedVariant.bankName}</td>
+                  </tr>
+                  <tr className="roi-row">
+                    <td></td>
+                    <td>ROI {selectedVariant.roi}</td>
+                  </tr>
+                  <tr>
+                    <td>Cost of the vehicle EX Showroom</td>
+                    <td>₹{selectedVariant.quotationData?.ex_showroom?.toLocaleString('en-IN') || selectedVariant.price}</td>
+                  </tr>
+                  <tr>
+                    <td>TCS</td>
+                    <td>₹{selectedVariant.quotationData?.tcs?.toLocaleString('en-IN') || '0'}</td>
+                  </tr>
+                  <tr>
+                    <td>Registration</td>
+                    <td>₹{selectedVariant.quotationData?.registration?.toLocaleString('en-IN') || '39,500'}</td>
+                  </tr>
+                  <tr>
+                    <td>Insurance</td>
+                    <td>₹{selectedVariant.quotationData?.insurance?.toLocaleString('en-IN') || '39,500'}</td>
+                  </tr>
+                  <tr>
+                    <td>GPS</td>
+                    <td>₹{selectedVariant.quotationData?.gps?.toLocaleString('en-IN') || '18,500'}</td>
+                  </tr>
+                  <tr>
+                    <td>Speed Governor</td>
+                    <td>₹{selectedVariant.quotationData?.speed_governor?.toLocaleString('en-IN') || '0'}</td>
+                  </tr>
+                  <tr className="on-road-row highlighted-field">
+                    <td>On the road</td>
+                    <td>₹{selectedVariant.quotationData?.on_the_road?.toLocaleString('en-IN') || '12,11,105'}</td>
+                  </tr>
+                  <tr>
+                    <td>Loan Amount</td>
+                    <td>₹{selectedVariant.quotationData?.loan_amount?.toLocaleString('en-IN') || '10,10,000'}</td>
+                  </tr>
+                  <tr>
+                    <td>Margin (Down payment)</td>
+                    <td>₹{selectedVariant.quotationData?.margin_down_payment?.toLocaleString('en-IN') || '2,01,105'}</td>
+                  </tr>
+                  <tr>
+                    <td>Process fee</td>
+                    <td>₹{selectedVariant.quotationData?.process_fee?.toLocaleString('en-IN') || '16,500'}</td>
+                  </tr>
+                  <tr>
+                    <td>Stamp duty</td>
+                    <td>₹{selectedVariant.quotationData?.stamp_duty?.toLocaleString('en-IN') || '6,500'}</td>
+                  </tr>
+                  <tr>
+                    <td>Handling Loan Services and Document Charge</td>
+                    <td>₹{selectedVariant.quotationData?.handling_document_charge?.toLocaleString('en-IN') || '30,300'}</td>
+                  </tr>
+                  <tr className="down-payment-row highlighted-field">
+                    <td>Down Payment</td>
+                    <td>₹{selectedVariant.quotationData?.down_payment?.toLocaleString('en-IN') || selectedVariant.downPayment}</td>
+                  </tr>
+                  <tr className="offers-row highlighted-field">
+                    <td>Offers</td>
+                    <td>₹{selectedVariant.quotationData?.offers?.toLocaleString('en-IN') || '100'}</td>
+                  </tr>
+                  <tr>
+                    <td>Final Down Payment</td>
+                    <td>₹{selectedVariant.quotationData?.final_down_payment?.toLocaleString('en-IN') || selectedVariant.downPayment}</td>
+                  </tr>
+                  <tr className="emi-row">
+                    <td>{selectedVariant.quotationData?.emi_years || 5} years ({(selectedVariant.quotationData?.emi_years || 5) * 12} Months)</td>
+                    <td>₹{Math.round(selectedVariant.quotationData?.monthly_emi || 0).toLocaleString('en-IN')}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          
+          {/* Download Section - Replace Excel button with Enquiry and Book Now */}
+          {showFullQuotation && (
+            <div className="download-section">
+              <h3>Download Quotation:</h3>
+              <div className="download-buttons">
+                <button 
+                  className="download-button pdf-button"
+                  onClick={downloadAsPDF}
+                  disabled={isDownloading}
+                >
+                  {isDownloading ? (
+                    <>
+                      <span className="download-spinner"></span>
+                      Generating...
+                    </>
+                  ) : (
+                    <>
+                      <span className="download-icon">📄</span>
+                      PDF
+                    </>
+                  )}
+                </button>
+                
+                <a 
+                  href="https://wa.me/+919102526006?text=I'm%20interested%20in%20this%20car.%20Please%20provide%20more%20details." 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="download-button enquiry-button"
+                >
+                  <span className="download-icon">💬</span>
+                  Enquiry
+                </a>
+                
+                <button 
+                  className="download-button book-button"
+                >
+                  <span className="download-icon">🚗</span>
+                  Book Now
+                </button>
               </div>
             </div>
-          ))}
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-export default CarDetailWithInvoices; 
+export default CarDetailWithInvoices;
