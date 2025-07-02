@@ -3,6 +3,18 @@ import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './BannerSection.css';
 
+interface BannerData {
+  id: number;
+  image: string;
+  alt: string;
+  title: string;
+  price: string;
+  downPayment: string;
+  emi: string;
+  cta: string;
+  fallbackImage?: string;
+}
+
 const BannerSection: React.FC = () => {
   const [isMobile, setIsMobile] = useState(false);
   
@@ -22,7 +34,7 @@ const BannerSection: React.FC = () => {
     setIsMobile(window.innerWidth <= 768);
   };
 
-  const banners = [
+  const banners: BannerData[] = [
     {
       id: 1,
       image: '/Website-Images/Banners/Ertiga.png',
@@ -31,7 +43,8 @@ const BannerSection: React.FC = () => {
       price: '₹8,64,000',
       downPayment: '₹86,400',
       emi: '₹12,456/month',
-      cta: 'View More'
+      cta: 'View More',
+      fallbackImage: '/Website-Images/Cars/ertiga.jpg' // Fallback for better quality
     },
     {
       id: 2,
@@ -89,9 +102,18 @@ const BannerSection: React.FC = () => {
                   src={banner.image} 
                   alt={banner.alt} 
                   loading="eager"
+                  className={`banner-image ${banner.alt.toLowerCase().includes('ertiga') ? 'ertiga-image' : ''}`}
                   onError={(e) => {
                     console.error(`Failed to load banner image: ${banner.image}`);
-                    e.currentTarget.style.display = 'none';
+                    // Try fallback image if available
+                    if (banner.fallbackImage && e.currentTarget.src !== banner.fallbackImage) {
+                      e.currentTarget.src = banner.fallbackImage;
+                    } else {
+                      e.currentTarget.style.display = 'none';
+                    }
+                  }}
+                  onLoad={(e) => {
+                    console.log(`Successfully loaded banner image: ${banner.image}`);
                   }}
                 />
               </div>

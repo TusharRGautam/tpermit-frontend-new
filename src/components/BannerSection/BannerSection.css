@@ -50,6 +50,23 @@
   transform: scale(1.02);
 }
 
+/* Specific styling for Ertiga image to improve clarity */
+.banner-image-box .ertiga-image {
+  object-fit: contain !important;
+  object-position: center !important;
+  filter: brightness(1.1) contrast(1.1) saturate(1.05) !important;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  padding: 10px;
+  max-width: 95%;
+  max-height: 95%;
+  border-radius: var(--border-radius-md);
+}
+
+.banner-image-box .ertiga-image:hover {
+  transform: scale(1.03) !important;
+  filter: brightness(1.15) contrast(1.15) saturate(1.1) !important;
+}
+
 .banner-content-box {
   flex: 1;
   display: flex;

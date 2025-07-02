@@ -366,6 +366,10 @@ const CarDetailWithInvoices: React.FC = () => {
       
       const quotationData = selectedVariant.quotationData;
       
+      // Calculate TCS based on ex-showroom price
+      const exShowroom = quotationData?.ex_showroom || 0;
+      const calculatedTCS = exShowroom > 1000000 ? exShowroom * 0.01 : 0;
+      
       const data = [
         ['ASW CARS & FINANCE', ''],
         ['', ''],
@@ -373,13 +377,23 @@ const CarDetailWithInvoices: React.FC = () => {
         ['Bank', selectedVariant.bankName],
         ['ROI', selectedVariant.roi],
         ['', ''],
-        ['Cost of the vehicle EX Showroom', `₹${quotationData?.ex_showroom?.toLocaleString('en-IN') || selectedVariant.price}`],
-        ['TCS', `₹${quotationData?.tcs?.toLocaleString('en-IN') || '0'}`],
+        ['Cost of the vehicle EX Showroom', `₹${exShowroom.toLocaleString('en-IN') || selectedVariant.price}`],
+        ['TCS', `₹${Math.round(calculatedTCS).toLocaleString('en-IN')}`],
         ['Registration', `₹${quotationData?.registration?.toLocaleString('en-IN') || '39,500'}`],
         ['Insurance', `₹${quotationData?.insurance?.toLocaleString('en-IN') || '39,500'}`],
         ['GPS', `₹${quotationData?.gps?.toLocaleString('en-IN') || '18,500'}`],
         ['Speed Governor', `₹${quotationData?.speed_governor?.toLocaleString('en-IN') || '0'}`],
-        ['On the road', `₹${quotationData?.on_the_road?.toLocaleString('en-IN') || '12,11,105'}`],
+        ['On the road', `₹${(() => {
+          const total = 
+            exShowroom + 
+            calculatedTCS + 
+            (quotationData?.registration || 0) + 
+            (quotationData?.insurance || 0) + 
+            (quotationData?.gps || 0) + 
+            (quotationData?.speed_governor || 0) + 
+            (quotationData?.accessories || 0);
+          return Math.round(total).toLocaleString('en-IN');
+        })()}`],
         ['Loan Amount', `₹${quotationData?.loan_amount?.toLocaleString('en-IN') || '10,10,000'}`],
         ['Margin (Down payment)', `₹${quotationData?.margin_down_payment?.toLocaleString('en-IN') || '2,01,105'}`],
         ['Process fee', `₹${quotationData?.process_fee?.toLocaleString('en-IN') || '16,500'}`],
@@ -520,10 +534,14 @@ const CarDetailWithInvoices: React.FC = () => {
             </div>
           </div>
           
-          {/* Move On-Road Price to right side */}
+          {/* Move Ex-showroom Price to right side */}
           <div className="on-road-price-section">
             <div className="on-road-price">
-              On-Road Price: ₹{selectedVariant.quotationData?.on_the_road?.toLocaleString('en-IN') || '12,11,105'}
+              Ex-showroom Price: ₹{(() => {
+                const exShowroom = selectedVariant.quotationData?.ex_showroom || 0;
+                const offers = selectedVariant.quotationData?.offers || 0;
+                return (exShowroom - offers).toLocaleString('en-IN');
+              })()}
             </div>
             <button 
               className="full-quotation-btn"
@@ -556,7 +574,12 @@ const CarDetailWithInvoices: React.FC = () => {
                   </tr>
                   <tr>
                     <td>TCS</td>
-                    <td>₹{selectedVariant.quotationData?.tcs?.toLocaleString('en-IN') || '0'}</td>
+                    <td>₹{(() => {
+                      const exShowroom = selectedVariant.quotationData?.ex_showroom || 0;
+                      // If ex-showroom > ₹10 lakh, show 1% TCS, otherwise 0
+                      const tcs = exShowroom > 1000000 ? exShowroom * 0.01 : 0;
+                      return Math.round(tcs).toLocaleString('en-IN');
+                    })()}</td>
                   </tr>
                   <tr>
                     <td>Registration</td>
@@ -576,7 +599,23 @@ const CarDetailWithInvoices: React.FC = () => {
                   </tr>
                   <tr className="on-road-row highlighted-field">
                     <td>On the road</td>
-                    <td>₹{selectedVariant.quotationData?.on_the_road?.toLocaleString('en-IN') || '12,11,105'}</td>
+                    <td>₹{(() => {
+                      const quotationData = selectedVariant.quotationData;
+                      if (!quotationData) return '12,11,105';
+                      
+                      const exShowroom = quotationData.ex_showroom || 0;
+                      const tcs = exShowroom > 1000000 ? exShowroom * 0.01 : 0;
+                      const total = 
+                        exShowroom + 
+                        tcs + 
+                        (quotationData.registration || 0) + 
+                        (quotationData.insurance || 0) + 
+                        (quotationData.gps || 0) + 
+                        (quotationData.speed_governor || 0) + 
+                        (quotationData.accessories || 0);
+                      
+                      return Math.round(total).toLocaleString('en-IN');
+                    })()}</td>
                   </tr>
                   <tr>
                     <td>Loan Amount</td>

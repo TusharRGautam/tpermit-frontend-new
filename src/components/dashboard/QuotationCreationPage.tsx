@@ -249,10 +249,10 @@ const QuotationCreationPage: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     
-    // Special handling for showroomCost to auto-calculate TCS as 1%
+    // Special handling for showroomCost to auto-calculate TCS based on ₹10 lakh threshold
     if (name === 'showroomCost') {
       const showroomCost = parseFloat(value) || 0;
-      const tcs = (showroomCost * 0.01).toFixed(2);
+      const tcs = calculateTCS(showroomCost).toFixed(2);
       
       setFormData({
         ...formData,
@@ -355,9 +355,31 @@ const QuotationCreationPage: React.FC = () => {
 
   // Calculate on-road price
   const calculateOnRoadPrice = (): string => {
+    // New logic: Ex-showroom price minus offers
+    const exShowroomPrice = parseFloat(formData.showroomCost) || 0;
+    const offers = parseFloat(formData.offers) || 0;
+    const total = exShowroomPrice - offers;
+      
+    return total.toLocaleString('en-IN');
+  };
+
+  // Calculate TCS automatically based on ex-showroom price
+  const calculateTCS = (exShowroomPrice: number): number => {
+    // If ex-showroom price is above ₹10 lakh, calculate 1% TCS
+    if (exShowroomPrice > 1000000) {
+      return exShowroomPrice * 0.01; // 1% TCS
+    }
+    return 0; // No TCS if ≤ ₹10 lakh
+  };
+
+  // Calculate the actual on-road price (sum of all components) for backend calculations
+  const calculateActualOnRoadPrice = (): number => {
+    const exShowroomPrice = parseFloat(formData.showroomCost) || 0;
+    const tcs = calculateTCS(exShowroomPrice);
+    
     const total = 
-      (parseFloat(formData.showroomCost) || 0) + 
-      (parseFloat(formData.tcs) || 0) + 
+      exShowroomPrice + 
+      tcs + 
       (parseFloat(formData.registration) || 0) + 
       (parseFloat(formData.insurance) || 0) + 
       (parseFloat(formData.noPlate) || 0) + 
@@ -366,7 +388,7 @@ const QuotationCreationPage: React.FC = () => {
       (parseFloat(formData.speedGovernor) || 0) + 
       (parseFloat(formData.accessories) || 0);
       
-    return total.toLocaleString('en-IN');
+    return total;
   };
 
   // Calculate down payment
@@ -414,9 +436,12 @@ const QuotationCreationPage: React.FC = () => {
 
   // Calculate bank loan amount based on bank-specific logic
   const calculateBankLoanAmount = (bankName: string, bankPercentage: number, data: QuotationData) => {
+    const exShowroomPrice = parseFloat(data.showroomCost) || 0;
+    const calculatedTCS = calculateTCS(exShowroomPrice);
+    
     const onRoadPrice = 
-      (parseFloat(data.showroomCost) || 0) + 
-      (parseFloat(data.tcs) || 0) + 
+      exShowroomPrice + 
+      calculatedTCS + 
       (parseFloat(data.registration) || 0) + 
       (parseFloat(data.insurance) || 0) + 
       (parseFloat(data.noPlate) || 0) + 
@@ -430,8 +455,8 @@ const QuotationCreationPage: React.FC = () => {
     if (bankName === 'sbiBank') {
       // SBI Bank: EX Showroom + TCS + Insurance + Registration
       loanBaseAmount = 
-        (parseFloat(data.showroomCost) || 0) +
-        (parseFloat(data.tcs) || 0) +
+        exShowroomPrice +
+        calculatedTCS +
         (parseFloat(data.insurance) || 0) +
         (parseFloat(data.registration) || 0);
     } else if (bankName === 'unionBank') {
@@ -439,7 +464,7 @@ const QuotationCreationPage: React.FC = () => {
       loanBaseAmount = onRoadPrice;
     } else if (bankName === 'indusIndBank' || bankName === 'auBank') {
       // IndusInd Bank & AU Bank: Only EX Showroom
-      loanBaseAmount = parseFloat(data.showroomCost) || 0;
+      loanBaseAmount = exShowroomPrice;
     }
     
     const loanAmount = (loanBaseAmount * bankPercentage / 100).toFixed(2);
@@ -498,7 +523,7 @@ const QuotationCreationPage: React.FC = () => {
         indusind_bank: parseFloat(formData.indusIndBank) || 0,
         au_bank: parseFloat(formData.auBank) || 0,
         ex_showroom: parseFloat(formData.showroomCost) || 0,
-        tcs: parseFloat(formData.tcs) || 0,
+        tcs: calculateTCS(parseFloat(formData.showroomCost) || 0),
         registration: parseFloat(formData.registration) || 0,
         insurance: parseFloat(formData.insurance) || 0,
         number_plate_crtm_autocard: parseFloat(formData.noPlate) || 0,
@@ -506,7 +531,7 @@ const QuotationCreationPage: React.FC = () => {
         fastag: parseFloat(formData.fastag) || 0,
         speed_governor: parseFloat(formData.speedGovernor) || 0,
         accessories: parseFloat(formData.accessories) || 0,
-        on_the_road: parseFloat(calculateOnRoadPrice().replace(/,/g, '')) || 0,
+        on_the_road: calculateActualOnRoadPrice(),
         loan_amount: parseFloat(formData.loanAmount) || 0,
         margin_down_payment: parseFloat(formData.margin) || 0,
         process_fee: parseFloat(formData.processFee) || 0,
@@ -686,7 +711,7 @@ const QuotationCreationPage: React.FC = () => {
                   />
                 </div>
                 <div className="cost-row">
-                  <label>TCS (1%):</label>
+                  <label>TCS (1% if &gt; ₹10,00,000):</label>
                   <input 
                     type="number" 
                     name="tcs"
@@ -694,6 +719,7 @@ const QuotationCreationPage: React.FC = () => {
                     onChange={handleInputChange}
                     className="form-control readonly"
                     readOnly
+                    title="Automatically calculated: 1% if Ex-showroom > ₹10,00,000, otherwise 0"
                   />
                 </div>
                 <div className="cost-row">
@@ -784,7 +810,7 @@ const QuotationCreationPage: React.FC = () => {
             
             <div className="total-section">
               <div className="total-row highlight-row">
-                <label>On the Road Price:</label>
+                <label>Effective Price (Ex-showroom - Offers):</label>
                 <div className="total-value">₹{calculateOnRoadPrice()}</div>
               </div>
             </div>
