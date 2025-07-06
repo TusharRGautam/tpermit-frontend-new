@@ -86,33 +86,33 @@ const CarDetailWithInvoices: React.FC = () => {
     });
   }, []);
 
-  // Function to convert car ID to model name
+  // Function to convert car ID to model name - Updated with new model names
   const getCarModelFromId = (id: string): string => {
     const idToModelMap: { [key: string]: string } = {
-      'maruti-suzuki-ertiga': 'Maruti Suzuki Ertiga',
-      'ertiga': 'Maruti Suzuki Ertiga',
-      'maruti-suzuki-dzire': 'Maruti Suzuki Dzire',
-      'dzire': 'Maruti Suzuki Dzire',
       'maruti-suzuki-wagon-r': 'Maruti Suzuki Wagon-R',
       'wagnor': 'Maruti Suzuki Wagon-R',
-      'maruti-suzuki-rumion': 'Maruti Suzuki Rumion',
-      'rumion': 'Maruti Suzuki Rumion',
-      'hyundai-aura': 'Hyundai Aura',
-      'aura': 'Hyundai Aura',
+      'maruti-suzuki-ertiga': 'Maruti Suzuki ERTIGA',
+      'ertiga': 'Maruti Suzuki ERTIGA',
+      'toyota-rumion': 'TOYOTA RUMION',
+      'rumion': 'TOYOTA RUMION',
+      'hyundai-aura': 'HYUNDAI AURA',
+      'aura': 'HYUNDAI AURA',
+      'maruti-suzuki-dzire': 'Maruti Suzuki Dzire',
+      'dzire': 'Maruti Suzuki Dzire',
       'toyota-innova-crysta': 'Toyota Innova Crysta',
       'crysta': 'Toyota Innova Crysta'
     };
     return idToModelMap[id] || '';
   };
 
-  // Function to get car image path
+  // Function to get car image path - Updated with new model names
   const getCarImagePath = (carName: string): string => {
     const imageMap: { [key: string]: string } = {
-      'Maruti Suzuki Ertiga': '/Website-Images/Cars/ertiga.jpg',
-      'Maruti Suzuki Dzire': '/Website-Images/Cars/Dzire.jpg',
       'Maruti Suzuki Wagon-R': '/Website-Images/Cars/wagnor.jpg',
-      'Maruti Suzuki Rumion': '/Website-Images/Cars/Ruminum.jpg',
-      'Hyundai Aura': '/Website-Images/Cars/Aura.jpg',
+      'Maruti Suzuki ERTIGA': '/Website-Images/Cars/ertiga.jpg',
+      'TOYOTA RUMION': '/Website-Images/Cars/Ruminum.jpg',
+      'HYUNDAI AURA': '/Website-Images/Cars/Aura.jpg',
+      'Maruti Suzuki Dzire': '/Website-Images/Cars/Dzire.jpg',
       'Toyota Innova Crysta': '/Website-Images/Cars/Crysta.jpg'
     };
     return imageMap[carName] || '/Website-Images/Cars/default.jpg';
@@ -263,10 +263,10 @@ const CarDetailWithInvoices: React.FC = () => {
       setShowFullQuotation(true);
       
       // Wait for DOM update
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 200));
       
       const canvas = await html2canvas(invoiceRef.current, {
-        scale: 1.5,
+        scale: 3, // Increased scale for better quality
         useCORS: true,
         allowTaint: true,
         backgroundColor: '#ffffff',
@@ -275,74 +275,117 @@ const CarDetailWithInvoices: React.FC = () => {
         height: invoiceRef.current.offsetHeight,
         onclone: (clonedDoc) => {
           const clonedElement = clonedDoc.querySelector('.invoice-content');
-          const headerElement = clonedDoc.querySelector('.invoice-header h2');
+          const companyHeader = clonedDoc.querySelector('.company-header');
+          const companyHeaderH2 = clonedDoc.querySelector('.company-header h2');
+          const companyDetails = clonedDoc.querySelectorAll('.company-details p');
           const tableElement = clonedDoc.querySelector('.invoice-table');
           const tableCells = clonedDoc.querySelectorAll('.invoice-table td');
           
           if (clonedElement) {
             (clonedElement as HTMLElement).style.backgroundColor = '#ffffff';
-            (clonedElement as HTMLElement).style.padding = '15px';
-            (clonedElement as HTMLElement).style.fontSize = '14px';
-            (clonedElement as HTMLElement).style.lineHeight = '1.4';
+            (clonedElement as HTMLElement).style.padding = '20px';
+            (clonedElement as HTMLElement).style.fontSize = '16px';
+            (clonedElement as HTMLElement).style.lineHeight = '1.5';
+            (clonedElement as HTMLElement).style.fontFamily = 'Arial, sans-serif';
+            (clonedElement as HTMLElement).style.color = '#000000'; // Ensure black text
           }
           
-          // Adjust company heading for PDF
-          if (headerElement) {
-            (headerElement as HTMLElement).style.fontSize = '20px';
-            (headerElement as HTMLElement).style.fontWeight = '700';
-            (headerElement as HTMLElement).style.color = '#2563eb';
-            (headerElement as HTMLElement).style.background = 'none';
-            (headerElement as HTMLElement).style.webkitBackgroundClip = 'unset';
-            (headerElement as HTMLElement).style.webkitTextFillColor = '#2563eb';
-            (headerElement as HTMLElement).style.marginBottom = '15px';
+          // Force display and style company header for PDF
+          if (companyHeader) {
+            (companyHeader as HTMLElement).style.display = 'block';
+            (companyHeader as HTMLElement).style.textAlign = 'center';
+            (companyHeader as HTMLElement).style.padding = '20px 0';
+            (companyHeader as HTMLElement).style.borderBottom = '2px solid #e5e7eb';
+            (companyHeader as HTMLElement).style.marginBottom = '20px';
+            (companyHeader as HTMLElement).style.backgroundColor = '#ffffff';
           }
           
-          // Reduce table size and improve readability
+          if (companyHeaderH2) {
+            (companyHeaderH2 as HTMLElement).style.fontSize = '24px';
+            (companyHeaderH2 as HTMLElement).style.fontWeight = '700';
+            (companyHeaderH2 as HTMLElement).style.color = '#000000'; // Pure black for better visibility
+            (companyHeaderH2 as HTMLElement).style.margin = '0 0 10px 0';
+            (companyHeaderH2 as HTMLElement).style.textTransform = 'uppercase';
+            (companyHeaderH2 as HTMLElement).style.letterSpacing = '1px';
+            (companyHeaderH2 as HTMLElement).style.fontFamily = 'Arial, sans-serif';
+          }
+          
+          // Style company details
+          companyDetails.forEach(detail => {
+            (detail as HTMLElement).style.margin = '4px 0';
+            (detail as HTMLElement).style.fontSize = '12px';
+            (detail as HTMLElement).style.color = '#000000'; // Pure black for better visibility
+            (detail as HTMLElement).style.fontWeight = '600'; // Bolder text
+            (detail as HTMLElement).style.lineHeight = '1.4';
+            (detail as HTMLElement).style.fontFamily = 'Arial, sans-serif';
+          });
+          
+          // Improve table styling for PDF
           if (tableElement) {
-            (tableElement as HTMLElement).style.fontSize = '12px';
+            (tableElement as HTMLElement).style.fontSize = '14px';
             (tableElement as HTMLElement).style.width = '100%';
-            (tableElement as HTMLElement).style.maxWidth = '500px';
-            (tableElement as HTMLElement).style.margin = '0 auto';
+            (tableElement as HTMLElement).style.borderCollapse = 'collapse';
+            (tableElement as HTMLElement).style.fontFamily = 'Arial, sans-serif';
+            (tableElement as HTMLElement).style.backgroundColor = '#ffffff';
+            (tableElement as HTMLElement).style.color = '#000000';
           }
           
-          // Adjust table cell padding for better fit
+          // Style specific table rows for better visibility
+          const tableRows = clonedDoc.querySelectorAll('.invoice-table tr');
+          tableRows.forEach((row, index) => {
+            if (index % 2 === 0) {
+              (row as HTMLElement).style.backgroundColor = '#f8f9fa';
+            } else {
+              (row as HTMLElement).style.backgroundColor = '#ffffff';
+            }
+          });
+          
+          // Style important rows with better contrast
+          const onRoadRow = clonedDoc.querySelector('.on-road-row');
+          if (onRoadRow) {
+            (onRoadRow as HTMLElement).style.backgroundColor = '#e3f2fd !important';
+            (onRoadRow as HTMLElement).style.fontWeight = '700';
+          }
+          
+          const emiRow = clonedDoc.querySelector('.emi-row');
+          if (emiRow) {
+            (emiRow as HTMLElement).style.backgroundColor = '#fff3e0 !important';
+            (emiRow as HTMLElement).style.fontWeight = '700';
+          }
+          
+          // Enhance table cell styling for better readability
           tableCells.forEach(cell => {
-            (cell as HTMLElement).style.padding = '8px 12px';
-            (cell as HTMLElement).style.fontSize = '12px';
-            (cell as HTMLElement).style.lineHeight = '1.3';
-            (cell as HTMLElement).style.color = '#333';
-            (cell as HTMLElement).style.border = '1px solid #ccc';
+            (cell as HTMLElement).style.padding = '12px 16px';
+            (cell as HTMLElement).style.fontSize = '14px';
+            (cell as HTMLElement).style.lineHeight = '1.4';
+            (cell as HTMLElement).style.color = '#000000'; // Pure black for better contrast
+            (cell as HTMLElement).style.backgroundColor = '#ffffff'; // Pure white background
+            (cell as HTMLElement).style.border = '1px solid #000000'; // Black borders
+            (cell as HTMLElement).style.fontFamily = 'Arial, sans-serif';
+            (cell as HTMLElement).style.fontWeight = '600'; // Bolder text
           });
         }
       });
 
-      const imgData = canvas.toDataURL('image/png');
+      const imgData = canvas.toDataURL('image/png', 1.0); // Maximum quality
       const pdf = new jsPDF('p', 'mm', 'a4');
       
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = pdf.internal.pageSize.getHeight();
+      
+      // Calculate image dimensions and position
       const imgWidth = canvas.width;
       const imgHeight = canvas.height;
-      
-      // Calculate ratio to fit content better with margins
       const maxWidth = pdfWidth - 20; // 10mm margin on each side
-      const maxHeight = pdfHeight - 40; // 20mm margin top and bottom
+      const maxHeight = pdfHeight - 30; // 15mm margin top and bottom
       const ratio = Math.min(maxWidth / imgWidth, maxHeight / imgHeight);
       
       const scaledWidth = imgWidth * ratio;
       const scaledHeight = imgHeight * ratio;
       const imgX = (pdfWidth - scaledWidth) / 2;
-      const imgY = 20; // Reduced top margin
+      const imgY = 15; // Small top margin
 
-      pdf.addImage(imgData, 'PNG', imgX, imgY, scaledWidth, scaledHeight);
-      
-      // Add company name as text at the top for better visibility
-      pdf.setFontSize(16);
-      pdf.setTextColor(37, 99, 235); // Blue color
-      pdf.setFont('helvetica', 'bold');
-      const companyName = 'ASW CARS & FINANCE';
-      const textWidth = pdf.getTextWidth(companyName);
-      pdf.text(companyName, (pdfWidth - textWidth) / 2, 15);
+      pdf.addImage(imgData, 'PNG', imgX, imgY, scaledWidth, scaledHeight, undefined, 'FAST');
       
       const fileName = `ASW_Quotation_${selectedVariant.modelName.replace(/\s+/g, '_')}_${selectedVariant.bankName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
       pdf.save(fileName);
@@ -554,6 +597,15 @@ const CarDetailWithInvoices: React.FC = () => {
           {/* Full Quotation - Expandable */}
           <div className={`quotation-container ${showFullQuotation ? 'expanded' : 'collapsed'}`}>
             <div className="invoice-content" ref={invoiceRef}>
+              {/* Company Header for PDF */}
+              <div className="company-header">
+                <h2>ASW CARS & FINANCE</h2>
+                <div className="company-details">
+                  <p>Shop No. 123, Main Road, Auto Market</p>
+                  <p>City Center, Bangalore - 560001</p>
+                  <p>Contact: +91 91025 26006 | Email: info@aswcars.com</p>
+                </div>
+              </div>
               <table className="invoice-table">
                 <tbody>
                   <tr className="invoice-model-row">

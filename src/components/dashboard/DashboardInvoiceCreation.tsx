@@ -5,10 +5,10 @@ import './Dashboard.css';
 const carVariants = {
   'Maruti Suzuki Ertiga': ['VXI CNG', 'Tour M'],
   'Maruti Suzuki Dzire': ['Tour S CNG'],
-  'Maruti Suzuki Wagon-R': ['Tour H', 'LXI CNG', 'VXI CNG'],
+  'Maruti Suzuki Wagon-R': ['Wagoner-R H3 CNG', 'Wagoner-R LXI CNG', 'Wagoner-R VXI CNG'],
   'Maruti Suzuki Rumion': ['S CNG'],
-  'Hyundai Aura': ['E CNG', 'S CNG', 'SX CNG'],
-  'Toyota Innova Crysta': ['GX Diesel', 'GXT Diesel', 'VX Diesel', 'ZX Diesel']
+  'Hyundai Aura': ['Aura E CNG', 'Aura S CNG', 'Aura SX CNG'],
+  'Toyota Innova Crysta': ['Crysta GX', 'Crysta GX+', 'Crysta VX', 'Crysta ZX']
 };
 
 const DashboardInvoiceCreation: React.FC = () => {
@@ -94,4 +94,4 @@ const DashboardInvoiceCreation: React.FC = () => {
   );
 };
 
-export default DashboardInvoiceCreation; 
+export default DashboardInvoiceCreation;

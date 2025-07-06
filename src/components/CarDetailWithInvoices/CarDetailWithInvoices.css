@@ -304,6 +304,50 @@
   z-index: 2;
 }
 
+/* Company Header Styles for PDF */
+.company-header {
+  text-align: center;
+  padding: 20px 0;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 20px;
+  background: #ffffff;
+}
+
+.company-header h2 {
+  font-size: 1.8rem;
+  color: #2563eb;
+  font-weight: 700;
+  margin: 0 0 10px 0;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.company-details {
+  margin-top: 8px;
+}
+
+.company-details p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: #4b5563;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Hide company header on screen, show only in PDF */
+@media screen {
+  .company-header {
+    display: none;
+  }
+}
+
+/* Show company header in print/PDF */
+@media print {
+  .company-header {
+    display: block !important;
+  }
+}
+
 .invoice-table {
   width: 100%;
   border-collapse: collapse;

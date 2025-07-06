@@ -11,10 +11,10 @@ type CarVariant = string;
 const carVariants = {
   'Maruti Suzuki Ertiga': ['VXI CNG', 'Tour M'],
   'Maruti Suzuki Dzire': ['Tour S CNG'],
-  'Maruti Suzuki Wagon-R': ['Tour H', 'LXI CNG', 'VXI CNG'],
+  'Maruti Suzuki Wagon-R': ['Wagoner-R H3 CNG', 'Wagoner-R LXI CNG', 'Wagoner-R VXI CNG'],
   'Maruti Suzuki Rumion': ['S CNG'],
-  'Hyundai Aura': ['E CNG', 'S CNG', 'SX CNG'],
-  'Toyota Innova Crysta': ['GX Diesel', 'GXT Diesel', 'VX Diesel', 'ZX Diesel']
+  'Hyundai Aura': ['Aura E CNG', 'Aura S CNG', 'Aura SX CNG'],
+  'Toyota Innova Crysta': ['Crysta GX', 'Crysta GX+', 'Crysta VX', 'Crysta ZX']
 };
 
 // Car colors for each variant
@@ -27,23 +27,23 @@ const carColors = {
     'Tour S CNG': ['White']
   },
   'Maruti Suzuki Wagon-R': {
-    'Tour H': ['White'],
-    'LXI CNG': ['White', 'Silver', 'Grey', 'Red', 'Blue'],
-    'VXI CNG': ['White', 'Silver', 'Grey', 'Red', 'Blue']
+    'Wagoner-R H3 CNG': ['White'],
+    'Wagoner-R LXI CNG': ['White', 'Silver', 'Grey', 'Red', 'Blue'],
+    'Wagoner-R VXI CNG': ['White', 'Silver', 'Grey', 'Red', 'Blue']
   },
   'Maruti Suzuki Rumion': {
     'S CNG': ['White', 'Silver', 'Grey']
   },
   'Hyundai Aura': {
-    'E CNG': ['White', 'Silver', 'Grey', 'Cherry Night'],
-    'S CNG': ['White', 'Silver', 'Grey', 'Cherry Night'],
-    'SX CNG': ['White', 'Silver', 'Grey', 'Cherry Night']
+    'Aura E CNG': ['White', 'Silver', 'Grey', 'Cherry Night'],
+    'Aura S CNG': ['White', 'Silver', 'Grey', 'Cherry Night'],
+    'Aura SX CNG': ['White', 'Silver', 'Grey', 'Cherry Night']
   },
   'Toyota Innova Crysta': {
-    'GX Diesel': ['White', 'Silver', 'Pearl White'],
-    'GXT Diesel': ['White', 'Silver', 'Pearl White'],
-    'VX Diesel': ['White', 'Silver', 'Pearl White'],
-    'ZX Diesel': ['White', 'Silver', 'Pearl White']
+    'Crysta GX': ['White', 'Silver', 'Pearl White'],
+    'Crysta GX+': ['White', 'Silver', 'Pearl White'],
+    'Crysta VX': ['White', 'Silver', 'Pearl White'],
+    'Crysta ZX': ['White', 'Silver', 'Pearl White']
   }
 };
 
@@ -249,10 +249,10 @@ const QuotationCreationPage: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     
-    // Special handling for showroomCost to auto-calculate TCS based on ₹10 lakh threshold
+    // Special handling for showroomCost to auto-calculate TCS as 1%
     if (name === 'showroomCost') {
       const showroomCost = parseFloat(value) || 0;
-      const tcs = calculateTCS(showroomCost).toFixed(2);
+      const tcs = (showroomCost * 0.01).toFixed(2);
       
       setFormData({
         ...formData,
@@ -355,31 +355,9 @@ const QuotationCreationPage: React.FC = () => {
 
   // Calculate on-road price
   const calculateOnRoadPrice = (): string => {
-    // New logic: Ex-showroom price minus offers
-    const exShowroomPrice = parseFloat(formData.showroomCost) || 0;
-    const offers = parseFloat(formData.offers) || 0;
-    const total = exShowroomPrice - offers;
-      
-    return total.toLocaleString('en-IN');
-  };
-
-  // Calculate TCS automatically based on ex-showroom price
-  const calculateTCS = (exShowroomPrice: number): number => {
-    // If ex-showroom price is above ₹10 lakh, calculate 1% TCS
-    if (exShowroomPrice > 1000000) {
-      return exShowroomPrice * 0.01; // 1% TCS
-    }
-    return 0; // No TCS if ≤ ₹10 lakh
-  };
-
-  // Calculate the actual on-road price (sum of all components) for backend calculations
-  const calculateActualOnRoadPrice = (): number => {
-    const exShowroomPrice = parseFloat(formData.showroomCost) || 0;
-    const tcs = calculateTCS(exShowroomPrice);
-    
     const total = 
-      exShowroomPrice + 
-      tcs + 
+      (parseFloat(formData.showroomCost) || 0) + 
+      (parseFloat(formData.tcs) || 0) + 
       (parseFloat(formData.registration) || 0) + 
       (parseFloat(formData.insurance) || 0) + 
       (parseFloat(formData.noPlate) || 0) + 
@@ -388,7 +366,7 @@ const QuotationCreationPage: React.FC = () => {
       (parseFloat(formData.speedGovernor) || 0) + 
       (parseFloat(formData.accessories) || 0);
       
-    return total;
+    return total.toLocaleString('en-IN');
   };
 
   // Calculate down payment
@@ -436,12 +414,9 @@ const QuotationCreationPage: React.FC = () => {
 
   // Calculate bank loan amount based on bank-specific logic
   const calculateBankLoanAmount = (bankName: string, bankPercentage: number, data: QuotationData) => {
-    const exShowroomPrice = parseFloat(data.showroomCost) || 0;
-    const calculatedTCS = calculateTCS(exShowroomPrice);
-    
     const onRoadPrice = 
-      exShowroomPrice + 
-      calculatedTCS + 
+      (parseFloat(data.showroomCost) || 0) + 
+      (parseFloat(data.tcs) || 0) + 
       (parseFloat(data.registration) || 0) + 
       (parseFloat(data.insurance) || 0) + 
       (parseFloat(data.noPlate) || 0) + 
@@ -455,8 +430,8 @@ const QuotationCreationPage: React.FC = () => {
     if (bankName === 'sbiBank') {
       // SBI Bank: EX Showroom + TCS + Insurance + Registration
       loanBaseAmount = 
-        exShowroomPrice +
-        calculatedTCS +
+        (parseFloat(data.showroomCost) || 0) +
+        (parseFloat(data.tcs) || 0) +
         (parseFloat(data.insurance) || 0) +
         (parseFloat(data.registration) || 0);
     } else if (bankName === 'unionBank') {
@@ -464,7 +439,7 @@ const QuotationCreationPage: React.FC = () => {
       loanBaseAmount = onRoadPrice;
     } else if (bankName === 'indusIndBank' || bankName === 'auBank') {
       // IndusInd Bank & AU Bank: Only EX Showroom
-      loanBaseAmount = exShowroomPrice;
+      loanBaseAmount = parseFloat(data.showroomCost) || 0;
     }
     
     const loanAmount = (loanBaseAmount * bankPercentage / 100).toFixed(2);
@@ -523,7 +498,7 @@ const QuotationCreationPage: React.FC = () => {
         indusind_bank: parseFloat(formData.indusIndBank) || 0,
         au_bank: parseFloat(formData.auBank) || 0,
         ex_showroom: parseFloat(formData.showroomCost) || 0,
-        tcs: calculateTCS(parseFloat(formData.showroomCost) || 0),
+        tcs: parseFloat(formData.tcs) || 0,
         registration: parseFloat(formData.registration) || 0,
         insurance: parseFloat(formData.insurance) || 0,
         number_plate_crtm_autocard: parseFloat(formData.noPlate) || 0,
@@ -531,7 +506,7 @@ const QuotationCreationPage: React.FC = () => {
         fastag: parseFloat(formData.fastag) || 0,
         speed_governor: parseFloat(formData.speedGovernor) || 0,
         accessories: parseFloat(formData.accessories) || 0,
-        on_the_road: calculateActualOnRoadPrice(),
+        on_the_road: parseFloat(calculateOnRoadPrice().replace(/,/g, '')) || 0,
         loan_amount: parseFloat(formData.loanAmount) || 0,
         margin_down_payment: parseFloat(formData.margin) || 0,
         process_fee: parseFloat(formData.processFee) || 0,
@@ -711,7 +686,7 @@ const QuotationCreationPage: React.FC = () => {
                   />
                 </div>
                 <div className="cost-row">
-                  <label>TCS (1% if &gt; ₹10,00,000):</label>
+                  <label>TCS (1%):</label>
                   <input 
                     type="number" 
                     name="tcs"
@@ -719,7 +694,6 @@ const QuotationCreationPage: React.FC = () => {
                     onChange={handleInputChange}
                     className="form-control readonly"
                     readOnly
-                    title="Automatically calculated: 1% if Ex-showroom > ₹10,00,000, otherwise 0"
                   />
                 </div>
                 <div className="cost-row">
@@ -810,7 +784,7 @@ const QuotationCreationPage: React.FC = () => {
             
             <div className="total-section">
               <div className="total-row highlight-row">
-                <label>Effective Price (Ex-showroom - Offers):</label>
+                <label>On the Road Price:</label>
                 <div className="total-value">₹{calculateOnRoadPrice()}</div>
               </div>
             </div>
@@ -1218,4 +1192,4 @@ const QuotationCreationPage: React.FC = () => {
   );
 };
 
-export default QuotationCreationPage; 
+export default QuotationCreationPage;

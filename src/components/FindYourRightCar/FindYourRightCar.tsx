@@ -4,23 +4,11 @@ import './FindYourRightCar.css';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { globalFetchCarsData } from '../../redux/slices/globalCarsSlice';
 import { 
-  selectGlobalCarsList, 
   selectGlobalCarsLoading, 
   selectGlobalCarsError,
   selectGlobalCarsWithEmi 
 } from '../../redux/selectors';
-
-interface CarData {
-  id: string;
-  image: string;
-  name: string;
-  downPayment: string;
-  monthlyEmi?: string;
-  variants: Array<{
-    name: string;
-    colors: string[];
-  }>;
-}
+import OptimizedImage from '../OptimizedImage/OptimizedImage';
 
 interface CarCardProps {
   id: string;
@@ -39,7 +27,14 @@ const CarCard: React.FC<CarCardProps> = ({ id, image, name, downPayment, monthly
     <div className="todays-offers-badge">Today's Offers</div>
     <Link to={`/car/${id}`} className="car-link">
       <div className="car-image">
-        <img src={image} alt={name} loading="lazy" />
+        <OptimizedImage 
+          src={image} 
+          alt={name} 
+          loading="lazy"
+          className="car-image-optimized"
+          onError={() => console.warn(`Failed to load image for ${name}: ${image}`)}
+          placeholder="/Website-Images/Cars/placeholder.svg"
+        />
       </div>
       <div className="car-info">
         <h3 className="car-name">{name}</h3>
@@ -98,7 +93,6 @@ const FindYourRightCar: React.FC = () => {
   const dispatch = useAppDispatch();
   
   // Global state selectors
-  const globalCarsList = useAppSelector(selectGlobalCarsList);
   const globalCarsWithEmi = useAppSelector(selectGlobalCarsWithEmi);
   const globalIsLoading = useAppSelector(selectGlobalCarsLoading);
   const globalError = useAppSelector(selectGlobalCarsError);

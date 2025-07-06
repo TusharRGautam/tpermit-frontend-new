@@ -27,7 +27,7 @@ const InvoiceList: React.FC = () => {
           id: 'INV-2023-042',
           date: '2023-05-25',
           customerName: 'Rahul Sharma',
-          carModel: 'Maruti Ertiga',
+          carModel: 'Maruti Suzuki ERTIGA',
           variant: 'ZXI+',
           totalAmount: '₹11,25,500'
         },

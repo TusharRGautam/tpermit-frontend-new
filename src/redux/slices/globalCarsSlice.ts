@@ -44,116 +44,119 @@ const initialState: GlobalCarsState = {
   globalLastUpdated: null,
 };
 
+// Get fallback car data
+const getFallbackCarData = () => [
+  {
+    id: 'maruti-suzuki-ertiga',
+    image: '/Website-Images/Cars/ertiga.jpg',
+    name: 'Maruti Suzuki ERTIGA',
+    downPayment: '₹99,347',
+    monthlyEmi: '₹23,367/month',
+    globalExShowroomPrice: 1000000,
+    globalLoanAmount: 875000,
+    globalInterestRate: 8.5,
+    globalTotalOnRoadPrice: 1125000,
+    variants: [
+      { name: 'VXI CNG 1.5 MT', colors: ['White', 'Silver', 'Grey', 'Red', 'Blue'] },
+      { name: 'Tour M CNG 1.5 MT', colors: ['White'] }
+    ]
+  },
+  {
+    id: 'maruti-suzuki-dzire',
+    image: '/Website-Images/Cars/Dzire.jpg',
+    name: 'Maruti Suzuki Dzire',
+    downPayment: '₹1,35,971',
+    monthlyEmi: '₹17,531/month',
+    globalExShowroomPrice: 750000,
+    globalLoanAmount: 665000,
+    globalInterestRate: 8.5,
+    globalTotalOnRoadPrice: 850000,
+    variants: [
+      { name: 'Tour S CNG', colors: ['White'] },
+      { name: 'Tour S CNG', colors: ['White'] }
+    ]
+  },
+  {
+    id: 'maruti-suzuki-wagon-r',
+    image: '/Website-Images/Cars/wagnor.jpg',
+    name: 'Maruti Suzuki Wagon-R',
+    downPayment: '₹92,821',
+    monthlyEmi: '₹11,884/month',
+    globalExShowroomPrice: 650000,
+    globalLoanAmount: 585000,
+    globalInterestRate: 8.5,
+    globalTotalOnRoadPrice: 715000,
+    variants: [
+      { name: 'LXI CNG', colors: ['White', 'Silver', 'Grey', 'Red', 'Blue'] },
+      { name: 'Tour H', colors: ['White'] }
+    ]
+  },
+  {
+    id: 'toyota-rumion',
+    image: '/Website-Images/Cars/Ruminum.jpg',
+    name: 'TOYOTA RUMION',
+    downPayment: '₹1,03,647',
+    monthlyEmi: '₹23,344/month',
+    globalExShowroomPrice: 850000,
+    globalLoanAmount: 755000,
+    globalInterestRate: 8.5,
+    globalTotalOnRoadPrice: 950000,
+    variants: [
+      { name: 'S CNG 1.5 MT', colors: ['White', 'Silver', 'Grey'] }
+    ]
+  },
+  {
+    id: 'hyundai-aura',
+    image: '/Website-Images/Cars/Aura.jpg',
+    name: 'HYUNDAI AURA',
+    downPayment: '₹1,23,821',
+    monthlyEmi: '₹15,809/month',
+    globalExShowroomPrice: 700000,
+    globalLoanAmount: 625000,
+    globalInterestRate: 8.5,
+    globalTotalOnRoadPrice: 775000,
+    variants: [
+      { name: 'E CNG', colors: ['White', 'Silver', 'Grey', 'Cherry Night'] },
+      { name: 'S CNG', colors: ['White', 'Silver', 'Grey', 'Cherry Night'] }
+    ]
+  },
+  {
+    id: 'toyota-innova-crysta',
+    image: '/Website-Images/Cars/Crysta.jpg',
+    name: 'Toyota Innova Crysta',
+    downPayment: '₹1,59,547',
+    monthlyEmi: '₹38,557/month',
+    globalExShowroomPrice: 1800000,
+    globalLoanAmount: 1650000,
+    globalInterestRate: 8.5,
+    globalTotalOnRoadPrice: 1950000,
+    variants: [
+      { name: 'GX', colors: ['White', 'Silver', 'Pearl White'] },
+      { name: 'GX+', colors: ['White', 'Silver', 'Pearl White'] }
+    ]
+  }
+];
+
 // Async thunk for fetching car data
 export const globalFetchCarsData = createAsyncThunk(
   'globalCars/fetchCarsData',
   async (_, { rejectWithValue }) => {
     try {
-      // This will be connected to your quotation service
+      // Try to fetch from backend
       const quotationService = await import('../../services/quotationService');
       const carSummaries = await quotationService.default.getCarSummaries();
       
       if (carSummaries && carSummaries.length > 0) {
+        console.log('✅ Successfully fetched car data from backend');
         return carSummaries;
       } else {
-        // Fallback data
-        return [
-          {
-            id: 'maruti-suzuki-ertiga',
-            image: '/Website-Images/Cars/ertiga.jpg',
-            name: 'Maruti Suzuki Ertiga',
-            downPayment: '₹1,25,000',
-            monthlyEmi: '₹18,500/month',
-            globalExShowroomPrice: 1000000,
-            globalLoanAmount: 875000,
-            globalInterestRate: 8.5,
-            globalTotalOnRoadPrice: 1125000,
-            variants: [
-              { name: 'VXI CNG', colors: ['White', 'Silver', 'Grey', 'Red', 'Blue'] },
-              { name: 'Tour M', colors: ['White'] }
-            ]
-          },
-          {
-            id: 'maruti-suzuki-dzire',
-            image: '/Website-Images/Cars/Dzire.jpg',
-            name: 'Maruti Suzuki Dzire',
-            downPayment: '₹85,000',
-            monthlyEmi: '₹14,200/month',
-            globalExShowroomPrice: 750000,
-            globalLoanAmount: 665000,
-            globalInterestRate: 8.5,
-            globalTotalOnRoadPrice: 850000,
-            variants: [
-              { name: 'Tour S CNG', colors: ['White'] }
-            ]
-          },
-          {
-            id: 'maruti-suzuki-wagon-r',
-            image: '/Website-Images/Cars/wagnor.jpg',
-            name: 'Maruti Suzuki Wagon-R',
-            downPayment: '₹65,000',
-            monthlyEmi: '₹12,800/month',
-            globalExShowroomPrice: 650000,
-            globalLoanAmount: 585000,
-            globalInterestRate: 8.5,
-            globalTotalOnRoadPrice: 715000,
-            variants: [
-              { name: 'Tour H', colors: ['White'] },
-              { name: 'LXI CNG', colors: ['White', 'Silver', 'Grey', 'Red', 'Blue'] },
-              { name: 'VXI CNG', colors: ['White', 'Silver', 'Grey', 'Red', 'Blue'] }
-            ]
-          },
-          {
-            id: 'maruti-suzuki-rumion',
-            image: '/Website-Images/Cars/Ruminum.jpg',
-            name: 'Maruti Suzuki Rumion',
-            downPayment: '₹95,000',
-            monthlyEmi: '₹15,900/month',
-            globalExShowroomPrice: 850000,
-            globalLoanAmount: 755000,
-            globalInterestRate: 8.5,
-            globalTotalOnRoadPrice: 950000,
-            variants: [
-              { name: 'S CNG', colors: ['White', 'Silver', 'Grey'] }
-            ]
-          },
-          {
-            id: 'hyundai-aura',
-            image: '/Website-Images/Cars/Aura.jpg',
-            name: 'Hyundai Aura',
-            downPayment: '₹75,000',
-            monthlyEmi: '₹13,500/month',
-            globalExShowroomPrice: 700000,
-            globalLoanAmount: 625000,
-            globalInterestRate: 8.5,
-            globalTotalOnRoadPrice: 775000,
-            variants: [
-              { name: 'E CNG', colors: ['White', 'Silver', 'Grey', 'Cherry Night'] },
-              { name: 'S CNG', colors: ['White', 'Silver', 'Grey', 'Cherry Night'] },
-              { name: 'SX CNG', colors: ['White', 'Silver', 'Grey', 'Cherry Night'] }
-            ]
-          },
-          {
-            id: 'toyota-innova-crysta',
-            image: '/Website-Images/Cars/Crysta.jpg',
-            name: 'Toyota Innova Crysta',
-            downPayment: '₹1,50,000',
-            monthlyEmi: '₹28,500/month',
-            globalExShowroomPrice: 1800000,
-            globalLoanAmount: 1650000,
-            globalInterestRate: 8.5,
-            globalTotalOnRoadPrice: 1950000,
-            variants: [
-              { name: 'GX Diesel', colors: ['White', 'Silver', 'Pearl White'] },
-              { name: 'GXT Diesel', colors: ['White', 'Silver', 'Pearl White'] },
-              { name: 'VX Diesel', colors: ['White', 'Silver', 'Pearl White'] },
-              { name: 'ZX Diesel', colors: ['White', 'Silver', 'Pearl White'] }
-            ]
-          }
-        ];
+        console.log('⚠️ Backend returned empty data, using fallback');
+        return getFallbackCarData();
       }
     } catch (error) {
-      return rejectWithValue(`Failed to fetch car data: ${error}`);
+      console.log('⚠️ Backend fetch failed, using fallback:', error);
+      // Always return fallback data instead of rejecting
+      return getFallbackCarData();
     }
   }
 );
@@ -219,4 +222,4 @@ export const {
   globalResetCarSelection,
 } = globalCarsSlice.actions;
 
-export default globalCarsSlice.reducer; 
+export default globalCarsSlice.reducer;

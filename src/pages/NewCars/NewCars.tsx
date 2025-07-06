@@ -53,15 +53,15 @@ const NewCars: React.FC = () => {
       startingPrice: '₹5,97,500',
       variants: [
         {
-          name: 'Tour H',
+          name: 'Wagoner-R H3 CNG',
           colors: ['White']
         },
         {
-          name: 'LXI CNG',
+          name: 'Wagoner-R LXI CNG',
           colors: ['White', 'Silver', 'Grey', 'Red', 'Blue']
         },
         {
-          name: 'VXI CNG',
+          name: 'Wagoner-R VXI CNG',
           colors: ['White', 'Silver', 'Grey', 'Red', 'Blue']
         }
       ]
@@ -85,15 +85,15 @@ const NewCars: React.FC = () => {
       startingPrice: '₹7,97,500',
       variants: [
         {
-          name: 'E CNG',
+          name: 'Aura E CNG',
           colors: ['White', 'Silver', 'Grey', 'Cherry Night']
         },
         {
-          name: 'S CNG',
+          name: 'Aura S CNG',
           colors: ['White', 'Silver', 'Grey', 'Cherry Night']
         },
         {
-          name: 'SX CNG',
+          name: 'Aura SX CNG',
           colors: ['White', 'Silver', 'Grey', 'Cherry Night']
         }
       ]
@@ -105,19 +105,19 @@ const NewCars: React.FC = () => {
       startingPrice: '₹17,97,500',
       variants: [
         {
-          name: 'GX Diesel',
+          name: 'Crysta GX',
           colors: ['White', 'Silver', 'Pearl White']
         },
         {
-          name: 'GXT Diesel',
+          name: 'Crysta GX+',
           colors: ['White', 'Silver', 'Pearl White']
         },
         {
-          name: 'VX Diesel',
+          name: 'Crysta VX',
           colors: ['White', 'Silver', 'Pearl White']
         },
         {
-          name: 'ZX Diesel',
+          name: 'Crysta ZX',
           colors: ['White', 'Silver', 'Pearl White']
         }
       ]
@@ -198,4 +198,4 @@ const NewCars: React.FC = () => {
   );
 };
 
-export default NewCars; 
+export default NewCars;
