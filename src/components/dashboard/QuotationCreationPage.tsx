@@ -9,41 +9,42 @@ type CarVariant = string;
 
 // Real ASW Cars inventory with variants
 const carVariants = {
-  'Maruti Suzuki Ertiga': ['VXI CNG', 'Tour M'],
-  'Maruti Suzuki Dzire': ['Tour S CNG'],
-  'Maruti Suzuki Wagon-R': ['Wagoner-R H3 CNG', 'Wagoner-R LXI CNG', 'Wagoner-R VXI CNG'],
-  'Maruti Suzuki Rumion': ['S CNG'],
-  'Hyundai Aura': ['Aura E CNG', 'Aura S CNG', 'Aura SX CNG'],
-  'Toyota Innova Crysta': ['Crysta GX', 'Crysta GX+', 'Crysta VX', 'Crysta ZX']
+  'Maruti Suzuki Wagon-R': ['H3 CNG', 'LXI CNG', 'VXI CNG'],
+  'Maruti Suzuki ERTIGA': ['Tour M CNG 1.5 MT', 'VXI CNG 1.5 MT', 'ZXI CNG 1.5 MT'],
+  'TOYOTA RUMION': ['S CNG 1.5 MT'],
+  'HYUNDAI AURA': ['E CNG', 'S CNG', 'SX CNG'],
+  'Maruti Suzuki Dzire': ['Tour\'s CNG'],
+  'Toyota Innova Crysta': ['GX', 'GX+', 'VX', 'ZX']
 };
 
 // Car colors for each variant
 const carColors = {
-  'Maruti Suzuki Ertiga': {
-    'VXI CNG': ['White', 'Silver', 'Grey', 'Red', 'Blue'],
-    'Tour M': ['White']
+  'Maruti Suzuki Wagon-R': {
+    'H3 CNG': ['White'],
+    'LXI CNG': ['White', 'Silver', 'Grey', 'Red', 'Blue'],
+    'VXI CNG': ['White', 'Silver', 'Grey', 'Red', 'Blue']
+  },
+  'Maruti Suzuki ERTIGA': {
+    'Tour M CNG 1.5 MT': ['White'],
+    'VXI CNG 1.5 MT': ['White', 'Silver', 'Grey', 'Red', 'Blue'],
+    'ZXI CNG 1.5 MT': ['White', 'Silver', 'Grey', 'Red', 'Blue']
+  },
+  'TOYOTA RUMION': {
+    'S CNG 1.5 MT': ['White', 'Silver', 'Grey']
+  },
+  'HYUNDAI AURA': {
+    'E CNG': ['White', 'Silver', 'Grey', 'Cherry Night'],
+    'S CNG': ['White', 'Silver', 'Grey', 'Cherry Night'],
+    'SX CNG': ['White', 'Silver', 'Grey', 'Cherry Night']
   },
   'Maruti Suzuki Dzire': {
-    'Tour S CNG': ['White']
-  },
-  'Maruti Suzuki Wagon-R': {
-    'Wagoner-R H3 CNG': ['White'],
-    'Wagoner-R LXI CNG': ['White', 'Silver', 'Grey', 'Red', 'Blue'],
-    'Wagoner-R VXI CNG': ['White', 'Silver', 'Grey', 'Red', 'Blue']
-  },
-  'Maruti Suzuki Rumion': {
-    'S CNG': ['White', 'Silver', 'Grey']
-  },
-  'Hyundai Aura': {
-    'Aura E CNG': ['White', 'Silver', 'Grey', 'Cherry Night'],
-    'Aura S CNG': ['White', 'Silver', 'Grey', 'Cherry Night'],
-    'Aura SX CNG': ['White', 'Silver', 'Grey', 'Cherry Night']
+    'Tour\'s CNG': ['White']
   },
   'Toyota Innova Crysta': {
-    'Crysta GX': ['White', 'Silver', 'Pearl White'],
-    'Crysta GX+': ['White', 'Silver', 'Pearl White'],
-    'Crysta VX': ['White', 'Silver', 'Pearl White'],
-    'Crysta ZX': ['White', 'Silver', 'Pearl White']
+    'GX': ['White', 'Silver', 'Pearl White'],
+    'GX+': ['White', 'Silver', 'Pearl White'],
+    'VX': ['White', 'Silver', 'Pearl White'],
+    'ZX': ['White', 'Silver', 'Pearl White']
   }
 };
 
@@ -249,10 +250,11 @@ const QuotationCreationPage: React.FC = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     
-    // Special handling for showroomCost to auto-calculate TCS as 1%
+    // Special handling for showroomCost to auto-calculate TCS - Only if > ₹10,00,000
     if (name === 'showroomCost') {
       const showroomCost = parseFloat(value) || 0;
-      const tcs = (showroomCost * 0.01).toFixed(2);
+      // Only calculate TCS if Ex-Showroom > ₹10,00,000
+      const tcs = showroomCost > 1000000 ? (showroomCost * 0.01).toFixed(2) : '0';
       
       setFormData({
         ...formData,
@@ -353,14 +355,14 @@ const QuotationCreationPage: React.FC = () => {
     }
   };
 
-  // Calculate on-road price
+  // Calculate on-road price - Exclude Number Plate/CRTm/AutoCard charges
   const calculateOnRoadPrice = (): string => {
     const total = 
       (parseFloat(formData.showroomCost) || 0) + 
       (parseFloat(formData.tcs) || 0) + 
       (parseFloat(formData.registration) || 0) + 
       (parseFloat(formData.insurance) || 0) + 
-      (parseFloat(formData.noPlate) || 0) + 
+      // Note: noPlate (number_plate_crtm_autocard) is excluded from On-Road Price
       (parseFloat(formData.gps) || 0) + 
       (parseFloat(formData.fastag) || 0) + 
       (parseFloat(formData.speedGovernor) || 0) + 
@@ -414,12 +416,13 @@ const QuotationCreationPage: React.FC = () => {
 
   // Calculate bank loan amount based on bank-specific logic
   const calculateBankLoanAmount = (bankName: string, bankPercentage: number, data: QuotationData) => {
+    // Calculate On-Road Price excluding Number Plate/CRTm/AutoCard charges
     const onRoadPrice = 
       (parseFloat(data.showroomCost) || 0) + 
       (parseFloat(data.tcs) || 0) + 
       (parseFloat(data.registration) || 0) + 
       (parseFloat(data.insurance) || 0) + 
-      (parseFloat(data.noPlate) || 0) + 
+      // Note: noPlate (number_plate_crtm_autocard) is excluded from On-Road Price
       (parseFloat(data.gps) || 0) + 
       (parseFloat(data.fastag) || 0) + 
       (parseFloat(data.speedGovernor) || 0) + 
@@ -435,7 +438,7 @@ const QuotationCreationPage: React.FC = () => {
         (parseFloat(data.insurance) || 0) +
         (parseFloat(data.registration) || 0);
     } else if (bankName === 'unionBank') {
-      // Union Bank: On Road Price (all components)
+      // Union Bank: On Road Price (excludes Number Plate charges)
       loanBaseAmount = onRoadPrice;
     } else if (bankName === 'indusIndBank' || bankName === 'auBank') {
       // IndusInd Bank & AU Bank: Only EX Showroom
@@ -685,17 +688,21 @@ const QuotationCreationPage: React.FC = () => {
                     required
                   />
                 </div>
-                <div className="cost-row">
-                  <label>TCS (1%):</label>
-                  <input 
-                    type="number" 
-                    name="tcs"
-                    value={formData.tcs}
-                    onChange={handleInputChange}
-                    className="form-control readonly"
-                    readOnly
-                  />
-                </div>
+                {/* Only show TCS if Ex-Showroom > ₹10,00,000 */}
+                {(parseFloat(formData.showroomCost) || 0) > 1000000 && (
+                  <div className="cost-row">
+                    <label>TCS (1%):</label>
+                    <input 
+                      type="number" 
+                      name="tcs"
+                      value={formData.tcs}
+                      onChange={handleInputChange}
+                      className="form-control readonly"
+                      readOnly
+                    />
+                    <small className="field-note">Automatically calculated at 1% of Ex-Showroom price</small>
+                  </div>
+                )}
                 <div className="cost-row">
                   <label>Registration: <span className="required">*</span></label>
                   <input 

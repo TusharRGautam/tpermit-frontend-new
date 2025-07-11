@@ -19,18 +19,74 @@ interface CarModel {
 const NewCars: React.FC = () => {
   const aswCarsInventory: CarModel[] = [
     {
+      id: 'wagnor',
+      name: 'Maruti Suzuki Wagon-R',
+      image: '/Website-Images/Cars/wagnor.jpg',
+      startingPrice: '₹5,97,500',
+      variants: [
+        {
+          name: 'H3 CNG',
+          colors: ['White']
+        },
+        {
+          name: 'LXI CNG',
+          colors: ['White', 'Silver', 'Grey', 'Red', 'Blue']
+        },
+        {
+          name: 'VXI CNG',
+          colors: ['White', 'Silver', 'Grey', 'Red', 'Blue']
+        }
+      ]
+    },
+    {
       id: 'ertiga',
-      name: 'Maruti Suzuki Ertiga',
+      name: 'Maruti Suzuki ERTIGA',
       image: '/Website-Images/Cars/ertiga.jpg',
       startingPrice: '₹10,97,500',
       variants: [
         {
-          name: 'VXI CNG',
+          name: 'Tour M CNG 1.5 MT',
+          colors: ['White']
+        },
+        {
+          name: 'VXI CNG 1.5 MT',
           colors: ['White', 'Silver', 'Grey', 'Red', 'Blue']
         },
         {
-          name: 'Tour M',
-          colors: ['White']
+          name: 'ZXI CNG 1.5 MT',
+          colors: ['White', 'Silver', 'Grey', 'Red', 'Blue']
+        }
+      ]
+    },
+    {
+      id: 'rumion',
+      name: 'TOYOTA RUMION',
+      image: '/Website-Images/Cars/Ruminum.jpg',
+      startingPrice: '₹10,97,500',
+      variants: [
+        {
+          name: 'S CNG 1.5 MT',
+          colors: ['White', 'Silver', 'Grey']
+        }
+      ]
+    },
+    {
+      id: 'aura',
+      name: 'HYUNDAI AURA',
+      image: '/Website-Images/Cars/Aura.jpg',
+      startingPrice: '₹7,97,500',
+      variants: [
+        {
+          name: 'E CNG',
+          colors: ['White', 'Silver', 'Grey', 'Cherry Night']
+        },
+        {
+          name: 'S CNG',
+          colors: ['White', 'Silver', 'Grey', 'Cherry Night']
+        },
+        {
+          name: 'SX CNG',
+          colors: ['White', 'Silver', 'Grey', 'Cherry Night']
         }
       ]
     },
@@ -41,60 +97,8 @@ const NewCars: React.FC = () => {
       startingPrice: '₹8,97,500',
       variants: [
         {
-          name: 'Tour S CNG',
+          name: 'Tour\'s CNG',
           colors: ['White']
-        }
-      ]
-    },
-    {
-      id: 'wagnor',
-      name: 'Maruti Suzuki Wagon-R',
-      image: '/Website-Images/Cars/wagnor.jpg',
-      startingPrice: '₹5,97,500',
-      variants: [
-        {
-          name: 'Wagoner-R H3 CNG',
-          colors: ['White']
-        },
-        {
-          name: 'Wagoner-R LXI CNG',
-          colors: ['White', 'Silver', 'Grey', 'Red', 'Blue']
-        },
-        {
-          name: 'Wagoner-R VXI CNG',
-          colors: ['White', 'Silver', 'Grey', 'Red', 'Blue']
-        }
-      ]
-    },
-    {
-      id: 'rumion',
-      name: 'Maruti Suzuki Rumion',
-      image: '/Website-Images/Cars/Ruminum.jpg',
-      startingPrice: '₹10,97,500',
-      variants: [
-        {
-          name: 'S CNG',
-          colors: ['White', 'Silver', 'Grey']
-        }
-      ]
-    },
-    {
-      id: 'aura',
-      name: 'Hyundai Aura',
-      image: '/Website-Images/Cars/Aura.jpg',
-      startingPrice: '₹7,97,500',
-      variants: [
-        {
-          name: 'Aura E CNG',
-          colors: ['White', 'Silver', 'Grey', 'Cherry Night']
-        },
-        {
-          name: 'Aura S CNG',
-          colors: ['White', 'Silver', 'Grey', 'Cherry Night']
-        },
-        {
-          name: 'Aura SX CNG',
-          colors: ['White', 'Silver', 'Grey', 'Cherry Night']
         }
       ]
     },
@@ -105,19 +109,19 @@ const NewCars: React.FC = () => {
       startingPrice: '₹17,97,500',
       variants: [
         {
-          name: 'Crysta GX',
+          name: 'GX',
           colors: ['White', 'Silver', 'Pearl White']
         },
         {
-          name: 'Crysta GX+',
+          name: 'GX+',
           colors: ['White', 'Silver', 'Pearl White']
         },
         {
-          name: 'Crysta VX',
+          name: 'VX',
           colors: ['White', 'Silver', 'Pearl White']
         },
         {
-          name: 'Crysta ZX',
+          name: 'ZX',
           colors: ['White', 'Silver', 'Pearl White']
         }
       ]

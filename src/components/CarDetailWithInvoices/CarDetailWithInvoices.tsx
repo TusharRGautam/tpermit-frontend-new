@@ -409,9 +409,10 @@ const CarDetailWithInvoices: React.FC = () => {
       
       const quotationData = selectedVariant.quotationData;
       
-      // Calculate TCS based on ex-showroom price
+      // Calculate TCS based on ex-showroom price - Only if > ₹10,00,000
       const exShowroom = quotationData?.ex_showroom || 0;
       const calculatedTCS = exShowroom > 1000000 ? exShowroom * 0.01 : 0;
+      const showTCS = exShowroom > 1000000;
       
       const data = [
         ['ASW CARS & FINANCE', ''],
@@ -421,12 +422,14 @@ const CarDetailWithInvoices: React.FC = () => {
         ['ROI', selectedVariant.roi],
         ['', ''],
         ['Cost of the vehicle EX Showroom', `₹${exShowroom.toLocaleString('en-IN') || selectedVariant.price}`],
-        ['TCS', `₹${Math.round(calculatedTCS).toLocaleString('en-IN')}`],
+        // Only include TCS row if Ex-Showroom > ₹10,00,000
+        ...(showTCS ? [['TCS', `₹${Math.round(calculatedTCS).toLocaleString('en-IN')}`]] : []),
         ['Registration', `₹${quotationData?.registration?.toLocaleString('en-IN') || '39,500'}`],
         ['Insurance', `₹${quotationData?.insurance?.toLocaleString('en-IN') || '39,500'}`],
         ['GPS', `₹${quotationData?.gps?.toLocaleString('en-IN') || '18,500'}`],
         ['Speed Governor', `₹${quotationData?.speed_governor?.toLocaleString('en-IN') || '0'}`],
         ['On the road', `₹${(() => {
+          // Calculate On-Road Price excluding Number Plate/CRTm/AutoCard charges
           const total = 
             exShowroom + 
             calculatedTCS + 
@@ -435,6 +438,7 @@ const CarDetailWithInvoices: React.FC = () => {
             (quotationData?.gps || 0) + 
             (quotationData?.speed_governor || 0) + 
             (quotationData?.accessories || 0);
+            // Note: number_plate_crtm_autocard is excluded from On-Road Price
           return Math.round(total).toLocaleString('en-IN');
         })()}`],
         ['Loan Amount', `₹${quotationData?.loan_amount?.toLocaleString('en-IN') || '10,10,000'}`],
@@ -624,15 +628,20 @@ const CarDetailWithInvoices: React.FC = () => {
                     <td>Cost of the vehicle EX Showroom</td>
                     <td>₹{selectedVariant.quotationData?.ex_showroom?.toLocaleString('en-IN') || selectedVariant.price}</td>
                   </tr>
-                  <tr>
-                    <td>TCS</td>
-                    <td>₹{(() => {
-                      const exShowroom = selectedVariant.quotationData?.ex_showroom || 0;
-                      // If ex-showroom > ₹10 lakh, show 1% TCS, otherwise 0
-                      const tcs = exShowroom > 1000000 ? exShowroom * 0.01 : 0;
-                      return Math.round(tcs).toLocaleString('en-IN');
-                    })()}</td>
-                  </tr>
+                  {/* Only show TCS if Ex-Showroom > ₹10,00,000 */}
+                  {(() => {
+                    const exShowroom = selectedVariant.quotationData?.ex_showroom || 0;
+                    const showTCS = exShowroom > 1000000;
+                    if (showTCS) {
+                      return (
+                        <tr>
+                          <td>TCS</td>
+                          <td>₹{Math.round(exShowroom * 0.01).toLocaleString('en-IN')}</td>
+                        </tr>
+                      );
+                    }
+                    return null;
+                  })()}
                   <tr>
                     <td>Registration</td>
                     <td>₹{selectedVariant.quotationData?.registration?.toLocaleString('en-IN') || '39,500'}</td>
@@ -656,7 +665,10 @@ const CarDetailWithInvoices: React.FC = () => {
                       if (!quotationData) return '12,11,105';
                       
                       const exShowroom = quotationData.ex_showroom || 0;
+                      // Only include TCS if Ex-Showroom > ₹10,00,000
                       const tcs = exShowroom > 1000000 ? exShowroom * 0.01 : 0;
+                      
+                      // Calculate On-Road Price excluding Number Plate/CRTm/AutoCard charges
                       const total = 
                         exShowroom + 
                         tcs + 
@@ -665,6 +677,7 @@ const CarDetailWithInvoices: React.FC = () => {
                         (quotationData.gps || 0) + 
                         (quotationData.speed_governor || 0) + 
                         (quotationData.accessories || 0);
+                        // Note: number_plate_crtm_autocard is excluded from On-Road Price
                       
                       return Math.round(total).toLocaleString('en-IN');
                     })()}</td>

@@ -47,36 +47,6 @@ const initialState: GlobalCarsState = {
 // Get fallback car data
 const getFallbackCarData = () => [
   {
-    id: 'maruti-suzuki-ertiga',
-    image: '/Website-Images/Cars/ertiga.jpg',
-    name: 'Maruti Suzuki ERTIGA',
-    downPayment: '₹99,347',
-    monthlyEmi: '₹23,367/month',
-    globalExShowroomPrice: 1000000,
-    globalLoanAmount: 875000,
-    globalInterestRate: 8.5,
-    globalTotalOnRoadPrice: 1125000,
-    variants: [
-      { name: 'VXI CNG 1.5 MT', colors: ['White', 'Silver', 'Grey', 'Red', 'Blue'] },
-      { name: 'Tour M CNG 1.5 MT', colors: ['White'] }
-    ]
-  },
-  {
-    id: 'maruti-suzuki-dzire',
-    image: '/Website-Images/Cars/Dzire.jpg',
-    name: 'Maruti Suzuki Dzire',
-    downPayment: '₹1,35,971',
-    monthlyEmi: '₹17,531/month',
-    globalExShowroomPrice: 750000,
-    globalLoanAmount: 665000,
-    globalInterestRate: 8.5,
-    globalTotalOnRoadPrice: 850000,
-    variants: [
-      { name: 'Tour S CNG', colors: ['White'] },
-      { name: 'Tour S CNG', colors: ['White'] }
-    ]
-  },
-  {
     id: 'maruti-suzuki-wagon-r',
     image: '/Website-Images/Cars/wagnor.jpg',
     name: 'Maruti Suzuki Wagon-R',
@@ -87,8 +57,25 @@ const getFallbackCarData = () => [
     globalInterestRate: 8.5,
     globalTotalOnRoadPrice: 715000,
     variants: [
+      { name: 'H3 CNG', colors: ['White'] },
       { name: 'LXI CNG', colors: ['White', 'Silver', 'Grey', 'Red', 'Blue'] },
-      { name: 'Tour H', colors: ['White'] }
+      { name: 'VXI CNG', colors: ['White', 'Silver', 'Grey', 'Red', 'Blue'] }
+    ]
+  },
+  {
+    id: 'maruti-suzuki-ertiga',
+    image: '/Website-Images/Cars/ertiga.jpg',
+    name: 'Maruti Suzuki ERTIGA',
+    downPayment: '₹99,347',
+    monthlyEmi: '₹23,367/month',
+    globalExShowroomPrice: 1000000,
+    globalLoanAmount: 875000,
+    globalInterestRate: 8.5,
+    globalTotalOnRoadPrice: 1125000,
+    variants: [
+      { name: 'Tour M CNG 1.5 MT', colors: ['White'] },
+      { name: 'VXI CNG 1.5 MT', colors: ['White', 'Silver', 'Grey', 'Red', 'Blue'] },
+      { name: 'ZXI CNG 1.5 MT', colors: ['White', 'Silver', 'Grey', 'Red', 'Blue'] }
     ]
   },
   {
@@ -117,7 +104,22 @@ const getFallbackCarData = () => [
     globalTotalOnRoadPrice: 775000,
     variants: [
       { name: 'E CNG', colors: ['White', 'Silver', 'Grey', 'Cherry Night'] },
-      { name: 'S CNG', colors: ['White', 'Silver', 'Grey', 'Cherry Night'] }
+      { name: 'S CNG', colors: ['White', 'Silver', 'Grey', 'Cherry Night'] },
+      { name: 'SX CNG', colors: ['White', 'Silver', 'Grey', 'Cherry Night'] }
+    ]
+  },
+  {
+    id: 'maruti-suzuki-dzire',
+    image: '/Website-Images/Cars/Dzire.jpg',
+    name: 'Maruti Suzuki Dzire',
+    downPayment: '₹1,35,971',
+    monthlyEmi: '₹17,531/month',
+    globalExShowroomPrice: 750000,
+    globalLoanAmount: 665000,
+    globalInterestRate: 8.5,
+    globalTotalOnRoadPrice: 850000,
+    variants: [
+      { name: 'Tour\'s CNG', colors: ['White'] }
     ]
   },
   {
@@ -132,7 +134,9 @@ const getFallbackCarData = () => [
     globalTotalOnRoadPrice: 1950000,
     variants: [
       { name: 'GX', colors: ['White', 'Silver', 'Pearl White'] },
-      { name: 'GX+', colors: ['White', 'Silver', 'Pearl White'] }
+      { name: 'GX+', colors: ['White', 'Silver', 'Pearl White'] },
+      { name: 'VX', colors: ['White', 'Silver', 'Pearl White'] },
+      { name: 'ZX', colors: ['White', 'Silver', 'Pearl White'] }
     ]
   }
 ];
@@ -142,12 +146,17 @@ export const globalFetchCarsData = createAsyncThunk(
   'globalCars/fetchCarsData',
   async (_, { rejectWithValue }) => {
     try {
-      // Try to fetch from backend
+      // Try to fetch from backend with cache busting
       const quotationService = await import('../../services/quotationService');
       const carSummaries = await quotationService.default.getCarSummaries();
       
       if (carSummaries && carSummaries.length > 0) {
         console.log('✅ Successfully fetched car data from backend');
+        console.log('📊 Car data summary:', carSummaries.map((car: GlobalCarData) => ({
+          name: car.name,
+          variantCount: car.variants?.length || 0,
+          variants: car.variants?.map((v: GlobalCarVariant) => v.name) || []
+        })));
         return carSummaries;
       } else {
         console.log('⚠️ Backend returned empty data, using fallback');
@@ -156,6 +165,35 @@ export const globalFetchCarsData = createAsyncThunk(
     } catch (error) {
       console.log('⚠️ Backend fetch failed, using fallback:', error);
       // Always return fallback data instead of rejecting
+      return getFallbackCarData();
+    }
+  }
+);
+
+// Force refresh thunk that bypasses cache
+export const globalForceRefreshCarsData = createAsyncThunk(
+  'globalCars/forceRefreshCarsData',
+  async (_, { rejectWithValue }) => {
+    try {
+      console.log('🔄 Force refreshing car data...');
+      // Clear any cached data and force fresh fetch
+      const quotationService = await import('../../services/quotationService');
+      const carSummaries = await quotationService.default.getCarSummaries();
+      
+      if (carSummaries && carSummaries.length > 0) {
+        console.log('✅ Successfully force refreshed car data from backend');
+        console.log('📊 Refreshed car data:', carSummaries.map((car: GlobalCarData) => ({
+          name: car.name,
+          variantCount: car.variants?.length || 0,
+          variants: car.variants?.map((v: GlobalCarVariant) => v.name) || []
+        })));
+        return carSummaries;
+      } else {
+        console.log('⚠️ Backend returned empty data after force refresh, using fallback');
+        return getFallbackCarData();
+      }
+    } catch (error) {
+      console.log('⚠️ Force refresh failed, using fallback:', error);
       return getFallbackCarData();
     }
   }
@@ -193,9 +231,15 @@ const globalCarsSlice = createSlice({
       state.globalSelectedVariant = null;
       state.globalSelectedBank = null;
     },
+    globalClearCache: (state) => {
+      state.globalCarsList = [];
+      state.globalLastUpdated = null;
+      state.globalError = null;
+    },
   },
   extraReducers: (builder) => {
     builder
+      // Handle regular fetch
       .addCase(globalFetchCarsData.pending, (state) => {
         state.globalIsLoading = true;
         state.globalError = null;
@@ -209,6 +253,21 @@ const globalCarsSlice = createSlice({
       .addCase(globalFetchCarsData.rejected, (state, action) => {
         state.globalIsLoading = false;
         state.globalError = action.payload as string;
+      })
+      // Handle force refresh
+      .addCase(globalForceRefreshCarsData.pending, (state) => {
+        state.globalIsLoading = true;
+        state.globalError = null;
+      })
+      .addCase(globalForceRefreshCarsData.fulfilled, (state, action) => {
+        state.globalIsLoading = false;
+        state.globalCarsList = action.payload;
+        state.globalLastUpdated = new Date().toISOString();
+        state.globalError = null;
+      })
+      .addCase(globalForceRefreshCarsData.rejected, (state, action) => {
+        state.globalIsLoading = false;
+        state.globalError = action.payload as string;
       });
   },
 });
@@ -220,6 +279,7 @@ export const {
   globalUpdateCarFinancialData,
   globalClearError,
   globalResetCarSelection,
+  globalClearCache,
 } = globalCarsSlice.actions;
 
 export default globalCarsSlice.reducer;

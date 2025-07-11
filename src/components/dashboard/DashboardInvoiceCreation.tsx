@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
 
-// Car variants matching the quotation data
+// Car variants matching the approved quotation data
 const carVariants = {
-  'Maruti Suzuki Ertiga': ['VXI CNG', 'Tour M'],
-  'Maruti Suzuki Dzire': ['Tour S CNG'],
-  'Maruti Suzuki Wagon-R': ['Wagoner-R H3 CNG', 'Wagoner-R LXI CNG', 'Wagoner-R VXI CNG'],
-  'Maruti Suzuki Rumion': ['S CNG'],
-  'Hyundai Aura': ['Aura E CNG', 'Aura S CNG', 'Aura SX CNG'],
-  'Toyota Innova Crysta': ['Crysta GX', 'Crysta GX+', 'Crysta VX', 'Crysta ZX']
+  'Maruti Suzuki Wagon-R': ['H3 CNG', 'LXI CNG', 'VXI CNG'],
+  'Maruti Suzuki ERTIGA': ['Tour M CNG 1.5 MT', 'VXI CNG 1.5 MT', 'ZXI CNG 1.5 MT'],
+  'TOYOTA RUMION': ['S CNG 1.5 MT'],
+  'HYUNDAI AURA': ['E CNG', 'S CNG', 'SX CNG'],
+  'Maruti Suzuki Dzire': ['Tour\'s CNG'],
+  'Toyota Innova Crysta': ['GX', 'GX+', 'VX', 'ZX']
 };
 
 const DashboardInvoiceCreation: React.FC = () => {
