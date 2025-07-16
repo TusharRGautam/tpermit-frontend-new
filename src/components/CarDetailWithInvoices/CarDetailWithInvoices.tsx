@@ -606,7 +606,7 @@ const CarDetailWithInvoices: React.FC = () => {
                 <h2>ASW CARS & FINANCE</h2>
                 <div className="company-details">
                   <p>Shop No. 123, Main Road, Auto Market</p>
-                  <p>City Center, Bangalore - 560001</p>
+                  <p>City Center, Thane - 560001</p>
                   <p>Contact: +91 91025 26006 | Email: info@aswcars.com</p>
                 </div>
               </div>

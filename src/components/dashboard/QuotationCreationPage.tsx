@@ -355,32 +355,51 @@ const QuotationCreationPage: React.FC = () => {
     }
   };
 
+  // 1. Loan Amount = Ex-Showroom + Registration + Insurance (already correct)
+  const exShowroom = parseFloat(formData.showroomCost) || 0;
+  const registration = parseFloat(formData.registration) || 0;
+  const insurance = parseFloat(formData.insurance) || 0;
+  const loanBase = exShowroom + registration + insurance;
+  const loanAmountLive = parseFloat(formData.loanAmount) || 0;
+
+  // 2. Displayed On-Road Price
+  const gps = parseFloat(formData.gps) || 0;
+  const noPlate = parseFloat(formData.noPlate) || 0;
+  const fastag = parseFloat(formData.fastag) || 0;
+  const speedGovernor = parseFloat(formData.speedGovernor) || 0;
+  const accessories = parseFloat(formData.accessories) || 0;
+  // CRTM and Autocard are assumed to be included in noPlate (if not, add separate fields)
+  const onRoadPriceDisplay = exShowroom + registration + insurance + noPlate + gps + fastag + speedGovernor + accessories;
+
+  // 3. Margin = Displayed On-Road Price - Loan Amount
+  const marginLive = (onRoadPriceDisplay - loanAmountLive).toFixed(2);
+
   // Calculate on-road price - Exclude Number Plate/CRTm/AutoCard charges
   const calculateOnRoadPrice = (): string => {
-    const total = 
-      (parseFloat(formData.showroomCost) || 0) + 
-      (parseFloat(formData.tcs) || 0) + 
-      (parseFloat(formData.registration) || 0) + 
-      (parseFloat(formData.insurance) || 0) + 
-      // Note: noPlate (number_plate_crtm_autocard) is excluded from On-Road Price
-      (parseFloat(formData.gps) || 0) + 
-      (parseFloat(formData.fastag) || 0) + 
-      (parseFloat(formData.speedGovernor) || 0) + 
-      (parseFloat(formData.accessories) || 0);
-      
-    return total.toLocaleString('en-IN');
+    return onRoadPriceDisplay.toLocaleString('en-IN');
   };
 
   // Calculate down payment
   const calculateDownPayment = () => {
-    const margin = parseFloat(formData.margin) || 0;
+    // Calculate all values, defaulting to 0 if blank
+    const exShowroom = parseFloat(formData.showroomCost) || 0;
+    const registration = parseFloat(formData.registration) || 0;
+    const insurance = parseFloat(formData.insurance) || 0;
+    const noPlate = parseFloat(formData.noPlate) || 0;
+    const gps = parseFloat(formData.gps) || 0;
+    const fastag = parseFloat(formData.fastag) || 0;
+    const speedGovernor = parseFloat(formData.speedGovernor) || 0;
+    const accessories = parseFloat(formData.accessories) || 0;
+    // CRTM and Autocard are assumed to be included in noPlate (if not, add separate fields)
+    const onRoadPriceDisplay = exShowroom + registration + insurance + noPlate + gps + fastag + speedGovernor + accessories;
+    const loanAmountLive = parseFloat(formData.loanAmount) || 0;
+    const margin = onRoadPriceDisplay - loanAmountLive;
     const processFee = parseFloat(formData.processFee) || 0;
     const stampDuty = parseFloat(formData.stampDuty) || 0;
     const handlingCharge = parseFloat(formData.handlingCharge) || 0;
     const loanInsurance = parseFloat(formData.loanInsurance) || 0;
-    
+    // Total Down Payment calculation as specified
     const downPayment = (margin + processFee + stampDuty + handlingCharge + loanInsurance).toFixed(2);
-    
     setFormData(prevData => ({
       ...prevData,
       downPayment: downPayment,
@@ -416,48 +435,19 @@ const QuotationCreationPage: React.FC = () => {
 
   // Calculate bank loan amount based on bank-specific logic
   const calculateBankLoanAmount = (bankName: string, bankPercentage: number, data: QuotationData) => {
-    // Calculate On-Road Price excluding Number Plate/CRTm/AutoCard charges
-    const onRoadPrice = 
-      (parseFloat(data.showroomCost) || 0) + 
-      (parseFloat(data.tcs) || 0) + 
-      (parseFloat(data.registration) || 0) + 
-      (parseFloat(data.insurance) || 0) + 
-      // Note: noPlate (number_plate_crtm_autocard) is excluded from On-Road Price
-      (parseFloat(data.gps) || 0) + 
-      (parseFloat(data.fastag) || 0) + 
-      (parseFloat(data.speedGovernor) || 0) + 
-      (parseFloat(data.accessories) || 0);
-
-    let loanBaseAmount = 0;
-    
-    if (bankName === 'sbiBank') {
-      // SBI Bank: EX Showroom + TCS + Insurance + Registration
-      loanBaseAmount = 
-        (parseFloat(data.showroomCost) || 0) +
-        (parseFloat(data.tcs) || 0) +
-        (parseFloat(data.insurance) || 0) +
-        (parseFloat(data.registration) || 0);
-    } else if (bankName === 'unionBank') {
-      // Union Bank: On Road Price (excludes Number Plate charges)
-      loanBaseAmount = onRoadPrice;
-    } else if (bankName === 'indusIndBank' || bankName === 'auBank') {
-      // IndusInd Bank & AU Bank: Only EX Showroom
-      loanBaseAmount = parseFloat(data.showroomCost) || 0;
-    }
-    
-    const loanAmount = (loanBaseAmount * bankPercentage / 100).toFixed(2);
-    const margin = (onRoadPrice - parseFloat(loanAmount)).toFixed(2);
-    
+    const exShowroom = parseFloat(data.showroomCost) || 0;
+    const registration = parseFloat(data.registration) || 0;
+    const insurance = parseFloat(data.insurance) || 0;
+    const tcs = exShowroom > 1000000 ? (exShowroom * 0.01) : 0;
+    const onRoadPriceForLoan = exShowroom + registration + insurance + tcs;
+    const loanAmount = (onRoadPriceForLoan * bankPercentage / 100);
     setFormData(prevData => ({
       ...prevData,
-      loanAmount: loanAmount,
-      margin: margin
+      loanAmount: loanAmount.toFixed(2)
     }));
-    
-    // Update down payment and EMI
     setTimeout(() => {
       calculateDownPayment();
-      calculateEMI({ ...data, loanAmount, margin });
+      calculateEMI({ ...data, loanAmount: loanAmount.toFixed(2) });
     }, 10);
   };
 
@@ -509,9 +499,9 @@ const QuotationCreationPage: React.FC = () => {
         fastag: parseFloat(formData.fastag) || 0,
         speed_governor: parseFloat(formData.speedGovernor) || 0,
         accessories: parseFloat(formData.accessories) || 0,
-        on_the_road: parseFloat(calculateOnRoadPrice().replace(/,/g, '')) || 0,
+        on_the_road: onRoadPriceDisplay,
         loan_amount: parseFloat(formData.loanAmount) || 0,
-        margin_down_payment: parseFloat(formData.margin) || 0,
+        margin_down_payment: onRoadPriceDisplay - (parseFloat(formData.loanAmount) || 0),
         process_fee: parseFloat(formData.processFee) || 0,
         stamp_duty: parseFloat(formData.stampDuty) || 0,
         handling_document_charge: parseFloat(formData.handlingCharge) || 0,
@@ -792,7 +782,7 @@ const QuotationCreationPage: React.FC = () => {
             <div className="total-section">
               <div className="total-row highlight-row">
                 <label>On the Road Price:</label>
-                <div className="total-value">₹{calculateOnRoadPrice()}</div>
+                <div className="total-value">₹{onRoadPriceDisplay.toLocaleString('en-IN')}</div>
               </div>
             </div>
           </div>
@@ -830,8 +820,7 @@ const QuotationCreationPage: React.FC = () => {
                   <input 
                     type="number" 
                     name="margin"
-                    value={formData.margin}
-                    onChange={handleInputChange}
+                    value={marginLive}
                     className="form-control readonly"
                     readOnly
                   />
