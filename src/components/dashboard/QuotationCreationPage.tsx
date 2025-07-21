@@ -217,10 +217,78 @@ const QuotationCreationPage: React.FC = () => {
   const handleBrandSelect = (brand: string) => {
     setSelectedBrand(brand);
     setSelectedVariant('');
+    // Reset form data when selecting a new brand
+    setFormData({
+      emiInterestRate: '',
+      showroomCost: '',
+      tcs: '',
+      registration: '',
+      insurance: '',
+      noPlate: '',
+      gps: '',
+      fastag: '',
+      speedGovernor: '',
+      accessories: '',
+      loanAmount: '',
+      margin: '',
+      processFee: '',
+      stampDuty: '',
+      handlingCharge: '',
+      loanInsurance: '',
+      // Bank percentage fields
+      sbiBank: '',
+      unionBank: '',
+      indusIndBank: '',
+      auBank: '',
+      // Additional financial fields
+      downPayment: '',
+      offers: '',
+      finalDownPayment: '',
+      emiYears: 'None',
+      emiFor5Years: '',
+      customerName: '',
+      customerPhone: '',
+      customerAddress: ''
+    });
+    setErrors({});
   };
 
   const handleVariantSelect = (variant: string) => {
     setSelectedVariant(variant);
+    // Reset form data when selecting a new variant
+    setFormData({
+      emiInterestRate: '',
+      showroomCost: '',
+      tcs: '',
+      registration: '',
+      insurance: '',
+      noPlate: '',
+      gps: '',
+      fastag: '',
+      speedGovernor: '',
+      accessories: '',
+      loanAmount: '',
+      margin: '',
+      processFee: '',
+      stampDuty: '',
+      handlingCharge: '',
+      loanInsurance: '',
+      // Bank percentage fields
+      sbiBank: '',
+      unionBank: '',
+      indusIndBank: '',
+      auBank: '',
+      // Additional financial fields
+      downPayment: '',
+      offers: '',
+      finalDownPayment: '',
+      emiYears: 'None',
+      emiFor5Years: '',
+      customerName: '',
+      customerPhone: '',
+      customerAddress: ''
+    });
+    setErrors({});
   };
 
   // Modal handlers
@@ -355,21 +423,21 @@ const QuotationCreationPage: React.FC = () => {
     }
   };
 
-  // 1. Loan Amount = Ex-Showroom + Registration + Insurance (already correct)
+  // 1. Loan Amount Base = Ex-Showroom + Registration + Insurance + TCS (if Ex-Showroom > 10L)
   const exShowroom = parseFloat(formData.showroomCost) || 0;
   const registration = parseFloat(formData.registration) || 0;
   const insurance = parseFloat(formData.insurance) || 0;
-  const loanBase = exShowroom + registration + insurance;
+  const tcs = exShowroom > 1000000 ? (exShowroom * 0.01) : 0;
+  const loanAmountBase = exShowroom + registration + insurance + tcs;
   const loanAmountLive = parseFloat(formData.loanAmount) || 0;
 
-  // 2. Displayed On-Road Price
+  // 2. Displayed On-Road Price = Loan Amount Base + Number Plate + GPS + Fastag + Speed Governor + Accessories
   const gps = parseFloat(formData.gps) || 0;
   const noPlate = parseFloat(formData.noPlate) || 0;
   const fastag = parseFloat(formData.fastag) || 0;
   const speedGovernor = parseFloat(formData.speedGovernor) || 0;
   const accessories = parseFloat(formData.accessories) || 0;
-  // CRTM and Autocard are assumed to be included in noPlate (if not, add separate fields)
-  const onRoadPriceDisplay = exShowroom + registration + insurance + noPlate + gps + fastag + speedGovernor + accessories;
+  const onRoadPriceDisplay = loanAmountBase + noPlate + gps + fastag + speedGovernor + accessories;
 
   // 3. Margin = Displayed On-Road Price - Loan Amount
   const marginLive = (onRoadPriceDisplay - loanAmountLive).toFixed(2);
@@ -385,13 +453,14 @@ const QuotationCreationPage: React.FC = () => {
     const exShowroom = parseFloat(formData.showroomCost) || 0;
     const registration = parseFloat(formData.registration) || 0;
     const insurance = parseFloat(formData.insurance) || 0;
+    const tcs = exShowroom > 1000000 ? (exShowroom * 0.01) : 0;
+    const loanAmountBase = exShowroom + registration + insurance + tcs;
     const noPlate = parseFloat(formData.noPlate) || 0;
     const gps = parseFloat(formData.gps) || 0;
     const fastag = parseFloat(formData.fastag) || 0;
     const speedGovernor = parseFloat(formData.speedGovernor) || 0;
     const accessories = parseFloat(formData.accessories) || 0;
-    // CRTM and Autocard are assumed to be included in noPlate (if not, add separate fields)
-    const onRoadPriceDisplay = exShowroom + registration + insurance + noPlate + gps + fastag + speedGovernor + accessories;
+    const onRoadPriceDisplay = loanAmountBase + noPlate + gps + fastag + speedGovernor + accessories;
     const loanAmountLive = parseFloat(formData.loanAmount) || 0;
     const margin = onRoadPriceDisplay - loanAmountLive;
     const processFee = parseFloat(formData.processFee) || 0;
@@ -439,8 +508,8 @@ const QuotationCreationPage: React.FC = () => {
     const registration = parseFloat(data.registration) || 0;
     const insurance = parseFloat(data.insurance) || 0;
     const tcs = exShowroom > 1000000 ? (exShowroom * 0.01) : 0;
-    const onRoadPriceForLoan = exShowroom + registration + insurance + tcs;
-    const loanAmount = (onRoadPriceForLoan * bankPercentage / 100);
+    const loanAmountBase = exShowroom + registration + insurance + tcs;
+    const loanAmount = (loanAmountBase * bankPercentage / 100);
     setFormData(prevData => ({
       ...prevData,
       loanAmount: loanAmount.toFixed(2)
