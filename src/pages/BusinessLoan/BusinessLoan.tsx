@@ -129,12 +129,12 @@ const BusinessLoan: React.FC = () => {
   ];
 
   const handleCallClick = (phoneNumber: string) => {
-    window.location.href = `tel:${phoneNumber}`;
+    window.location.href = `tel:+919987828690`;
   };
 
   const handleWhatsAppClick = (phoneNumber: string) => {
     const message = "Hi! I'm interested in business loan options. Could you please provide more information?";
-    const whatsappUrl = `https://wa.me/${phoneNumber.replace(/\+/g, '')}?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/919987828417?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -352,11 +352,11 @@ const BusinessLoan: React.FC = () => {
           <div className="single-contact-method">
             <button 
               className="contact-btn call-now-single"
-              onClick={() => handleCallClick("+919987828417")}
+              onClick={() => handleCallClick("+919987828690")}
             >
               📞 Call Now
             </button>
-            <p className="contact-number">+91 99878 28417 (Shailendra)</p>
+            <p className="contact-number">+91 99878 28690 (Mithilesh)</p>
           </div>
           
           <div className="contact-info">

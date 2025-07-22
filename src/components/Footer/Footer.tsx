@@ -17,7 +17,7 @@ const Footer: React.FC = () => {
             </p>
             <div className="contact">
               <p><i className="fa fa-map-marker"></i> GB 60, Ground floor, High Street Mall, Kapurbawdi, Thane West, Thane-400607</p>
-              <p><i className="fa fa-phone"></i> +91 99878 28417 (Shailendra) | +91 99878 28690 (Mithilesh)</p>
+              <p><i className="fa fa-phone"></i> +91 99878 28690 (Call) | <a href="https://wa.me/919987828417" target="_blank" rel="noopener noreferrer">WhatsApp: +91 99878 28417</a></p>
               <p><i className="fa fa-phone"></i> +91 99877 98417 (Pintu) | +91 90047 26521 (Prakash)</p>
               <p><i className="fa fa-envelope"></i> asw.cars@gmail.com</p>
             </div>

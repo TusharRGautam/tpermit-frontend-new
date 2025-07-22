@@ -11,8 +11,7 @@ interface BankProps {
 
 const Bank: React.FC<BankProps> = ({ name, image, interestRate, loanAmount, colorClass }) => {
   const handleCallClick = () => {
-    // Using the first phone number from the contact list for simplicity
-    window.location.href = 'tel:+919987828417';
+    window.location.href = 'tel:+919987828690';
   };
 
   return (
