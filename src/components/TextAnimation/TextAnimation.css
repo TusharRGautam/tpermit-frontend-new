@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:700');
+
+.text-animation-container {
+  color: #999;
+  text-transform: uppercase;
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  position: relative;
+  width: 100%;
+  display: block;
+  padding: 2rem 0;
+  font-family: 'Roboto', var(--heading-font);
+  overflow: hidden;
+  min-height: 120px;
+}
+
+.animation-flip {
+  height: 60px;
+  overflow: hidden;
+  display: inline-block;
+  position: relative;
+}
+
+.animation-flip > div > div {
+  color: #fff;
+  padding: 8px 20px;
+  height: 50px;
+  margin-bottom: 50px;
+  display: inline-block;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  font-size: 2.2rem;
+  line-height: 1.1;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.animation-flip div:first-child {
+  animation: flipShow 6s linear infinite;
+}
+
+.animation-flip div div {
+  background: linear-gradient(135deg, #42c58a, #2d8659);
+}
+
+.animation-flip div:first-child div {
+  background: linear-gradient(135deg, #4ec7f3, #3498db);
+}
+
+.animation-flip div:last-child div {
+  background: linear-gradient(135deg, #DC143C, #B91C3C);
+}
+
+@keyframes flipShow {
+  0% { margin-top: -300px; }
+  5% { margin-top: -200px; }
+  33% { margin-top: -200px; }
+  38% { margin-top: -100px; }
+  66% { margin-top: -100px; }
+  71% { margin-top: 0px; }
+  99.99% { margin-top: 0px; }
+  100% { margin-top: -300px; }
+}
+
+/* Hide animation on mobile and small tablets */
+@media (max-width: 768px) {
+  .text-animation-container {
+    display: none;
+  }
+}

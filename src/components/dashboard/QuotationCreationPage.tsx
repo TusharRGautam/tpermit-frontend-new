@@ -1032,14 +1032,14 @@ const QuotationCreationPage: React.FC = () => {
   };
 
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-welcome">
+    <div className="dashboard-container quotation-page-container">
+      <div className="dashboard-welcome quotation-welcome-compact">
         <h1>Create Quotation</h1>
         <p>Generate new vehicle quotations for customers</p>
       </div>
       
-      <div className="quotation-creator-wrapper">
-        <div className="quotation-card">
+      <div className="quotation-creator-wrapper-wide">
+        <div className="quotation-card-wide">
           <h3>New Quotation</h3>
           <p>Generate a comprehensive quotation for a vehicle sale</p>
           <button 
@@ -1050,7 +1050,7 @@ const QuotationCreationPage: React.FC = () => {
           </button>
         </div>
         
-        <div className="quotation-help-card">
+        <div className="quotation-help-card-wide">
           <h3>About Quotations</h3>
           <ul className="quotation-help-list">
             <li>Fill in all required vehicle details</li>
@@ -1090,17 +1090,25 @@ const QuotationCreationPage: React.FC = () => {
               {selectedBrand && (
                 <div className="form-section">
                   <label>Select Model Variant</label>
-                  <div className="custom-dropdown">
-                    <select 
-                      value={selectedVariant}
-                      onChange={(e) => handleVariantSelect(e.target.value)}
-                      className="form-control"
-                    >
-                      <option value="">-- Select Variant --</option>
-                      {carVariants[selectedBrand as CarBrand]?.map(variant => (
-                        <option key={variant} value={variant}>{variant}</option>
-                      ))}
-                    </select>
+                  <div className="variant-grid-selection">
+                    {carVariants[selectedBrand as CarBrand]?.map(variant => (
+                      <div 
+                        key={variant} 
+                        className={`variant-card ${selectedVariant === variant ? 'selected' : ''}`}
+                        onClick={() => handleVariantSelect(variant)}
+                      >
+                        <div className="variant-name">{variant}</div>
+                        <div className="variant-colors">
+                          {(() => {
+                            const brandColors = carColors[selectedBrand as keyof typeof carColors];
+                            if (!brandColors) return 0;
+                            const variantColors = brandColors[variant as keyof typeof brandColors] as string[] | undefined;
+                            return (variantColors?.length || 0);
+                          })()} colors available
+                        </div>
+                        {selectedVariant === variant && <div className="variant-check">✓</div>}
+                      </div>
+                    ))}
                   </div>
                 </div>
               )}

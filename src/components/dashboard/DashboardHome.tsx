@@ -27,7 +27,7 @@ const DashboardHome: React.FC = () => {
     <div className="dashboard-container">
       <div className="dashboard-welcome">
         <h1>Dashboard</h1>
-        <p>Welcome to ASW Dashboard. Here's an overview of your business.</p>
+        <p>Welcome to T-Permit Dashboard. Here's an overview of your business.</p>
       </div>
       
       <div className="dashboard-section main-section">

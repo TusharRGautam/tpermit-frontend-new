@@ -5,6 +5,7 @@ import quotationService from '../../services/quotationService';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import * as XLSX from 'xlsx';
+import BookingModal from '../BookingModal/BookingModal';
 
 interface CarVariant {
   id: number;
@@ -57,6 +58,17 @@ interface BankOption {
   roi: string;
 }
 
+// BookingModal variant interface - different from CarVariant
+interface BookingModalVariant {
+  id: string;
+  name: string;
+  exShowroom: number;
+  onRoadPrice: number;
+  monthlyEmi: number;
+  downPayment: number;
+  bookingAmount: number;
+}
+
 const CarDetailWithInvoices: React.FC = () => {
   const { carId } = useParams<{ carId: string }>();
   const navigate = useNavigate();
@@ -70,8 +82,11 @@ const CarDetailWithInvoices: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [carModel, setCarModel] = useState<string>('');
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
-  const [showFullQuotation, setShowFullQuotation] = useState<boolean>(false);
   const invoiceRef = useRef<HTMLDivElement>(null);
+  
+  // BookingModal state
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState<boolean>(false);
+  const [bookingModalVariants, setBookingModalVariants] = useState<BookingModalVariant[]>([]);
 
   // Bank options - Only SBI bank is supported
   const bankOptions: { [key: string]: BankOption } = {
@@ -108,12 +123,12 @@ const CarDetailWithInvoices: React.FC = () => {
   // Function to get car image path - Updated with new model names
   const getCarImagePath = (carName: string): string => {
     const imageMap: { [key: string]: string } = {
-      'Maruti Suzuki Wagon-R': '/Website-Images/Cars/wagnor.jpg',
-      'Maruti Suzuki ERTIGA': '/Website-Images/Cars/ertiga.jpg',
-      'TOYOTA RUMION': '/Website-Images/Cars/Ruminum.jpg',
-      'HYUNDAI AURA': '/Website-Images/Cars/Aura.jpg',
-      'Maruti Suzuki Dzire': '/Website-Images/Cars/Dzire.jpg',
-      'Toyota Innova Crysta': '/Website-Images/Cars/Crysta.jpg'
+      'Maruti Suzuki Wagon-R': '/Website-Images/Cars/wagnor.png',
+      'Maruti Suzuki ERTIGA': '/Website-Images/Cars/ertiga.png',
+      'TOYOTA RUMION': '/Website-Images/Cars/Rumion.png',
+      'HYUNDAI AURA': '/Website-Images/Cars/Aura.png',
+      'Maruti Suzuki Dzire': '/Website-Images/Cars/Dzire.png',
+      'Toyota Innova Crysta': '/Website-Images/Cars/crysta.png'
     };
     return imageMap[carName] || '/Website-Images/Cars/default.jpg';
   };
@@ -142,6 +157,19 @@ const CarDetailWithInvoices: React.FC = () => {
       roi: `${quotation.roi_emi_interest}%`,
       quotationData: quotation
     };
+  };
+
+  // Function to convert CarVariant to BookingModalVariant format
+  const convertToBookingVariants = (carVariants: CarVariant[]): BookingModalVariant[] => {
+    return carVariants.map((variant, index) => ({
+      id: `${variant.id}`,
+      name: variant.name,
+      exShowroom: variant.quotationData?.ex_showroom || 0,
+      onRoadPrice: variant.quotationData?.on_the_road || 0,
+      monthlyEmi: Math.round(variant.quotationData?.monthly_emi || 0),
+      downPayment: variant.quotationData?.final_down_payment || 0,
+      bookingAmount: 5000 // Fixed booking amount
+    }));
   };
 
   // Fetch car data from backend
@@ -211,6 +239,8 @@ const CarDetailWithInvoices: React.FC = () => {
           setSelectedVariant(bestVariants[0]);
           // Always set SBI bank since we only deal with SBI quotations
           setSelectedBank(bankOptions['SBI']);
+          // Prepare booking modal variants
+          setBookingModalVariants(convertToBookingVariants(bestVariants));
         }
 
       } catch (error) {
@@ -233,7 +263,6 @@ const CarDetailWithInvoices: React.FC = () => {
 
   const handleVariantSelect = (variant: CarVariant) => {
     setSelectedVariant(variant);
-    setShowFullQuotation(false); // Reset quotation expansion when variant changes
     
     // Always set SBI bank since we only deal with SBI quotations
     setSelectedBank(bankOptions['SBI']);
@@ -248,9 +277,39 @@ const CarDetailWithInvoices: React.FC = () => {
     }
   };
 
-  const toggleFullQuotation = () => {
-    setShowFullQuotation(!showFullQuotation);
+  const handleBookNow = () => {
+    if (!selectedVariant || bookingModalVariants.length === 0) return;
+    
+    // Check if we're on mobile/tablet (including touch devices)
+    const isMobileOrTablet = window.innerWidth <= 992 || 
+                            'ontouchstart' in window || 
+                            navigator.maxTouchPoints > 0;
+    
+    if (isMobileOrTablet) {
+      // Force immediate scroll to top with multiple methods for maximum compatibility
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+      
+      // Also ensure any fixed/sticky elements are properly reset
+      try {
+        window.scrollTo({
+          top: 0,
+          left: 0,
+          behavior: 'auto'
+        });
+      } catch (e) {
+        // Fallback if modern scroll API not supported
+      }
+      
+      // Immediate modal opening for mobile (no delay needed since we're forcing position)
+      setIsBookingModalOpen(true);
+    } else {
+      // Desktop - immediate modal opening
+      setIsBookingModalOpen(true);
+    }
   };
+
 
   const downloadAsPDF = async () => {
     if (!selectedVariant || !invoiceRef.current) return;
@@ -258,12 +317,8 @@ const CarDetailWithInvoices: React.FC = () => {
     try {
       setIsDownloading(true);
       
-      // Temporarily show full quotation for PDF generation
-      const wasShowingFull = showFullQuotation;
-      setShowFullQuotation(true);
-      
       // Wait for DOM update
-      await new Promise(resolve => setTimeout(resolve, 200));
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       const canvas = await html2canvas(invoiceRef.current, {
         scale: 3, // Increased scale for better quality
@@ -387,11 +442,8 @@ const CarDetailWithInvoices: React.FC = () => {
 
       pdf.addImage(imgData, 'PNG', imgX, imgY, scaledWidth, scaledHeight, undefined, 'FAST');
       
-      const fileName = `ASW_Quotation_${selectedVariant.modelName.replace(/\s+/g, '_')}_${selectedVariant.bankName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+      const fileName = `T-Permit_Quotation_${selectedVariant.modelName.replace(/\s+/g, '_')}_${selectedVariant.bankName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
       pdf.save(fileName);
-      
-      // Restore previous quotation state
-      setShowFullQuotation(wasShowingFull);
       
     } catch (error) {
       console.error('Error generating PDF:', error);
@@ -415,7 +467,7 @@ const CarDetailWithInvoices: React.FC = () => {
       const showTCS = exShowroom > 1000000;
       
       const data = [
-        ['ASW CARS & FINANCE', ''],
+        ['T-PERMIT CARS & FINANCE', ''],
         ['', ''],
         ['Car Model', selectedVariant.modelName],
         ['Bank', selectedVariant.bankName],
@@ -463,7 +515,7 @@ const CarDetailWithInvoices: React.FC = () => {
         { width: 20 }
       ];
       
-      const fileName = `ASW_Quotation_${selectedVariant.modelName.replace(/\s+/g, '_')}_${selectedVariant.bankName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.xlsx`;
+      const fileName = `T-Permit_Quotation_${selectedVariant.modelName.replace(/\s+/g, '_')}_${selectedVariant.bankName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.xlsx`;
       XLSX.writeFile(workbook, fileName);
       
     } catch (error) {
@@ -527,79 +579,71 @@ const CarDetailWithInvoices: React.FC = () => {
   }
 
   return (
-    <div className="car-detail-page" ref={pageTopRef}>
+    <div className="car-detail-page-compact" ref={pageTopRef}>
       {isLoading && (
         <div className="loading-overlay">
           <div className="spinner"></div>
         </div>
       )}
       
-      <div className="car-detail-container elevated">
-        <div className="car-image-section">
-          <img src={selectedVariant.image} alt={selectedVariant.name} className="car-detail-image" />
-          <h2 className="car-name">{selectedVariant.name}</h2>
+      <div className="car-detail-container-compact">
+        <div className="car-image-section-compact">
+          <div className="main-car-image-container">
+            <img src={selectedVariant.image} alt={selectedVariant.name} className="car-detail-image-compact" />
+            <button 
+              className="book-now-overlay-btn"
+              onClick={handleBookNow}
+            >
+              🚗 Book Now
+            </button>
+          </div>
+          <h2 className="car-name-compact">{selectedVariant.name}</h2>
           
-          {/* Move More Variants section to top below car image */}
-          <div className="car-variants-section-inline">
-            <h3>More Variants</h3>
-            <div className="car-variants-grid-inline">
+          {/* Compact Variants Section */}
+          <div className="car-variants-section-compact">
+            <h3>Available Variants</h3>
+            <div className="car-variants-grid-compact">
               {variants.map(variant => (
                 <div 
                   key={variant.id}
-                  className={`variant-card-inline ${selectedVariant.id === variant.id ? 'active' : ''}`}
+                  className={`variant-card-compact ${selectedVariant.id === variant.id ? 'selected' : ''}`}
                   onClick={() => handleVariantSelect(variant)}
                 >
-                  <div className="variant-image-container-inline">
+                  <div className="variant-image-small">
                     <img src={variant.image} alt={variant.name} />
                   </div>
-                  <div className="variant-details-inline">
-                    <h4>{variant.name}</h4>
-                    <p className="variant-downpayment">Down: {variant.downPayment}</p>
-                    <p className="variant-emi">EMI: {variant.monthlyPayment}</p>
+                  <div className="variant-info-compact">
+                    <div className="variant-name-compact">{variant.name}</div>
+                    <div className="variant-pricing-compact">
+                      <span className="down-payment-compact">₹{variant.downPayment.replace('₹', '')}</span>
+                      <span className="emi-compact">EMI: ₹{variant.monthlyPayment.replace('₹', '')}</span>
+                    </div>
+                    <div className="variant-bank-compact">{variant.bankName.split(' ')[0]}</div>
                   </div>
+                  {selectedVariant.id === variant.id && (
+                    <div className="variant-selected-indicator">✓</div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
         </div>
         
-        <div className="invoice-section">
-          <div className="invoice-header">
-            <h2>ASW CARS & FINANCE</h2>
-          </div>
-          
-          {/* Bank Selection - Only SBI Bank supported */}
-          <div className="bank-selection">
-            <h3>Financing Partner:</h3>
-            <div className="bank-logo-container">
+        <div className="invoice-section-compact">
+          <div className="invoice-header-compact">
+            <h2>T-PERMIT CARS & FINANCE</h2>
+            <div className="bank-info-compact">
               <img 
                 src="/Website-Images/Banks/SBI.webp" 
                 alt="State Bank of India" 
-                className="bank-logo larger"
+                className="bank-logo-compact"
               />
-              <span className="bank-name">State Bank of India</span>
+              <span className="bank-name-compact">State Bank of India</span>
             </div>
           </div>
           
-          {/* Move Ex-showroom Price to right side */}
-          <div className="on-road-price-section">
-            <div className="on-road-price">
-              Ex-showroom Price: ₹{(() => {
-                const exShowroom = selectedVariant.quotationData?.ex_showroom || 0;
-                const offers = selectedVariant.quotationData?.offers || 0;
-                return (exShowroom - offers).toLocaleString('en-IN');
-              })()}
-            </div>
-            <button 
-              className="full-quotation-btn"
-              onClick={toggleFullQuotation}
-            >
-              {showFullQuotation ? 'Hide Full Quotation' : 'Full Quotation'}
-            </button>
-          </div>
-          
-          {/* Full Quotation - Expandable */}
-          <div className={`quotation-container ${showFullQuotation ? 'expanded' : 'collapsed'}`}>
+          {/* Always visible quotation */}
+          <div className="quotation-container-always-visible">
             <div className="invoice-content" ref={invoiceRef}>
               {/* Company Header for PDF */}
               <div className="company-header">
@@ -723,50 +767,59 @@ const CarDetailWithInvoices: React.FC = () => {
             </div>
           </div>
           
-          {/* Download Section - Replace Excel button with Enquiry and Book Now */}
-          {showFullQuotation && (
-            <div className="download-section">
-              <h3>Download Quotation:</h3>
-              <div className="download-buttons">
-                <button 
-                  className="download-button pdf-button"
-                  onClick={downloadAsPDF}
-                  disabled={isDownloading}
-                >
-                  {isDownloading ? (
-                    <>
-                      <span className="download-spinner"></span>
-                      Generating...
-                    </>
-                  ) : (
-                    <>
-                      <span className="download-icon">📄</span>
-                      PDF
-                    </>
-                  )}
-                </button>
-                
-                <a 
-                  href="https://wa.me/919987828417?text=I'm%20interested%20in%20this%20car.%20Please%20provide%20more%20details." 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="download-button enquiry-button"
-                >
-                  <span className="download-icon">💬</span>
-                  Enquiry
-                </a>
-                
-                <button 
-                  className="download-button book-button"
-                >
-                  <span className="download-icon">🚗</span>
-                  Book Now
-                </button>
-              </div>
+          {/* Compact Download Section - Always visible */}
+          <div className="download-section-compact">
+            <div className="download-buttons-compact">
+              <button 
+                className="download-button-compact pdf-button"
+                onClick={downloadAsPDF}
+                disabled={isDownloading}
+              >
+                {isDownloading ? (
+                  <>
+                    <span className="download-spinner"></span>
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <span className="download-icon">📄</span>
+                    PDF
+                  </>
+                )}
+              </button>
+              
+              <a
+                href="https://wa.me/918652089525?text=I'm%20interested%20in%20this%20car.%20Please%20provide%20more%20details."
+                target="_blank"
+                rel="noopener noreferrer"
+                className="download-button-compact enquiry-button"
+              >
+                <span className="download-icon">💬</span>
+                Enquiry
+              </a>
+              
+              <button 
+                className="download-button-compact book-button"
+                onClick={handleBookNow}
+              >
+                <span className="download-icon">🚗</span>
+                Book Now
+              </button>
             </div>
-          )}
+          </div>
         </div>
       </div>
+
+      {/* BookingModal */}
+      {selectedVariant && (
+        <BookingModal
+          isOpen={isBookingModalOpen}
+          onClose={() => setIsBookingModalOpen(false)}
+          carName={selectedVariant.modelName}
+          carImage={selectedVariant.image}
+          variants={bookingModalVariants}
+        />
+      )}
     </div>
   );
 };

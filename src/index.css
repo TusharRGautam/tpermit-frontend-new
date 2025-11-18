@@ -152,10 +152,35 @@ p {
   }
 }
 
-.image-loading-placeholder {
+.image-loading-placeholder, .loading-shimmer {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 1000px 100%;
-  animation: shimmer 2s infinite;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--border-radius-sm, 8px);
+}
+
+/* Prevent layout shifts */
+.car-image-container, .image-container {
+  aspect-ratio: 16/9;
+  background-color: #f8f9fa;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Enhanced loading states */
+.content-loading {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 4px;
+}
+
+/* Improve touch interactions globally */
+@media (max-width: 768px) {
+  button, .btn, .button, a[role="button"], .clickable, .interactive {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+    touch-action: manipulation;
+  }
 }
 
 /* Improve font loading performance */

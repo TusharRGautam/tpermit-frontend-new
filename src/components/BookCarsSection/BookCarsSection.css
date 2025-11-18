@@ -1,0 +1,121 @@
+.book-cars-section {
+  padding: 0.3rem 0;
+  background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.book-cars-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.book-cars-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.book-cars-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 0.1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  animation: fadeInUp 0.8s ease;
+}
+
+.book-cars-subtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 0.2rem;
+  font-weight: 300;
+  animation: fadeInUp 0.8s ease 0.2s both;
+}
+
+.book-cars-divider {
+  width: 80px;
+  height: 2px;
+  background: white;
+  margin: 0 auto 0 auto;
+  border-radius: 2px;
+  animation: fadeInUp 0.8s ease 0.4s both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .book-cars-section {
+    padding: 0.2rem 0;
+    margin-bottom: 0;
+  }
+  
+  .book-cars-container {
+    padding: 0 0.5rem;
+  }
+  
+  .book-cars-title {
+    font-size: 1.8rem;
+    letter-spacing: 1.5px;
+    margin-bottom: 0.15rem;
+  }
+  
+  .book-cars-subtitle {
+    font-size: 0.9rem;
+    margin-bottom: 0.3rem;
+  }
+  
+  .book-cars-divider {
+    width: 60px;
+    height: 2px;
+    margin: 0 auto 0 auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .book-cars-section {
+    padding: 0.3rem 0;
+    margin-bottom: 0;
+  }
+  
+  .book-cars-title {
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.1rem;
+  }
+  
+  .book-cars-subtitle {
+    font-size: 0.8rem;
+    margin-bottom: 0.2rem;
+  }
+  
+  .book-cars-divider {
+    width: 50px;
+    height: 1.5px;
+    margin: 0 auto 0 auto;
+  }
+}

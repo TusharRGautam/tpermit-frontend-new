@@ -5,13 +5,14 @@ interface BankProps {
   name: string;
   image: string;
   interestRate: string;
+  approvalRate: string;
   loanAmount: string;
   colorClass: string;
 }
 
-const Bank: React.FC<BankProps> = ({ name, image, interestRate, loanAmount, colorClass }) => {
+const Bank: React.FC<BankProps> = ({ name, image, interestRate, approvalRate, loanAmount, colorClass }) => {
   const handleCallClick = () => {
-    window.location.href = 'tel:+919987828690';
+    window.location.href = 'tel:+918652089525';
   };
 
   return (
@@ -21,7 +22,16 @@ const Bank: React.FC<BankProps> = ({ name, image, interestRate, loanAmount, colo
       </div>
       <div className="bank-details">
         <h4 className="bank-name">{name}</h4>
-        <p className="interest-rate">Interest Rate: {interestRate}</p>
+        <div className="bank-stats">
+          <div className="stat-item">
+            <span className="stat-label">Interest Rate</span>
+            <span className="stat-value interest">{interestRate}</span>
+          </div>
+          <div className="stat-item">
+            <span className="stat-label">Approval Rate</span>
+            <span className="stat-value approval">{approvalRate}</span>
+          </div>
+        </div>
         <p className="loan-amount">Loan up to {loanAmount}</p>
         <button onClick={handleCallClick} className={`call-now ${colorClass}`}>
           📞 Call Now
@@ -40,6 +50,7 @@ const BankLoans: React.FC = () => {
       name: 'State Bank of India',
       image: '/Website-Images/Banks/SBI.webp',
       interestRate: '7.5% - 9.5%',
+      approvalRate: '85%',
       loanAmount: '₹75 Lakhs',
       colorClass: 'apply-sbi'
     },
@@ -48,6 +59,7 @@ const BankLoans: React.FC = () => {
       name: 'Union Bank',
       image: '/Website-Images/Banks/Union Bank.webp',
       interestRate: '7.7% - 9.8%',
+      approvalRate: '80%',
       loanAmount: '₹80 Lakhs',
       colorClass: 'apply-union'
     },
@@ -56,6 +68,7 @@ const BankLoans: React.FC = () => {
       name: 'AU Bank',
       image: '/Website-Images/Banks/AU BANk.jpg',
       interestRate: '7.9% - 10.2%',
+      approvalRate: '90%',
       loanAmount: '₹70 Lakhs',
       colorClass: 'apply-au'
     },
@@ -64,6 +77,7 @@ const BankLoans: React.FC = () => {
       name: 'IndusInd Bank',
       image: '/Website-Images/Banks/Indusind.webp',
       interestRate: '8.1% - 10.5%',
+      approvalRate: '90%',
       loanAmount: '₹85 Lakhs',
       colorClass: 'apply-indusind'
     }
@@ -103,6 +117,7 @@ const BankLoans: React.FC = () => {
               name={bank.name}
               image={bank.image}
               interestRate={bank.interestRate}
+              approvalRate={bank.approvalRate}
               loanAmount={bank.loanAmount}
               colorClass={bank.colorClass}
             />

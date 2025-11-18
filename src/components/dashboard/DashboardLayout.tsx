@@ -4,6 +4,8 @@ import './Dashboard.css';
 import DashboardHome from './DashboardHome';
 import QuotationCreationPage from './QuotationCreationPage';
 import QuotationList from './QuotationList';
+import ShowroomManagement from './ShowroomManagement';
+import BookingRelations from './BookingRelations';
 import apiService from '../../services/apiService';
 
 interface DashboardLayoutProps {
@@ -56,9 +58,17 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
             <span className="nav-icon">📄</span>
             <span>Manage Quotations</span>
           </Link>
+          <Link to="/dashboard/showrooms" className={`nav-item ${isActive('/dashboard/showrooms')}`}>
+            <span className="nav-icon">🏢</span>
+            <span>Showrooms</span>
+          </Link>
           <Link to="/dashboard/cars" className={`nav-item ${isActive('/dashboard/cars')}`}>
             <span className="nav-icon">🚗</span>
             <span>Cars</span>
+          </Link>
+          <Link to="/dashboard/booking-relations" className={`nav-item ${isActive('/dashboard/booking-relations')}`}>
+            <span className="nav-icon">📋</span>
+            <span>Booking Relations</span>
           </Link>
           <Link to="/" className="nav-item">
             <span className="nav-icon">🏠</span>
@@ -84,6 +94,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
             <Route path="/quotation" element={<QuotationCreationPage />} />
             <Route path="/quotations" element={<QuotationList />} />
             <Route path="/quotation/edit/:id" element={<QuotationCreationPage />} />
+            <Route path="/showrooms" element={<ShowroomManagement />} />
+            <Route path="/booking-relations" element={<BookingRelations />} />
           </Routes>
         </div>
       </div>

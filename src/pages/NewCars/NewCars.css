@@ -145,7 +145,7 @@
 }
 
 .variant-name {
-  font-size: 5px;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--primary-color);
   margin-bottom: 0.25rem;
@@ -158,7 +158,7 @@
 }
 
 .colors-label {
-  font-size: 5px;
+  font-size: 0.8rem;
   font-weight: 600;
   color: var(--text-secondary);
   display: block;
@@ -176,9 +176,9 @@
 .color-tag {
   background: var(--primary-color);
   color: white;
-  padding: 2px 4px;
+  padding: 4px 8px;
   border-radius: var(--border-radius-full);
-  font-size: 5px;
+  font-size: 0.75rem;
   font-weight: 500;
   transition: var(--transition);
 }
@@ -255,116 +255,237 @@
 
 /* Responsive Design */
 @media (max-width: 992px) {
+  .new-cars-container {
+    padding: 2rem 1.5rem;
+  }
+
   .car-model-header {
     grid-template-columns: 1fr;
     text-align: center;
     gap: 1rem;
+    padding: 1.5rem;
   }
 
   .car-model-image {
     justify-self: center;
+    max-width: 300px;
+  }
+
+  .car-model-image img {
+    height: 150px;
   }
 
   .variants-grid {
-    grid-template-columns: 1fr;
-    gap: 0.3rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
   }
   
   .variant-name {
-    font-size: 5px;
+    font-size: 0.85rem;
   }
   
   .colors-label {
-    font-size: 5px;
+    font-size: 0.8rem;
   }
   
   .color-tag {
-    font-size: 5px;
-    padding: 2px 3px;
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+
+  .variant-card {
+    padding: 0.75rem;
   }
 }
 
 @media (max-width: 768px) {
   .new-cars-container {
-    padding: 2rem 1rem;
+    padding: 1.5rem 1rem;
   }
 
   .new-cars-header h1 {
     font-size: 2rem;
   }
 
+  .new-cars-header p {
+    font-size: 1.1rem;
+  }
+
   .car-model-header {
-    padding: 1rem;
+    padding: 1.25rem;
+    gap: 1.25rem;
+  }
+
+  .car-model-image img {
+    height: 130px;
+  }
+
+  .car-model-info h2 {
+    font-size: 1.3rem;
+  }
+
+  .view-details-btn {
+    padding: 10px 20px;
+    font-size: 0.9rem;
   }
 
   .variants-section {
-    padding: 0.75rem;
+    padding: 1rem;
+  }
+
+  .variants-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .variants-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
 
   .cars-cta-section {
-    padding: 2rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .cars-cta-section h2 {
+    font-size: 1.8rem;
   }
 
   .cta-buttons {
     flex-direction: column;
     align-items: center;
+    gap: 1rem;
   }
 
   .cta-btn {
     width: 100%;
-    max-width: 300px;
+    max-width: 280px;
+    padding: 12px 24px;
   }
   
   .variant-card {
-    padding: 0.4rem;
+    padding: 0.75rem;
   }
   
   .variant-name {
-    font-size: 5px;
+    font-size: 0.85rem;
   }
   
   .colors-label {
-    font-size: 5px;
+    font-size: 0.8rem;
   }
   
   .color-tag {
-    font-size: 5px;
-    padding: 1px 3px;
+    font-size: 0.7rem;
+    padding: 3px 6px;
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 576px) {
+  .new-cars-container {
+    padding: 1rem 0.75rem;
+  }
+
   .new-cars-header h1 {
     font-size: 1.8rem;
+  }
+
+  .new-cars-header p {
+    font-size: 1rem;
+  }
+
+  .car-model-header {
+    padding: 1rem;
+    gap: 1rem;
+  }
+
+  .car-model-image img {
+    height: 110px;
+  }
+
+  .car-model-info h2 {
+    font-size: 1.2rem;
+  }
+
+  .car-starting-price {
+    font-size: 0.9rem;
+  }
+
+  .car-starting-price .price {
+    font-size: 1.1rem;
+  }
+
+  .view-details-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  .variants-section {
+    padding: 0.75rem;
+  }
+
+  .variants-section h3 {
+    font-size: 1rem;
+  }
+
+  .variant-card {
+    padding: 0.6rem;
+  }
+
+  .colors-list {
+    justify-content: center;
+    gap: 4px;
+  }
+  
+  .variant-name {
+    font-size: 0.8rem;
+  }
+  
+  .colors-label {
+    font-size: 0.75rem;
+  }
+  
+  .color-tag {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+  }
+
+  .cars-cta-section {
+    padding: 1.5rem 1rem;
+  }
+
+  .cars-cta-section h2 {
+    font-size: 1.6rem;
+  }
+
+  .cta-btn {
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+}
+
+@media (max-width: 320px) {
+  .new-cars-container {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .new-cars-header h1 {
+    font-size: 1.6rem;
   }
 
   .car-model-header {
     padding: 0.75rem;
   }
 
-  .variants-section {
-    padding: 0.5rem;
+  .car-model-image img {
+    height: 100px;
   }
 
   .variant-card {
-    padding: 0.3rem;
+    padding: 0.5rem;
   }
 
-  .colors-list {
-    justify-content: center;
-    gap: 1px;
-  }
-  
-  .variant-name {
-    font-size: 5px;
-  }
-  
-  .colors-label {
-    font-size: 5px;
-  }
-  
   .color-tag {
-    font-size: 5px;
-    padding: 1px 2px;
+    font-size: 0.6rem;
+    padding: 2px 4px;
   }
 } 

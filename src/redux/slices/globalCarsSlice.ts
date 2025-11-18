@@ -48,7 +48,7 @@ const initialState: GlobalCarsState = {
 const getFallbackCarData = () => [
   {
     id: 'maruti-suzuki-wagon-r',
-    image: '/Website-Images/Cars/wagnor.jpg',
+    image: '/Website-Images/Cars/wagnor.png',
     name: 'Maruti Suzuki Wagon-R',
     downPayment: '₹92,821',
     monthlyEmi: '₹11,884/month',
@@ -64,7 +64,7 @@ const getFallbackCarData = () => [
   },
   {
     id: 'maruti-suzuki-ertiga',
-    image: '/Website-Images/Cars/ertiga.jpg',
+    image: '/Website-Images/Cars/ertiga.png',
     name: 'Maruti Suzuki ERTIGA',
     downPayment: '₹99,347',
     monthlyEmi: '₹23,367/month',
@@ -80,7 +80,7 @@ const getFallbackCarData = () => [
   },
   {
     id: 'toyota-rumion',
-    image: '/Website-Images/Cars/Ruminum.jpg',
+    image: '/Website-Images/Cars/Rumion.png',
     name: 'TOYOTA RUMION',
     downPayment: '₹1,03,647',
     monthlyEmi: '₹23,344/month',
@@ -94,7 +94,7 @@ const getFallbackCarData = () => [
   },
   {
     id: 'hyundai-aura',
-    image: '/Website-Images/Cars/Aura.jpg',
+    image: '/Website-Images/Cars/Aura.png',
     name: 'HYUNDAI AURA',
     downPayment: '₹1,23,821',
     monthlyEmi: '₹15,809/month',
@@ -110,7 +110,7 @@ const getFallbackCarData = () => [
   },
   {
     id: 'maruti-suzuki-dzire',
-    image: '/Website-Images/Cars/Dzire.jpg',
+    image: '/Website-Images/Cars/Dzire.png',
     name: 'Maruti Suzuki Dzire',
     downPayment: '₹1,35,971',
     monthlyEmi: '₹17,531/month',
@@ -124,7 +124,7 @@ const getFallbackCarData = () => [
   },
   {
     id: 'toyota-innova-crysta',
-    image: '/Website-Images/Cars/Crysta.jpg',
+    image: '/Website-Images/Cars/Crysta.png',
     name: 'Toyota Innova Crysta',
     downPayment: '₹1,59,547',
     monthlyEmi: '₹38,557/month',

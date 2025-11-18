@@ -17,11 +17,11 @@ interface CarModel {
 }
 
 const NewCars: React.FC = () => {
-  const aswCarsInventory: CarModel[] = [
+  const tPermitCarsInventory: CarModel[] = [
     {
       id: 'wagnor',
       name: 'Maruti Suzuki Wagon-R',
-      image: '/Website-Images/Cars/wagnor.jpg',
+      image: '/Website-Images/Cars/wagnor.png',
       startingPrice: '₹5,97,500',
       variants: [
         {
@@ -41,7 +41,7 @@ const NewCars: React.FC = () => {
     {
       id: 'ertiga',
       name: 'Maruti Suzuki ERTIGA',
-      image: '/Website-Images/Cars/ertiga.jpg',
+      image: '/Website-Images/Cars/ertiga.png',
       startingPrice: '₹10,97,500',
       variants: [
         {
@@ -61,7 +61,7 @@ const NewCars: React.FC = () => {
     {
       id: 'rumion',
       name: 'TOYOTA RUMION',
-      image: '/Website-Images/Cars/Ruminum.jpg',
+      image: '/Website-Images/Cars/Rumion.png',
       startingPrice: '₹10,97,500',
       variants: [
         {
@@ -73,7 +73,7 @@ const NewCars: React.FC = () => {
     {
       id: 'aura',
       name: 'HYUNDAI AURA',
-      image: '/Website-Images/Cars/Aura.jpg',
+      image: '/Website-Images/Cars/Aura.png',
       startingPrice: '₹7,97,500',
       variants: [
         {
@@ -93,7 +93,7 @@ const NewCars: React.FC = () => {
     {
       id: 'dzire',
       name: 'Maruti Suzuki Dzire',
-      image: '/Website-Images/Cars/Dzire.jpg',
+      image: '/Website-Images/Cars/Dzire.png',
       startingPrice: '₹8,97,500',
       variants: [
         {
@@ -105,7 +105,7 @@ const NewCars: React.FC = () => {
     {
       id: 'crysta',
       name: 'Toyota Innova Crysta',
-      image: '/Website-Images/Cars/Crysta.jpg',
+      image: '/Website-Images/Cars/crysta.png',
       startingPrice: '₹17,97,500',
       variants: [
         {
@@ -131,12 +131,12 @@ const NewCars: React.FC = () => {
   return (
     <div className="new-cars-container">
       <div className="new-cars-header">
-        <h1>New Cars at ASW Cars</h1>
+        <h1>New Cars at T-Permit Cars</h1>
         <p>Explore our complete range of vehicles with detailed specifications and pricing</p>
       </div>
 
       <div className="cars-inventory">
-        {aswCarsInventory.map((car) => (
+        {tPermitCarsInventory.map((car) => (
           <div key={car.id} className="car-model-section">
             <div className="car-model-header">
               <div className="car-model-image">
@@ -188,7 +188,7 @@ const NewCars: React.FC = () => {
 
       <div className="cars-cta-section">
         <h2>Ready to Buy Your Dream Car?</h2>
-        <p>Contact ASW Cars for personalized financing solutions and best deals</p>
+        <p>Contact T-Permit Cars for personalized financing solutions and best deals</p>
         <div className="cta-buttons">
           <Link to="/finance-offers" className="cta-btn primary">
             View Finance Offers

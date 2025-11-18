@@ -5,70 +5,99 @@
 }
 
 :root {
-  /* Enhanced Modern Color Palette with more options */
-  --primary-color: #3b82f6; /* Blue */
-  --primary-light: #93c5fd;
-  --primary-dark: #1d4ed8;
+  /* Gautam Motors Color Palette - Based on L3.png Logo */
+  --primary-color: #dc2626; /* Gautam Motors Red - from wings */
+  --primary-light: #ef4444; /* Lighter red */
+  --primary-dark: #b91c1c; /* Darker red */
   
   /* Secondary Color Options */
-  --secondary-color: #8b5cf6; /* Purple */
-  --secondary-light: #c4b5fd;
-  --secondary-dark: #6d28d9;
+  --secondary-color: #1a1a1a; /* Black - from wheel and text */
+  --secondary-light: #374151; /* Dark gray */
+  --secondary-dark: #000000; /* Pure black */
   
   /* Accent Colors */
-  --accent-color-1: #ec4899; /* Pink */
-  --accent-color-2: #10b981; /* Green */
-  --accent-color-3: #f59e0b; /* Amber */
-  --accent-color-4: #06b6d4; /* Cyan */
-  --accent-color-5: #ef4444; /* Red */
+  --accent-color-1: #fca5a5; /* Light red */
+  --accent-color-2: #f87171; /* Medium light red */
+  --accent-color-3: #fee2e2; /* Very light red */
+  --accent-color-4: #2c2c2c; /* Dark gray */
+  --accent-color-5: #404040; /* Medium gray */
   
   /* Success, Warning, Danger */
-  --success-color: #10b981; /* Green */
-  --success-light: #6ee7b7;
-  --success-dark: #047857;
-  --warning-color: #f59e0b; /* Amber */
-  --warning-light: #fcd34d;
-  --warning-dark: #d97706;
-  --danger-color: #ef4444; /* Red */
-  --danger-light: #fca5a5;
-  --danger-dark: #b91c1c;
+  --success-color: #28a745; /* Green for success */
+  --success-light: #5cb85c;
+  --success-dark: #1e7e34;
+  --warning-color: #ffc107; /* Amber for warning */
+  --warning-light: #ffed4a;
+  --warning-dark: #e0a800;
+  --danger-color: #dc3545; /* Red for danger */
+  --danger-light: #e85d75;
+  --danger-dark: #bd2130;
   
-  /* Neutral Colors - Enhanced with slight warmth */
-  --background-color: #f8fafc;
-  --surface-color: #ffffff;
-  --surface-hover: #f1f5f9;
-  --surface-active: #e2e8f0;
-  --border-color: #e2e8f0;
+  /* Premium Neutral Colors */
+  --background-color: #f8f9fa; /* Light Gray */
+  --surface-color: #ffffff; /* White */
+  --surface-hover: #f0f0f0; /* Light Silver */
+  --surface-active: #e0e0e0;
+  --border-color: #d0d0d0;
+  --card-shadow: rgba(0, 0, 0, 0.15);
   
   /* Text Colors */
-  --text-primary: #0f172a;
-  --text-secondary: #334155;
-  --text-tertiary: #64748b;
-  --text-light: #f8fafc;
+  --text-primary: #1a1a1a; /* Deep Black */
+  --text-secondary: #333333; /* Dark Gray */
+  --text-tertiary: #666666; /* Medium Gray */
+  --text-light: #ffffff; /* White */
+  --text-muted: #888888;
   
-  /* Enhanced Gradients */
+  /* Enhanced Gradients - Gautam Motors Theme */
   --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
   --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--secondary-dark));
   --gradient-accent: linear-gradient(135deg, var(--accent-color-1), var(--accent-color-3));
   --gradient-success: linear-gradient(135deg, var(--success-color), var(--success-dark));
-  --gradient-blue-purple: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  --gradient-orange-pink: linear-gradient(135deg, #f59e0b, #ec4899);
-  --gradient-cyan-blue: linear-gradient(135deg, #06b6d4, #3b82f6);
-  --gradient-green-cyan: linear-gradient(135deg, #10b981, #06b6d4);
+  --gradient-premium: linear-gradient(135deg, #dc2626, #1a1a1a); /* Red to black */
+  --gradient-warm: linear-gradient(135deg, #fca5a5, #fee2e2); /* Light red gradient */
+  --gradient-cool: linear-gradient(135deg, #1a1a1a, #374151); /* Black to gray */
+  --gradient-dark: linear-gradient(135deg, #000000, #1a1a1a);
+  --gradient-red: linear-gradient(135deg, #dc2626, #ef4444, #f87171); /* Red variations */
+  --gradient-wings: linear-gradient(135deg, #b91c1c, #dc2626, #ef4444); /* Wing colors */
+  
+  /* Booking specific gradients */
+  --gradient-booking: linear-gradient(135deg, #dc2626, #b91c1c); /* Red gradient */
+  --gradient-cta: linear-gradient(135deg, #1a1a1a, #dc2626); /* Black to red */
   
   /* Typography */
   --heading-font: 'Poppins', 'Segoe UI', 'Roboto', sans-serif;
   --body-font: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
   
   /* Effects */
-  --box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --box-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --box-shadow-colored: 0 4px 14px 0 rgba(59, 130, 246, 0.2);
+  --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --box-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --box-shadow-xl: 0 12px 36px rgba(0, 0, 0, 0.2);
+  --box-shadow-colored: 0 4px 14px 0 rgba(220, 38, 38, 0.25); /* Red shadow */
+  --box-shadow-warm: 0 4px 14px 0 rgba(220, 38, 38, 0.3); /* Red warm shadow */
+  --box-shadow-success: 0 4px 14px 0 rgba(40, 167, 69, 0.25);
+  --box-shadow-red: 0 6px 20px rgba(220, 38, 38, 0.3); /* Red shadow */
+  --box-shadow-black: 0 8px 25px rgba(26, 26, 26, 0.2); /* Black shadow */
   --transition: all 0.3s ease;
-  --border-radius: 10px;
-  --border-radius-lg: 16px;
-  --border-radius-sm: 6px;
+  --transition-fast: all 0.2s ease;
+  --transition-slow: all 0.5s ease;
+  --border-radius: 12px;
+  --border-radius-lg: 20px;
+  --border-radius-sm: 8px;
   --border-radius-full: 9999px;
+  
+  /* Booking specific variables */
+  --booking-card-bg: rgba(255, 255, 255, 0.95);
+  --booking-modal-bg: rgba(26, 26, 26, 0.9);
+  --booking-button-height: 48px;
+  --booking-input-height: 44px;
+  
+  /* Additional color backgrounds - Gautam Motors Theme */
+  --primary-bg: rgba(220, 38, 38, 0.05); /* Light red background */
+  --accent-bg: rgba(220, 38, 38, 0.1); /* Red accent background */
+  --success-bg: rgba(40, 167, 69, 0.1);
+  --error-color: var(--danger-color);
+  --red-bg: rgba(220, 38, 38, 0.15); /* Red background */
+  --black-bg: linear-gradient(145deg, rgba(26, 26, 26, 0.1), rgba(55, 65, 81, 0.1)); /* Black gradient background */
 }
 
 body {
@@ -76,10 +105,11 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--text-primary);
-  background: linear-gradient(135deg, #f8fafc, #edf2f7);
+  background: linear-gradient(135deg, #fef2f2, #fee2e2); /* Light red background to complement logo */
   line-height: 1.6;
   position: relative;
   overflow-x: hidden;
+  font-size: 16px; /* Ensure base font size for mobile */
 }
 
 body::before {
@@ -90,8 +120,9 @@ body::before {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 10% 10%, rgba(59, 130, 246, 0.05), transparent 400px),
-    radial-gradient(circle at 90% 90%, rgba(139, 92, 246, 0.05), transparent 400px);
+    radial-gradient(circle at 15% 15%, rgba(220, 38, 38, 0.06), transparent 500px), /* Gautam Motors red */
+    radial-gradient(circle at 85% 85%, rgba(26, 26, 26, 0.06), transparent 500px), /* Black */
+    radial-gradient(circle at 50% 50%, rgba(220, 38, 38, 0.03), transparent 700px); /* Light red center */
   pointer-events: none;
   z-index: -1;
 }
@@ -101,26 +132,37 @@ h1, h2, h3, h4, h5, h6 {
   margin-top: 0;
   line-height: 1.2;
   color: var(--text-primary);
-  font-weight: 600;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
   font-size: 2.5rem;
   margin-bottom: 1.5rem;
-  background: var(--gradient-primary);
+  background: var(--gradient-primary); /* Use Gautam Motors red gradient */
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   display: inline-block;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 h2 {
   font-size: 2rem;
   margin-bottom: 1.25rem;
+  background: var(--gradient-secondary); /* Use black gradient */
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+  font-weight: 700;
 }
 
 h3 {
-  font-size: 1.75rem;
+  font-size: 1.6rem;
   margin-bottom: 1rem;
+  color: var(--secondary-color); /* Use Gautam Motors black */
+  font-weight: 600;
 }
 
 a {
@@ -179,7 +221,7 @@ button {
   border: 1px solid rgba(226, 232, 240, 0.8);
   overflow: hidden;
   position: relative;
-  z-index: 1;
+  /* z-index: 1; */
 }
 
 .card::before {
@@ -371,28 +413,7 @@ button {
 @media (max-width: 992px) {
   .main-content {
     max-width: 960px;
-  }
-  
-  h1 {
-    font-size: 2.25rem;
-  }
-  
-  h2 {
-    font-size: 1.8rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .main-content {
-    padding-top: 25px;
-    padding-left: 18px;
-    padding-right: 18px;
-    max-width: 720px;
-  }
-  
-  .section-spacing {
-    margin-top: 3.5rem;
-    margin-bottom: 3.5rem;
+    padding-top: 20px;
   }
   
   h1 {
@@ -400,7 +421,43 @@ button {
   }
   
   h2 {
-    font-size: 1.6rem;
+    font-size: 1.7rem;
+  }
+  
+  /* Reduce section spacing on tablets */
+  .gallery-section,
+  .our-partners,
+  .find-your-car-section {
+    padding: 1rem 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding-top: 15px;
+    padding-left: 16px;
+    padding-right: 16px;
+    max-width: 720px;
+  }
+  
+  .section-spacing {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  /* Further reduce section spacing on mobile */
+  .gallery-section,
+  .our-partners,
+  .find-your-car-section {
+    padding: 0.75rem 0;
   }
 }
 
@@ -414,5 +471,458 @@ button {
   .section-spacing {
     margin-top: 3rem;
     margin-bottom: 3rem;
+  }
+}
+
+/* Modern Booking System Styles */
+.booking-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: var(--booking-button-height);
+  padding: 0 24px;
+  background: var(--gradient-booking);
+  color: var(--text-light);
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--box-shadow-success);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.booking-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow-lg);
+  color: var(--text-light);
+}
+
+.booking-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.booking-btn:hover::before {
+  left: 100%;
+}
+
+.booking-btn-secondary {
+  background: var(--gradient-warm);
+  box-shadow: var(--box-shadow-warm);
+}
+
+.booking-btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  box-shadow: none;
+}
+
+.booking-btn-outline:hover {
+  background: var(--primary-color);
+  color: var(--text-light);
+}
+
+/* Booking Modal Styles */
+.booking-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--booking-modal-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1200;
+  opacity: 0;
+  visibility: hidden;
+  transition: var(--transition);
+  backdrop-filter: blur(8px);
+}
+
+.booking-modal-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.booking-modal {
+  background: var(--surface-color);
+  border-radius: var(--border-radius-lg);
+  padding: 32px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--box-shadow-xl);
+  transform: scale(0.9) translateY(20px);
+  transition: var(--transition);
+}
+
+.booking-modal-overlay.active .booking-modal {
+  transform: scale(1) translateY(0);
+}
+
+.booking-form-group {
+  margin-bottom: 20px;
+}
+
+.booking-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.booking-form-input {
+  width: 100%;
+  height: var(--booking-input-height);
+  padding: 0 16px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-size: 16px;
+  transition: var(--transition);
+  background: var(--surface-color);
+}
+
+.booking-form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.booking-price-display {
+  background: var(--gradient-cool);
+  color: var(--text-light);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.booking-price-display h3 {
+  margin: 0 0 8px 0;
+  font-size: 24px;
+}
+
+.booking-price-display p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 14px;
+}
+
+/* Variant Selection Styles */
+.variant-selector {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.variant-option {
+  padding: 16px;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  background: var(--surface-color);
+}
+
+.variant-option:hover {
+  border-color: var(--primary-light);
+  background: var(--surface-hover);
+}
+
+.variant-option.selected {
+  border-color: var(--primary-color);
+  background: rgba(0, 102, 204, 0.05);
+}
+
+.variant-name {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.variant-price {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* Compact Car Display */
+.car-compact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+  padding: 24px 0;
+}
+
+.car-compact-card {
+  background: var(--booking-card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--box-shadow);
+  transition: var(--transition);
+  border: 1px solid rgba(225, 232, 237, 0.6);
+  position: relative;
+}
+
+.car-compact-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--box-shadow-lg);
+}
+
+.car-compact-image {
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+}
+
+.car-compact-content {
+  padding: 20px;
+}
+
+.car-compact-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.car-variants-compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.variant-tag {
+  padding: 6px 12px;
+  background: rgba(0, 102, 204, 0.1);
+  color: var(--primary-color);
+  border-radius: var(--border-radius-full);
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(0, 102, 204, 0.2);
+}
+
+.car-price-section {
+  border-top: 1px solid var(--border-color);
+  padding-top: 16px;
+  margin-top: 16px;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.price-label {
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.price-value {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.booking-amount {
+  color: var(--success-color) !important;
+  font-size: 16px !important;
+}
+
+/* Responsive adjustments for booking system */
+@media (max-width: 992px) {
+  .booking-modal {
+    width: 90%;
+    max-width: 500px;
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .booking-modal {
+    width: 95%;
+    padding: 1.25rem;
+    margin: 0.75rem;
+    max-height: 90vh;
+  }
+  
+  .variant-selector {
+    grid-template-columns: 1fr;
+  }
+  
+  .car-compact-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 576px) {
+  .booking-modal {
+    width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    margin: 0;
+    padding: 1rem;
+  }
+  
+  .booking-modal-overlay {
+    align-items: stretch;
+  }
+}
+
+@media (max-width: 320px) {
+  .booking-modal {
+    padding: 0.75rem;
+  }
+  
+  .booking-btn {
+    width: 100%;
+    min-height: 44px;
+  }
+}
+
+/* Global Mobile Improvements */
+@media (max-width: 768px) {
+  /* Prevent unwanted mobile browser gestures globally */
+  html, body {
+    overscroll-behavior: contain;
+    overscroll-behavior-x: none;
+    -webkit-overscroll-behavior: contain;
+    -webkit-overscroll-behavior-x: none;
+    touch-action: pan-y;
+  }
+  
+  /* Improve touch targets */
+  button, .btn, .button, a[role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+    padding: 12px 16px;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Better text sizing for mobile */
+  h1 { font-size: 1.5rem; line-height: 1.3; }
+  h2 { font-size: 1.3rem; line-height: 1.3; }
+  h3 { font-size: 1.2rem; line-height: 1.4; }
+  h4 { font-size: 1.1rem; line-height: 1.4; }
+  h5 { font-size: 1rem; line-height: 1.4; }
+  h6 { font-size: 0.9rem; line-height: 1.4; }
+  
+  /* Improve form elements */
+  input, textarea, select {
+    font-size: 16px; /* Prevent iOS zoom */
+    padding: 12px 16px;
+    min-height: 44px;
+    border-radius: var(--border-radius-sm);
+    border: 2px solid var(--border-color);
+    transition: var(--transition-fast);
+    -webkit-appearance: none;
+    appearance: none;
+    touch-action: manipulation;
+  }
+  
+  input:focus, textarea:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(26, 26, 26, 0.1);
+  }
+  
+  /* Better spacing */
+  .container, .section-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  /* Selective text selection control */
+  .header-nav, .mobile-menu, .button-group, .action-buttons {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  
+  /* Allow text selection in content areas */
+  .main-content, .cart-container, .booking-modal-body, 
+  p, span, div[class*="content"], h1, h2, h3, h4, h5, h6, 
+  input, textarea, [contenteditable] {
+    -webkit-user-select: auto;
+    user-select: auto;
+  }
+  
+  /* Reduce animation complexity on mobile */
+  * {
+    animation-duration: 0.2s !important;
+    transition-duration: 0.2s !important;
+  }
+  
+  /* Improve loading states */
+  .loading-placeholder, .image-loading {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: var(--border-radius-sm);
+  }
+}
+
+@media (max-width: 576px) {
+  /* Further mobile refinements */
+  h1 { font-size: 1.4rem; }
+  h2 { font-size: 1.2rem; }
+  h3 { font-size: 1.1rem; }
+  
+  .container, .section-container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+  
+  /* Ensure all interactive elements are touch-friendly */
+  button, .btn, .button, a[role="button"], .clickable {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Better modal spacing on small screens */
+  .modal, .dialog {
+    margin: 0.5rem;
+  }
+}
+
+@media (max-width: 320px) {
+  /* Extra small screen optimizations */
+  h1 { font-size: 1.3rem; }
+  h2 { font-size: 1.1rem; }
+  
+  .container, .section-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .car-variants-compact {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .variant-tag {
+    align-self: flex-start;
   }
 }

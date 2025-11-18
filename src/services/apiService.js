@@ -7,7 +7,7 @@
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 
                      (window.location.origin.includes('localhost') ? 
                      'http://localhost:5000/api' : 
-                     'https://backend.aswcars.com/api');
+                     'https://backend.t-permit.com/api');
 
 class ApiService {
   constructor() {
@@ -53,7 +53,7 @@ class ApiService {
       
       // Enhanced error handling
       if (error.message.includes('Failed to fetch')) {
-        throw new Error('Backend server is not accessible. Please ensure the backend is running on backend.aswcars.com.');
+        throw new Error('Backend server is not accessible. Please ensure the backend is running on backend.t-permit.com.');
       } else if (error.message.includes('status: 404')) {
         throw new Error('API endpoint not found. Please check the backend server configuration.');
       } else if (error.message.includes('status: 500')) {
@@ -85,10 +85,38 @@ class ApiService {
     });
   }
 
+  // Generic HTTP methods
+  async get(endpoint) {
+    return this.makeRequest(endpoint, {
+      method: 'GET',
+    });
+  }
+
+  async post(endpoint, data) {
+    return this.makeRequest(endpoint, {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async put(endpoint, data) {
+    return this.makeRequest(endpoint, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async delete(endpoint) {
+    return this.makeRequest(endpoint, {
+      method: 'DELETE',
+    });
+  }
+
   // Test method
   async testConnection() {
     return this.makeRequest('/test');
   }
 }
 
-export default new ApiService(); 
+const apiService = new ApiService();
+export default apiService; 

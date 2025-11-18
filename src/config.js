@@ -12,7 +12,7 @@ export const API_CONFIG = {
   BASE_URL: process.env.REACT_APP_API_BASE_URL || 
             (window.location.origin.includes('localhost') ? 
             'http://localhost:5000/api' : 
-            'https://backend.aswcars.com/api'),
+            'https://backend.t-permit.com/api'),
   TIMEOUT: 10000, // 10 seconds
 };
 

@@ -95,25 +95,31 @@
 }
 
 .banks-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
+  justify-content: center;
 }
 
 .bank-card {
   background-color: white;
-  border-radius: 10px;
+  border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
   transition: transform 0.4s ease, box-shadow 0.4s ease;
   display: flex;
   flex-direction: column;
   height: 100%;
+  flex: 1;
+  min-width: 280px;
+  max-width: 320px;
+  border: 2px solid #f0f0f0;
 }
 
 .bank-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  transform: translateY(-8px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+  border-color: #0056b3;
 }
 
 .bank-logo {
@@ -144,17 +150,59 @@
   font-weight: 600;
   color: #333;
   margin: 0 0 1rem 0;
+  text-align: center;
 }
 
-.interest-rate, .loan-amount {
+.bank-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  padding: 0.8rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-bottom: 0.4rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  padding: 0.4rem;
+  border-radius: 6px;
+}
+
+.stat-value.interest {
+  color: #667eea;
+  background: linear-gradient(135deg, #667eea15, #764ba215);
+  border: 1px solid #667eea30;
+}
+
+.stat-value.approval {
+  color: #28a745;
+  background: linear-gradient(135deg, #28a74515, #20c99715);
+  border: 1px solid #28a74530;
+}
+
+.loan-amount {
   margin-bottom: 0.8rem;
   font-size: 1rem;
   color: #555;
-}
-
-.interest-rate {
-  color: #0056b3;
-  font-weight: 500;
+  text-align: center;
+  font-weight: 600;
 }
 
 /* Call Now button styles with different colors */
@@ -221,7 +269,7 @@
   .bank-loans-section .section-title {
     font-size: 2.4rem;
   }
-  
+
   .section-description {
     font-size: 1rem;
   }
@@ -236,6 +284,18 @@
     min-width: 130px;
   }
 
+  .stat-item {
+    padding: 0.7rem;
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+  }
+
+  .stat-value {
+    font-size: 1rem;
+  }
+
   .call-now {
     padding: 3px 6px;
     font-size: 11px;
@@ -248,14 +308,15 @@
   .bank-loans-section {
     padding: 3rem 0;
   }
-  
+
   .bank-loans-section .section-title {
     font-size: 2.2rem;
   }
-  
+
   .banks-container {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    flex-direction: column;
     gap: 1.5rem;
+    align-items: center;
   }
 
   .bank-selection-options {
@@ -272,6 +333,18 @@
     min-width: 110px;
   }
 
+  .stat-item {
+    padding: 0.6rem;
+  }
+
+  .stat-label {
+    font-size: 0.65rem;
+  }
+
+  .stat-value {
+    font-size: 0.95rem;
+  }
+
   .call-now {
     padding: 3px 6px;
     font-size: 10px;
@@ -285,15 +358,21 @@
     font-size: 2rem;
     margin-bottom: 0.8rem;
   }
-  
+
   .section-description {
     margin-bottom: 2rem;
   }
-  
+
   .banks-container {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: center;
   }
-  
+
+  .bank-card {
+    max-width: 100%;
+    min-width: auto;
+  }
+
   .bank-logo {
     height: 100px;
   }
@@ -312,6 +391,23 @@
   .bank-option-btn {
     width: 100%;
     max-width: 250px;
+  }
+
+  .bank-stats {
+    gap: 0.6rem;
+  }
+
+  .stat-item {
+    padding: 0.5rem;
+  }
+
+  .stat-label {
+    font-size: 0.6rem;
+  }
+
+  .stat-value {
+    font-size: 0.9rem;
+    padding: 0.3rem;
   }
 
   .call-now {

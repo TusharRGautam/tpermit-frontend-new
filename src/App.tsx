@@ -6,16 +6,20 @@ import { preloadCriticalImages } from './utils/imagePreloader';
 import './App.css';
 import Header from './components/Header/Header';
 import BannerSection from './components/BannerSection/BannerSection';
+import BookCarsSection from './components/BookCarsSection/BookCarsSection';
 import FindYourRightCar from './components/FindYourRightCar/FindYourRightCar';
 import LogosContainer from './components/LogosContainer/LogosContainer';
 import GallerySection from './components/GallerySection/GallerySection';
 import CarDetailWithInvoices from './components/CarDetailWithInvoices/CarDetailWithInvoices';
 import BankLoans from './components/BankLoans/BankLoans';
+import OurPartners from './components/OurPartners/OurPartners';
+import RequiredDocuments from './components/RequiredDocuments/RequiredDocuments';
 import Footer from './components/Footer/Footer';
 import NewCars from './pages/NewCars/NewCars';
-import FinanceOffers from './pages/FinanceOffers/FinanceOffers';
-import BusinessLoan from './pages/BusinessLoan/BusinessLoan';
 import AboutUs from './pages/AboutUs/AboutUs';
+import Cart from './pages/Cart/Cart';
+import Checkout from './pages/Checkout/Checkout';
+import MyBookings from './pages/MyBookings/MyBookings';
 import DashboardLayout from './components/dashboard/DashboardLayout';
 import GlobalStateProvider from './components/GlobalStateProvider';
 // TEMPORARY DEVELOPMENT CHANGES:
@@ -65,8 +69,6 @@ const App: React.FC = () => {
 const AppContent = () => {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-  const isFinanceOffers = location.pathname === '/finance-offers';
-  const isBusinessLoan = location.pathname === '/business-loan';
   const isAboutUs = location.pathname === '/about-us';
   
   return (
@@ -77,6 +79,9 @@ const AppContent = () => {
       {/* Banner section - only on homepage */}
       {isHomePage && <BannerSection />}
       
+      {/* Book Cars section - only on homepage */}
+      {isHomePage && <BookCarsSection />}
+      
       {/* Content area */}
       <div className="content-area">
         {/* Homepage specific components */}
@@ -84,32 +89,21 @@ const AppContent = () => {
           <>
             <FindYourRightCar />
             <LogosContainer />
+            <OurPartners />
+            <RequiredDocuments />
             <GallerySection />
           </>
         )}
-        
-        {/* Finance Offers page specific components */}
-        {isFinanceOffers && (
-          <>
-            <BankLoans />
-          </>
-        )}
-        
-        {/* Business Loan page specific components */}
-        {isBusinessLoan && (
-          <>
-            <BusinessLoan />
-          </>
-        )}
-        
+
         {/* Page specific content */}
         <Routes>
           <Route path="/" element={null} />
           <Route path="/car/:carId" element={<CarDetailWithInvoices />} />
           <Route path="/new-cars" element={<NewCars />} />
-          <Route path="/finance-offers" element={<></>} />
-          { <Route path="/business-loan" element={null} /> }
-          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/my-bookings" element={<MyBookings />} />
+          {/* <Route path="/about-us" element={<AboutUs />} /> */}
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

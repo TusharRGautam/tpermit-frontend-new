@@ -6,7 +6,7 @@ const AboutUs: React.FC = () => {
   return (
     <div className="about-us-container">
       <div className="about-us-header">
-        <h1>About ASW Cars</h1>
+        <h1>About T-Permit Cars</h1>
         <div className="about-us-divider"></div>
       </div>
 
@@ -35,7 +35,7 @@ const AboutUs: React.FC = () => {
       <section className="about-us-section">
         <h2>Our Story</h2>
         <p>
-          Welcome to <strong>A S Wheel Cars and Finance (ASW Cars)</strong>, your premier destination for quality automobiles 
+          Welcome to <strong>T-Permit Cars and Finance</strong>, your premier destination for quality automobiles 
           and comprehensive automotive finance solutions. Established in <strong>June 2013</strong>, we have built our 
           reputation on trust, excellence, and unwavering commitment to customer satisfaction.
         </p>
@@ -61,7 +61,7 @@ const AboutUs: React.FC = () => {
           <div className="proprietor-content">
             <h3>Leadership & Vision</h3>
             <p>
-              Under experienced leadership, ASW Cars has established itself as a reliable partner in the automotive 
+              Under experienced leadership, T-Permit Cars has established itself as a reliable partner in the automotive 
               journey of countless families. Our proprietor's vision of transparent dealings, customer-first approach, 
               and innovative financing solutions continues to drive our success.
             </p>
@@ -182,7 +182,7 @@ const AboutUs: React.FC = () => {
       <section className="about-us-section">
         <h2>Our Expert Team</h2>
         <p>
-          Behind ASW Cars' success is our dedicated team of 5 passionate professionals who bring years of 
+          Behind T-Permit Cars' success is our dedicated team of 5 passionate professionals who bring years of 
           experience and expertise to serve you better. From sales consultation to finance solutions and 
           customer service, each team member is committed to delivering excellence at every step.
         </p>
@@ -191,9 +191,9 @@ const AboutUs: React.FC = () => {
       </section>
       
       <section className="about-us-section cta-section">
-        <h2>Experience the ASW Difference</h2>
+        <h2>Experience the T-Permit Difference</h2>
         <p>
-          Since June 2013, ASW Cars has been committed to making your automotive dreams a reality. 
+          Since June 2013, T-Permit Cars has been committed to making your automotive dreams a reality. 
           Visit our showroom or connect with our expert team to discover how we can help you find 
           the perfect vehicle with the perfect financing solution.
         </p>

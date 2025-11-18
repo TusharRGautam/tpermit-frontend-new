@@ -3,18 +3,38 @@ import OptimizedImage from '../OptimizedImage/OptimizedImage';
 import './GallerySection.css';
 
 const GallerySection: React.FC = () => {
-  // Use the Gallery images from the public folder
+  // Use the client images from the public folder
   const galleryImages = [
-    '/Website-Images/Gallery/A1.webp',
-    '/Website-Images/Gallery/A2.webp',
-    '/Website-Images/Gallery/A3.webp',
-    '/Website-Images/Gallery/A4.webp',
-    '/Website-Images/Gallery/A5.webp',
-    '/Website-Images/Gallery/A6.webp',
-    '/Website-Images/Gallery/A7.webp',
-    '/Website-Images/Gallery/A8.webp',
-    '/Website-Images/Gallery/A9.webp',
-    '/Website-Images/Gallery/A10.webp',
+    '/Website-Images/our-clients/1 (1).webp',
+    '/Website-Images/our-clients/1 (2).webp',
+    '/Website-Images/our-clients/1 (3).webp',
+    '/Website-Images/our-clients/1 (4).webp',
+    '/Website-Images/our-clients/1 (5).webp',
+    '/Website-Images/our-clients/1 (6).webp',
+    '/Website-Images/our-clients/1 (7).webp',
+    '/Website-Images/our-clients/1 (8).webp',
+    '/Website-Images/our-clients/1.jpg',
+    '/Website-Images/our-clients/2.jpg',
+    '/Website-Images/our-clients/3.jpg',
+    '/Website-Images/our-clients/4.jpg',
+    '/Website-Images/our-clients/5.jpg',
+    '/Website-Images/our-clients/6.jpg',
+    '/Website-Images/our-clients/7.jpg',
+    '/Website-Images/our-clients/8.jpg',
+    '/Website-Images/our-clients/9.jpg',
+    '/Website-Images/our-clients/10.jpg',
+    '/Website-Images/our-clients/11.jpg',
+    '/Website-Images/our-clients/12.jpg',
+    '/Website-Images/our-clients/13.jpg',
+    '/Website-Images/our-clients/14.jpg',
+    '/Website-Images/our-clients/15.jpg',
+    '/Website-Images/our-clients/16.jpg',
+    '/Website-Images/our-clients/17.jpg',
+    '/Website-Images/our-clients/18.jpg',
+    '/Website-Images/our-clients/19.jpg',
+    '/Website-Images/our-clients/20.jpg',
+    '/Website-Images/our-clients/21.jpg',
+    '/Website-Images/our-clients/22.jpg',
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -48,17 +68,17 @@ const GallerySection: React.FC = () => {
 
     const maxIndex = galleryImages.length - getImagesPerView();
 
-    // Auto-slide every 3 seconds
-    const interval = setInterval(() => {
+    // Auto-slide every 3 seconds (only for mobile and tablet)
+    const interval = deviceType !== 'desktop' ? setInterval(() => {
       if (!isAnimating) {
         setCurrentIndex((prevIndex) => 
           prevIndex >= maxIndex ? 0 : prevIndex + 1
         );
       }
-    }, 3000);
+    }, 3000) : null;
 
     return () => {
-      clearInterval(interval);
+      if (interval) clearInterval(interval);
       window.removeEventListener('resize', updateDeviceType);
     };
   }, [galleryImages.length, deviceType, getImagesPerView, isAnimating]);
@@ -107,66 +127,76 @@ const GallerySection: React.FC = () => {
   return (
     <section className="gallery-section">
       <div className="section-container">
-        <h2 className="section-title">Our Gallery</h2>
-        <div className={`gallery-container gallery-${deviceType}`}>
-          <div 
-            className="gallery-slide" 
-            style={{ transform: `translateX(-${currentIndex * (100 / imagesPerView)}%)` }}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
-            {galleryImages.map((image, index) => (
-              <div 
-                className="gallery-image" 
-                key={index} 
-                style={{ flex: `0 0 calc(100% / ${imagesPerView})` }}
-              >
-                <OptimizedImage 
-                  src={image} 
-                  alt={`Gallery image ${index + 1}`} 
-                  loading={index < 4 ? "eager" : "lazy"} 
-                  priority={index < 2}
-                />
-              </div>
-            ))}
-          </div>
-          
-          {/* Navigation arrows for devices with more space */}
-          {deviceType !== 'mobile' && (
-            <div className="gallery-nav">
-              <button 
-                className="gallery-nav-btn prev" 
-                onClick={() => !isAnimating && currentIndex > 0 && goToSlide(currentIndex - 1)}
-                disabled={currentIndex === 0 || isAnimating}
-                aria-label="Previous images"
-              >
-                &lt;
-              </button>
-              <button 
-                className="gallery-nav-btn next" 
-                onClick={() => !isAnimating && currentIndex < maxDotsCount - 1 && goToSlide(currentIndex + 1)}
-                disabled={currentIndex >= maxDotsCount - 1 || isAnimating}
-                aria-label="Next images"
-              >
-                &gt;
-              </button>
+        <h2 className="section-title">Our Happy Clients</h2>
+        <p className="section-description">
+          See our satisfied customers with their new cars from T-Permit Auto
+        </p>
+        {/* Desktop Grid Gallery */}
+        {deviceType === 'desktop' ? (
+          <div className="desktop-gallery-container">
+            <div className="desktop-gallery-grid">
+              {galleryImages.map((image, index) => (
+                <div key={index} className="desktop-gallery-item">
+                  <OptimizedImage 
+                    src={image} 
+                    alt={`Happy client ${index + 1} with their new car from T-Permit Auto`} 
+                    loading={index < 8 ? "eager" : "lazy"} 
+                    priority={index < 4}
+                  />
+                </div>
+              ))}
             </div>
-          )}
-        </div>
+          </div>
+        ) : (
+          /* Mobile/Tablet Sliding Gallery */
+          <div className={`gallery-container gallery-${deviceType}`}>
+            <div 
+              className="gallery-slide" 
+              style={{ transform: `translateX(-${currentIndex * (100 / imagesPerView)}%)` }}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              {galleryImages.map((image, index) => (
+                <div 
+                  className="gallery-image" 
+                  key={index} 
+                  style={{ flex: `0 0 calc(100% / ${imagesPerView})` }}
+                >
+                  <OptimizedImage 
+                    src={image} 
+                    alt={`Happy client ${index + 1} with their new car from T-Permit Auto`} 
+                    loading={index < 4 ? "eager" : "lazy"} 
+                    priority={index < 2}
+                  />
+                </div>
+              ))}
+            </div>
+            
+            {/* Navigation arrows for tablet */}
+            {deviceType === 'tablet' && (
+              <div className="gallery-nav">
+                <button 
+                  className="gallery-nav-btn prev" 
+                  onClick={() => !isAnimating && currentIndex > 0 && goToSlide(currentIndex - 1)}
+                  disabled={currentIndex === 0 || isAnimating}
+                  aria-label="Previous client photos"
+                >
+                  &lt;
+                </button>
+                <button 
+                  className="gallery-nav-btn next" 
+                  onClick={() => !isAnimating && currentIndex < maxDotsCount - 1 && goToSlide(currentIndex + 1)}
+                  disabled={currentIndex >= maxDotsCount - 1 || isAnimating}
+                  aria-label="Next client photos"
+                >
+                  &gt;
+                </button>
+              </div>
+            )}
+          </div>
+        )}
         
-        {/* Pagination dots - show fewer on mobile */}
-        <div className="gallery-dots">
-          {Array.from({ length: maxDotsCount }).map((_, index) => (
-            <button 
-              key={index} 
-              className={`gallery-dot ${currentIndex === index ? 'active' : ''}`}
-              onClick={() => !isAnimating && goToSlide(index)}
-              disabled={isAnimating}
-              aria-label={`Go to gallery image set ${index + 1}`}
-            />
-          ))}
-        </div>
       </div>
     </section>
   );

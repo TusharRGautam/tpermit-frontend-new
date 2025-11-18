@@ -1,72 +1,102 @@
 import React, { useEffect, useState } from 'react';
-import { Carousel } from 'react-responsive-carousel';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './BannerSection.css';
 
-interface BannerData {
+interface CarImage {
   id: number;
-  image: string;
+  src: string;
   alt: string;
-  title: string;
+  brand: string;
+  model: string;
+  variant: string;
   price: string;
-  downPayment: string;
-  emi: string;
-  cta: string;
-  fallbackImage?: string;
 }
 
 const BannerSection: React.FC = () => {
-  const [isMobile, setIsMobile] = useState(false);
-  
-  useEffect(() => {
-    // Check if screen is mobile on initial load
-    checkIfMobile();
-    
-    // Add resize listener to update on window resize
-    window.addEventListener('resize', checkIfMobile);
-    
-    // Clean up listener on component unmount
-    return () => window.removeEventListener('resize', checkIfMobile);
-  }, []);
+  const [currentCarIndex, setCurrentCarIndex] = useState(0);
+  const [nextCarIndex, setNextCarIndex] = useState(1);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [textKey, setTextKey] = useState(0);
+  const [displayedCarIndex, setDisplayedCarIndex] = useState(0);
 
-  // Function to check if device is mobile based on screen width
-  const checkIfMobile = () => {
-    setIsMobile(window.innerWidth <= 768);
-  };
-
-  const banners: BannerData[] = [
-    {
-      id: 1,
-      image: '/Website-Images/Banners/Ertiga.png',
-      alt: 'Maruti Suzuki Ertiga',
-      title: 'Maruti Suzuki Ertiga',
-      price: '₹8,64,000',
-      downPayment: '₹86,400',
-      emi: '₹12,456/month',
-      cta: 'View More',
-      fallbackImage: '/Website-Images/Cars/ertiga.jpg' // Fallback for better quality
-    },
-    {
-      id: 2,
-      image: '/Website-Images/Banners/AURA.png',
+  const carImages: CarImage[] = [
+    { 
+      id: 1, 
+      src: '/Website-Images/Cars/Aura.png', 
       alt: 'Hyundai Aura',
-      title: 'Hyundai Aura',
-      price: '₹6,49,000',
-      downPayment: '₹64,900',
-      emi: '₹9,340/month',
-      cta: 'Explore More'
+      brand: 'HYUNDAI',
+      model: 'AURA',
+      variant: 'SX Plus 1.2L Petrol',
+      price: '₹8,09,000'
     },
-    {
-      id: 3,
-      image: '/Website-Images/Banners/Rumion.png',
+    { 
+      id: 2, 
+      src: '/Website-Images/Cars/Crysta.png', 
+      alt: 'Toyota Crysta',
+      brand: 'TOYOTA',
+      model: 'CRYSTA',
+      variant: 'GX 2.4L Diesel MT',
+      price: '₹18,05,000'
+    },
+    { 
+      id: 3, 
+      src: '/Website-Images/Cars/Dzire.png', 
+      alt: 'Maruti Suzuki Dzire',
+      brand: 'MARUTI',
+      model: 'DZIRE',
+      variant: 'ZXI Plus 1.2L Petrol',
+      price: '₹8,69,000'
+    },
+    { 
+      id: 4, 
+      src: '/Website-Images/Cars/Rumion.png', 
       alt: 'Maruti Suzuki Rumion',
-      title: 'Maruti Suzuki Rumion',
-      price: '₹7,74,000',
-      downPayment: '₹77,400',
-      emi: '₹11,128/month',
-      cta: 'Learn More'
+      brand: 'MARUTI',
+      model: 'RUMION',
+      variant: 'Smart Hybrid Zeta',
+      price: '₹7,74,000'
+    },
+    { 
+      id: 5, 
+      src: '/Website-Images/Cars/ertiga.png', 
+      alt: 'Maruti Suzuki Ertiga',
+      brand: 'MARUTI',
+      model: 'ERTIGA',
+      variant: 'ZXI Plus Smart Hybrid',
+      price: '₹8,64,000'
+    },
+    { 
+      id: 6, 
+      src: '/Website-Images/Cars/wagnor.png', 
+      alt: 'Maruti Suzuki WagonR',
+      brand: 'MARUTI',
+      model: 'WAGNOR',
+      variant: 'ZXI Plus 1.0L Petrol',
+      price: '₹6,35,000'
     }
   ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsAnimating(true);
+      
+      const nextIndex = (currentCarIndex + 1) % carImages.length;
+      setNextCarIndex(nextIndex);
+      
+      // Change text when the new car image is at center (halfway through slide)
+      setTimeout(() => {
+        setDisplayedCarIndex(nextIndex);
+        setTextKey(prev => prev + 1);
+      }, 1000); // Change text when new car is visible at center
+      
+      // Complete the transition
+      setTimeout(() => {
+        setCurrentCarIndex(nextIndex);
+        setIsAnimating(false);
+      }, 2000); // Complete slide animation
+    }, 4500); // Change car every 4.5 seconds
+
+    return () => clearInterval(interval);
+  }, [currentCarIndex, carImages.length]);
 
   const scrollToFindYourCar = () => {
     const findYourCarSection = document.querySelector('.find-your-car-section');
@@ -78,69 +108,91 @@ const BannerSection: React.FC = () => {
     }
   };
 
+
   return (
     <section className="banner-section">
-      <Carousel
-        autoPlay={true}
-        infiniteLoop={true}
-        showStatus={false}
-        showThumbs={false}
-        interval={5000}
-        transitionTime={500}
-        showArrows={!isMobile} // Hide arrows on mobile for better UX
-        emulateTouch={true}
-        dynamicHeight={false} // Set to false for consistent height
-        stopOnHover={false}
-        swipeable={true}
-        useKeyboardArrows={true}
-      >
-        {banners.map(banner => (
-          <div key={banner.id} className="banner-slide">
-            <div className="banner-container">
-              <div className="banner-image-box">
-                <img 
-                  src={banner.image} 
-                  alt={banner.alt} 
-                  loading="eager"
-                  className={`banner-image ${banner.alt.toLowerCase().includes('ertiga') ? 'ertiga-image' : ''}`}
-                  onError={(e) => {
-                    console.error(`Failed to load banner image: ${banner.image}`);
-                    // Try fallback image if available
-                    if (banner.fallbackImage && e.currentTarget.src !== banner.fallbackImage) {
-                      e.currentTarget.src = banner.fallbackImage;
-                    } else {
+      <div className="banner-slide">
+        <div className="banner-container">
+          {/* Background Banner Image */}
+          <div className="banner-background">
+            <img 
+              src="/Website-Images/Banners/New-banner.png" 
+              alt="New Banner Background" 
+              loading="eager"
+              className="banner-bg-image"
+              onError={(e) => {
+                console.error('Failed to load banner background: /Website-Images/Banners/New-banner.png');
+              }}
+            />
+          </div>
+          
+          {/* Car Slider Overlay */}
+          <div className="car-slider-overlay">
+            <div className="car-slider-container">
+              <div className="car-slider-track">
+                {/* Current car */}
+                <div className={`car-slide ${isAnimating ? 'slide-out-left' : 'active'}`}>
+                  <img
+                    src={carImages[currentCarIndex].src}
+                    alt={carImages[currentCarIndex].alt}
+                    className="car-slider-image"
+                    onError={(e) => {
+                      console.error(`Failed to load car image: ${carImages[currentCarIndex].src}`);
                       e.currentTarget.style.display = 'none';
-                    }
-                  }}
-                  onLoad={(e) => {
-                    console.log(`Successfully loaded banner image: ${banner.image}`);
-                  }}
-                />
-              </div>
-              <div className="banner-content-box">
-                <div className="banner-content">
-                  <h1 className="banner-title">{banner.title}</h1>
-                  <div className="price-details">
-                    <div className="price-row">
-                      <span className="price-label">Starting Price:</span>
-                      <span className="price-value">{banner.price}</span>
-                    </div>
-                    <div className="downpayment-highlight">
-                      <span className="downpayment-label">Down Payment:</span>
-                      <span className="downpayment-value">{banner.downPayment}</span>
-                    </div>
-                    <div className="emi-row">
-                      <span className="emi-label">EMI from:</span>
-                      <span className="emi-value">{banner.emi}</span>
-                    </div>
+                    }}
+                  />
+                </div>
+                
+                {/* Next car */}
+                {isAnimating && (
+                  <div className="car-slide slide-in-right">
+                    <img
+                      src={carImages[nextCarIndex].src}
+                      alt={carImages[nextCarIndex].alt}
+                      className="car-slider-image"
+                      onError={(e) => {
+                        console.error(`Failed to load car image: ${carImages[nextCarIndex].src}`);
+                        e.currentTarget.style.display = 'none';
+                      }}
+                    />
                   </div>
-                  <button onClick={scrollToFindYourCar} className="banner-btn">{banner.cta}</button>
+                )}
+              </div>
+              
+              {/* Car Details Text Overlay */}
+              <div className="car-details-overlay">
+                <div className={`car-text-container ${isAnimating ? 'text-animating' : 'text-entering'}`}>
+                  <div className="split-text-container" key={`text-${textKey}`}>
+                    <span className="text-part left" key={`brand-${textKey}`}>
+                      {carImages[displayedCarIndex].brand}
+                    </span>
+                    <span className="text-part right" key={`model-${textKey}`}>
+                      {carImages[displayedCarIndex].model}
+                    </span>
+                  </div>
+                  <div className="car-variant-info" key={`info-${textKey}`}>
+                    <p className="car-variant fade-in">{carImages[displayedCarIndex].variant}</p>
+                    <p className="car-price fade-in">Starting from {carImages[displayedCarIndex].price}</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        ))}
-      </Carousel>
+          
+          {/* Trust Messages */}
+          <div className="trust-messages">
+            <p className="trust-message-hindi">भरोसा रखो और बुक करो, 100% सुरक्षित है।</p>
+            <p className="trust-message-marathi">विश्वास ठेवा आणि बुक करा, 100% सुरक्षित आहे.</p>
+          </div>
+
+          {/* Action Button */}
+          <div className="banner-content-box">
+            <div className="banner-content">
+              <button onClick={scrollToFindYourCar} className="banner-btn">Explore Our Cars</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
   );
 };
