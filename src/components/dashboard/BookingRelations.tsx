@@ -143,6 +143,45 @@ const BookingRelations: React.FC = () => {
     }
   };
 
+  const handleConfirmBooking = async (bookingId: number, bookingReferenceId: string) => {
+    if (!window.confirm(`Are you sure you want to confirm booking ${bookingReferenceId}?`)) {
+      return;
+    }
+
+    try {
+      const response = await apiService.put(`/bookings/${bookingId}`, {
+        booking_status: 'confirmed'
+      });
+
+      if (response.success) {
+        // Update the local state
+        setBookingRelations(prevRelations =>
+          prevRelations.map(relation =>
+            relation.id === bookingId
+              ? { ...relation, booking_status: 'confirmed' }
+              : relation
+          )
+        );
+
+        // Try to refresh summary (don't fail if it errors)
+        try {
+          await fetchBookingSummary();
+        } catch (summaryError) {
+          console.warn('Could not refresh summary:', summaryError);
+        }
+
+        alert(`Booking ${bookingReferenceId} has been confirmed successfully!`);
+      } else {
+        setError('Failed to confirm booking');
+        alert('Failed to confirm booking. Please try again.');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Failed to confirm booking');
+      console.error('Error confirming booking:', err);
+      alert('Error confirming booking. Please try again.');
+    }
+  };
+
   const fetchBookingSummary = async () => {
     try {
       const response = await apiService.get('/bookings/dashboard/summary');
@@ -539,10 +578,21 @@ const BookingRelations: React.FC = () => {
                     {relation.lead_source && <span className="meta-tag">Source: {relation.lead_source}</span>}
                     {relation.referral_source && <span className="meta-tag">Referral: {relation.referral_source}</span>}
                   </div>
-                  <div className="timestamps">
-                    <span className="timestamp">Created: {new Date(relation.created_at).toLocaleDateString()}</span>
-                    {relation.updated_at && relation.updated_at !== relation.created_at && (
-                      <span className="timestamp">Updated: {new Date(relation.updated_at).toLocaleDateString()}</span>
+                  <div className="footer-actions">
+                    <div className="timestamps">
+                      <span className="timestamp">Created: {new Date(relation.created_at).toLocaleDateString()}</span>
+                      {relation.updated_at && relation.updated_at !== relation.created_at && (
+                        <span className="timestamp">Updated: {new Date(relation.updated_at).toLocaleDateString()}</span>
+                      )}
+                    </div>
+                    {relation.booking_status === 'pending' && (
+                      <button
+                        onClick={() => handleConfirmBooking(relation.id, relation.booking_reference_id)}
+                        className="confirm-booking-btn"
+                        title="Confirm this booking"
+                      >
+                        ✓ Confirm Booking
+                      </button>
                     )}
                   </div>
                 </div>

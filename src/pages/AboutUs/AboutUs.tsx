@@ -53,7 +53,7 @@ const AboutUs: React.FC = () => {
           <div className="proprietor-image">
             <OptimizedImage 
               src="/Website-Images/Proprietor-owner/Proprietor.webp" 
-              alt="ASW Cars Proprietor"
+              alt="GAUTAM MOTORS Proprietor"
               loading="eager"
               priority={true}
             />
@@ -67,7 +67,7 @@ const AboutUs: React.FC = () => {
             </p>
             <p>
               With a deep understanding of the automotive market and customer needs, our leadership ensures that 
-              ASW Cars remains at the forefront of providing exceptional automotive experiences.
+              GAUTAM MOTORS remains at the forefront of providing exceptional automotive experiences.
             </p>
           </div>
         </div>
@@ -77,7 +77,7 @@ const AboutUs: React.FC = () => {
           <div className="team-member">
             <OptimizedImage 
               src="/Website-Images/Team members/Prakash madal.webp" 
-              alt="Prakash Madal - ASW Cars Team"
+              alt="Prakash Madal - GAUTAM MOTORS Team"
               loading="lazy"
             />
             <h3>Prakash Madal</h3>
@@ -87,7 +87,7 @@ const AboutUs: React.FC = () => {
           <div className="team-member">
             <OptimizedImage 
               src="/Website-Images/Team members/Mithilesh Mandal.webp" 
-              alt="Mithilesh Mandal - ASW Cars Team"
+              alt="Mithilesh Mandal - GAUTAM MOTORS Team"
               loading="lazy"
             />
             <h3>Mithilesh Mandal</h3>
@@ -96,7 +96,7 @@ const AboutUs: React.FC = () => {
           <div className="team-member">
             <OptimizedImage 
               src="/Website-Images/Team members/Manikant mandal.webp" 
-              alt="Manikant mandal - ASW Cars Team"
+              alt="Manikant mandal - GAUTAM MOTORS Team"
               loading="lazy"
             />
             <h3>Manikant mandal</h3>
@@ -105,7 +105,7 @@ const AboutUs: React.FC = () => {
           <div className="team-member">
             <OptimizedImage 
               src="/Website-Images/Team members/Pintu Varma.webp" 
-              alt="Pintu Varma- ASW Cars Team"
+              alt="Pintu Varma- GAUTAM MOTORS Team"
               loading="lazy"
             />
             <h3>Pintu Varma</h3>
@@ -197,7 +197,7 @@ const AboutUs: React.FC = () => {
           Visit our showroom or connect with our expert team to discover how we can help you find 
           the perfect vehicle with the perfect financing solution.
         </p>
-        <button className="cta-button">Contact ASW Cars Today</button>
+        <button className="cta-button">Contact GAUTAM MOTORS Today</button>
       </section>
     </div>
   );

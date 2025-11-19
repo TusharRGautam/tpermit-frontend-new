@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './CarDetailWithInvoices.css';
 import quotationService from '../../services/quotationService';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
+import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import BookingModal from '../BookingModal/BookingModal';
 
@@ -312,139 +312,139 @@ const CarDetailWithInvoices: React.FC = () => {
 
 
   const downloadAsPDF = async () => {
-    if (!selectedVariant || !invoiceRef.current) return;
-    
+    if (!selectedVariant) return;
+
     try {
       setIsDownloading(true);
-      
-      // Wait for DOM update
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
-      const canvas = await html2canvas(invoiceRef.current, {
-        scale: 3, // Increased scale for better quality
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: '#ffffff',
-        logging: false,
-        width: invoiceRef.current.offsetWidth,
-        height: invoiceRef.current.offsetHeight,
-        onclone: (clonedDoc) => {
-          const clonedElement = clonedDoc.querySelector('.invoice-content');
-          const companyHeader = clonedDoc.querySelector('.company-header');
-          const companyHeaderH2 = clonedDoc.querySelector('.company-header h2');
-          const companyDetails = clonedDoc.querySelectorAll('.company-details p');
-          const tableElement = clonedDoc.querySelector('.invoice-table');
-          const tableCells = clonedDoc.querySelectorAll('.invoice-table td');
-          
-          if (clonedElement) {
-            (clonedElement as HTMLElement).style.backgroundColor = '#ffffff';
-            (clonedElement as HTMLElement).style.padding = '20px';
-            (clonedElement as HTMLElement).style.fontSize = '16px';
-            (clonedElement as HTMLElement).style.lineHeight = '1.5';
-            (clonedElement as HTMLElement).style.fontFamily = 'Arial, sans-serif';
-            (clonedElement as HTMLElement).style.color = '#000000'; // Ensure black text
+
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      let yPosition = 20;
+
+      // Company Header
+      pdf.setFontSize(18);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('GAUTAM MOTORS & FINANCE', pageWidth / 2, yPosition, { align: 'center' });
+
+      yPosition += 7;
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text('DIVA EAST', pageWidth / 2, yPosition, { align: 'center' });
+
+      yPosition += 5;
+      pdf.text('Contact: Rakesh Gautam - 8652089525', pageWidth / 2, yPosition, { align: 'center' });
+
+      yPosition += 5;
+
+      yPosition += 10;
+      pdf.setLineWidth(0.5);
+      pdf.line(15, yPosition, pageWidth - 15, yPosition);
+
+      yPosition += 10;
+
+      // Prepare table data
+      const quotationData = selectedVariant.quotationData;
+      const exShowroom = quotationData?.ex_showroom || 0;
+      const showTCS = exShowroom > 1000000;
+      const tcs = showTCS ? Math.round(exShowroom * 0.01) : 0;
+
+      const onTheRoad = Math.round(
+        exShowroom +
+        tcs +
+        (quotationData?.registration || 0) +
+        (quotationData?.insurance || 0) +
+        (quotationData?.gps || 0) +
+        (quotationData?.speed_governor || 0) +
+        (quotationData?.accessories || 0)
+      );
+
+      const tableData: any[] = [
+        ['car model :', selectedVariant.modelName],
+        ['', selectedVariant.bankName],
+        ['', `ROI ${selectedVariant.roi}`],
+        ['Cost of the vehicle EX Showroom', `Rs.${exShowroom.toLocaleString('en-IN')}`],
+      ];
+
+      if (showTCS) {
+        tableData.push(['TCS', `Rs.${tcs.toLocaleString('en-IN')}`]);
+      }
+
+      tableData.push(
+        ['Registration', `Rs.${(quotationData?.registration || 0).toLocaleString('en-IN')}`],
+        ['Insurance', `Rs.${(quotationData?.insurance || 0).toLocaleString('en-IN')}`],
+        ['GPS', `Rs.${(quotationData?.gps || 0).toLocaleString('en-IN')}`],
+        ['Speed Governor', `Rs.${(quotationData?.speed_governor || 0).toLocaleString('en-IN')}`],
+        ['On the road', `Rs.${onTheRoad.toLocaleString('en-IN')}`],
+        ['Loan Amount', `Rs.${(quotationData?.loan_amount || 0).toLocaleString('en-IN')}`],
+        ['Margin (Down payment)', `Rs.${(quotationData?.margin_down_payment || 0).toLocaleString('en-IN')}`],
+        ['Process fee', `Rs.${(quotationData?.process_fee || 0).toLocaleString('en-IN')}`],
+        ['Stamp duty', `Rs.${(quotationData?.stamp_duty || 0).toLocaleString('en-IN')}`],
+        ['Handling Loan Services and Document Charge', `Rs.${(quotationData?.handling_document_charge || 0).toLocaleString('en-IN')}`],
+        ['Down Payment', `Rs.${(quotationData?.down_payment || 0).toLocaleString('en-IN')}`],
+        ['Offers', `Rs.${(quotationData?.offers || 0).toLocaleString('en-IN')}`],
+        ['Final Down Payment', `Rs.${(quotationData?.final_down_payment || 0).toLocaleString('en-IN')}`],
+        [`${quotationData?.emi_years || 5} years (${(quotationData?.emi_years || 5) * 12} Months)`, `Rs.${Math.round(quotationData?.monthly_emi || 0).toLocaleString('en-IN')}`]
+      );
+
+      // Use autoTable to create the table
+      autoTable(pdf, {
+        startY: yPosition,
+        head: [],
+        body: tableData,
+        theme: 'grid',
+        styles: {
+          fontSize: 10,
+          cellPadding: 4,
+          lineColor: [0, 0, 0],
+          lineWidth: 0.5,
+          textColor: [0, 0, 0],
+          fontStyle: 'bold'
+        },
+        columnStyles: {
+          0: { cellWidth: 100, halign: 'left' },
+          1: { cellWidth: 80, halign: 'left', fontStyle: 'bold' }
+        },
+        headStyles: {
+          fillColor: [255, 255, 255],
+          textColor: [0, 0, 0],
+          fontStyle: 'bold'
+        },
+        bodyStyles: {
+          fillColor: [255, 255, 255]
+        },
+        alternateRowStyles: {
+          fillColor: [245, 245, 245]
+        },
+        didParseCell: function(data: any) {
+          // Highlight specific rows
+          if (data.row.index === 0) {
+            data.cell.styles.fillColor = [255, 255, 200]; // Light yellow for car model
+            data.cell.styles.fontStyle = 'bold';
           }
-          
-          // Force display and style company header for PDF
-          if (companyHeader) {
-            (companyHeader as HTMLElement).style.display = 'block';
-            (companyHeader as HTMLElement).style.textAlign = 'center';
-            (companyHeader as HTMLElement).style.padding = '20px 0';
-            (companyHeader as HTMLElement).style.borderBottom = '2px solid #e5e7eb';
-            (companyHeader as HTMLElement).style.marginBottom = '20px';
-            (companyHeader as HTMLElement).style.backgroundColor = '#ffffff';
+          if (tableData[data.row.index] && tableData[data.row.index][0] === 'On the road') {
+            data.cell.styles.fillColor = [255, 235, 150]; // Yellow for on-road
+            data.cell.styles.fontStyle = 'bold';
           }
-          
-          if (companyHeaderH2) {
-            (companyHeaderH2 as HTMLElement).style.fontSize = '24px';
-            (companyHeaderH2 as HTMLElement).style.fontWeight = '700';
-            (companyHeaderH2 as HTMLElement).style.color = '#000000'; // Pure black for better visibility
-            (companyHeaderH2 as HTMLElement).style.margin = '0 0 10px 0';
-            (companyHeaderH2 as HTMLElement).style.textTransform = 'uppercase';
-            (companyHeaderH2 as HTMLElement).style.letterSpacing = '1px';
-            (companyHeaderH2 as HTMLElement).style.fontFamily = 'Arial, sans-serif';
+          if (tableData[data.row.index] && tableData[data.row.index][0] === 'Down Payment') {
+            data.cell.styles.fillColor = [255, 235, 150]; // Yellow for down payment
+            data.cell.styles.fontStyle = 'bold';
           }
-          
-          // Style company details
-          companyDetails.forEach(detail => {
-            (detail as HTMLElement).style.margin = '4px 0';
-            (detail as HTMLElement).style.fontSize = '12px';
-            (detail as HTMLElement).style.color = '#000000'; // Pure black for better visibility
-            (detail as HTMLElement).style.fontWeight = '600'; // Bolder text
-            (detail as HTMLElement).style.lineHeight = '1.4';
-            (detail as HTMLElement).style.fontFamily = 'Arial, sans-serif';
-          });
-          
-          // Improve table styling for PDF
-          if (tableElement) {
-            (tableElement as HTMLElement).style.fontSize = '14px';
-            (tableElement as HTMLElement).style.width = '100%';
-            (tableElement as HTMLElement).style.borderCollapse = 'collapse';
-            (tableElement as HTMLElement).style.fontFamily = 'Arial, sans-serif';
-            (tableElement as HTMLElement).style.backgroundColor = '#ffffff';
-            (tableElement as HTMLElement).style.color = '#000000';
+          if (tableData[data.row.index] && tableData[data.row.index][0] === 'Offers') {
+            data.cell.styles.fillColor = [200, 255, 200]; // Light green for offers
+            data.cell.styles.fontStyle = 'bold';
+            data.cell.styles.textColor = [255, 0, 0]; // Red text for offers
           }
-          
-          // Style specific table rows for better visibility
-          const tableRows = clonedDoc.querySelectorAll('.invoice-table tr');
-          tableRows.forEach((row, index) => {
-            if (index % 2 === 0) {
-              (row as HTMLElement).style.backgroundColor = '#f8f9fa';
-            } else {
-              (row as HTMLElement).style.backgroundColor = '#ffffff';
-            }
-          });
-          
-          // Style important rows with better contrast
-          const onRoadRow = clonedDoc.querySelector('.on-road-row');
-          if (onRoadRow) {
-            (onRoadRow as HTMLElement).style.backgroundColor = '#e3f2fd !important';
-            (onRoadRow as HTMLElement).style.fontWeight = '700';
+          if (tableData[data.row.index] && tableData[data.row.index][0].includes('years')) {
+            data.cell.styles.fillColor = [200, 220, 255]; // Light blue for EMI
+            data.cell.styles.fontStyle = 'bold';
+            data.cell.styles.textColor = [255, 0, 0]; // Red text for EMI
           }
-          
-          const emiRow = clonedDoc.querySelector('.emi-row');
-          if (emiRow) {
-            (emiRow as HTMLElement).style.backgroundColor = '#fff3e0 !important';
-            (emiRow as HTMLElement).style.fontWeight = '700';
-          }
-          
-          // Enhance table cell styling for better readability
-          tableCells.forEach(cell => {
-            (cell as HTMLElement).style.padding = '12px 16px';
-            (cell as HTMLElement).style.fontSize = '14px';
-            (cell as HTMLElement).style.lineHeight = '1.4';
-            (cell as HTMLElement).style.color = '#000000'; // Pure black for better contrast
-            (cell as HTMLElement).style.backgroundColor = '#ffffff'; // Pure white background
-            (cell as HTMLElement).style.border = '1px solid #000000'; // Black borders
-            (cell as HTMLElement).style.fontFamily = 'Arial, sans-serif';
-            (cell as HTMLElement).style.fontWeight = '600'; // Bolder text
-          });
         }
       });
 
-      const imgData = canvas.toDataURL('image/png', 1.0); // Maximum quality
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      
-      // Calculate image dimensions and position
-      const imgWidth = canvas.width;
-      const imgHeight = canvas.height;
-      const maxWidth = pdfWidth - 20; // 10mm margin on each side
-      const maxHeight = pdfHeight - 30; // 15mm margin top and bottom
-      const ratio = Math.min(maxWidth / imgWidth, maxHeight / imgHeight);
-      
-      const scaledWidth = imgWidth * ratio;
-      const scaledHeight = imgHeight * ratio;
-      const imgX = (pdfWidth - scaledWidth) / 2;
-      const imgY = 15; // Small top margin
-
-      pdf.addImage(imgData, 'PNG', imgX, imgY, scaledWidth, scaledHeight, undefined, 'FAST');
-      
       const fileName = `T-Permit_Quotation_${selectedVariant.modelName.replace(/\s+/g, '_')}_${selectedVariant.bankName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
       pdf.save(fileName);
-      
+
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Failed to generate PDF. Please try again.');
@@ -647,11 +647,10 @@ const CarDetailWithInvoices: React.FC = () => {
             <div className="invoice-content" ref={invoiceRef}>
               {/* Company Header for PDF */}
               <div className="company-header">
-                <h2>ASW CARS & FINANCE</h2>
+                <h2>GAUTAM MOTORS & FINANCE</h2>
                 <div className="company-details">
-                  <p>Shop No. 123, Main Road, Auto Market</p>
-                  <p>City Center, Thane - 560001</p>
-                  <p>Contact: +91 91025 26006 | Email: info@aswcars.com</p>
+                  <p>DIVA EAST</p>
+                  <p>Contact: Rakesh Gautam - 8652089525</p>
                 </div>
               </div>
               <table className="invoice-table">
@@ -770,7 +769,7 @@ const CarDetailWithInvoices: React.FC = () => {
           {/* Compact Download Section - Always visible */}
           <div className="download-section-compact">
             <div className="download-buttons-compact">
-              <button 
+              <button
                 className="download-button-compact pdf-button"
                 onClick={downloadAsPDF}
                 disabled={isDownloading}
@@ -783,28 +782,20 @@ const CarDetailWithInvoices: React.FC = () => {
                 ) : (
                   <>
                     <span className="download-icon">📄</span>
-                    PDF
+                    Download Quotation
                   </>
                 )}
               </button>
-              
+
               <a
                 href="https://wa.me/918652089525?text=I'm%20interested%20in%20this%20car.%20Please%20provide%20more%20details."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="download-button-compact enquiry-button"
               >
-                <span className="download-icon">💬</span>
-                Enquiry
+                <span className="download-icon">📞</span>
+                Call
               </a>
-              
-              <button 
-                className="download-button-compact book-button"
-                onClick={handleBookNow}
-              >
-                <span className="download-icon">🚗</span>
-                Book Now
-              </button>
             </div>
           </div>
         </div>

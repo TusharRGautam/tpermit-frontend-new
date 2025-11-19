@@ -89,8 +89,8 @@ const Login: React.FC = () => {
     <div className="login-container">
       <div className="login-box">
         <div className="login-header">
-          <img src="/logo.jpg" alt="ASW Logo" className="login-logo" />
-          <h1>ASW Admin Login</h1>
+          <img src="/logo.jpg" alt="GAUTAM MOTORS Logo" className="login-logo" />
+          <h1>GAUTAM MOTORS Admin Login</h1>
           <p>Enter your credentials to access the dashboard</p>
         </div>
 
@@ -135,7 +135,7 @@ const Login: React.FC = () => {
         </form>
 
         <div className="login-footer">
-          <p>ASW - Your Trusted Car Partner</p>
+          <p>GAUTAM MOTORS - Your Trusted Car Partner</p>
         </div>
       </div>
     </div>

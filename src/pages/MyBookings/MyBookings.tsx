@@ -51,22 +51,29 @@ const MyBookings: React.FC = () => {
       }
 
       const profile = JSON.parse(savedUser);
+      console.log('User Profile from localStorage:', profile);
       setUserProfile(profile);
 
       // Fetch bookings by email
       if (profile.email) {
+        console.log('Fetching bookings for email:', profile.email);
         const response = await bookingService.getCustomerBookings(profile.email);
 
         console.log('Bookings API Response:', response);
+        console.log('Response success:', response.success);
+        console.log('Response data:', response.data);
+        console.log('Response data length:', response.data?.length);
 
         if (response.success && response.data) {
+          console.log('Setting bookings. Count:', response.data.length);
           console.log('Bookings Data:', response.data);
           setBookings(response.data);
         } else {
-          console.log('No bookings found or API error');
+          console.log('No bookings found or API error. Response:', response);
           setBookings([]);
         }
       } else {
+        console.log('No email in profile!', profile);
         setError('Email not found in user profile.');
       }
     } catch (err: any) {
@@ -222,8 +229,8 @@ const MyBookings: React.FC = () => {
                 <span className="id-value">{booking.booking_reference_id}</span>
               </div>
               <div className="status-badges">
-                <span className={getPaymentStatusBadgeClass(booking.payment_status)}>
-                  {booking.payment_status || 'Pending'}
+                <span className={getStatusBadgeClass(booking.booking_status)}>
+                  {booking.booking_status ? booking.booking_status.charAt(0).toUpperCase() + booking.booking_status.slice(1) : 'Pending'}
                 </span>
               </div>
             </div>

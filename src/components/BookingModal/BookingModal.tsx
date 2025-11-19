@@ -210,32 +210,53 @@ const BookingModal: React.FC<BookingModalProps> = ({
     };
 
     if (isOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+
       document.addEventListener('keydown', handleEscape);
+
+      // Lock body scroll completely
       document.body.style.overflow = 'hidden';
-      
-      // Force scroll to top when modal opens (additional safety measure)
-      const isMobile = window.innerWidth <= 992;
-      if (isMobile) {
-        // Use requestAnimationFrame to ensure DOM is ready
-        requestAnimationFrame(() => {
-          window.scrollTo(0, 0);
-          document.documentElement.scrollTop = 0;
-          document.body.scrollTop = 0;
-          
-          // Force the modal overlay to reset its scroll position
-          const modalOverlay = document.querySelector('.booking-modal-overlay') as HTMLElement;
-          if (modalOverlay) {
-            modalOverlay.scrollTop = 0;
-          }
-        });
-      }
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = '100%';
+      document.documentElement.style.overflow = 'hidden';
+
+      // Force scroll to top when modal opens
+      requestAnimationFrame(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+
+        // Reset modal overlay scroll position
+        const modalOverlay = document.querySelector('.booking-modal-overlay') as HTMLElement;
+        if (modalOverlay) {
+          modalOverlay.scrollTop = 0;
+        }
+      });
     } else {
-      document.body.style.overflow = 'unset';
+      // Restore body scroll
+      const scrollY = document.body.style.top;
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.documentElement.style.overflow = '';
+
+      // Restore scroll position
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
     }
 
     return () => {
       document.removeEventListener('keydown', handleEscape);
-      document.body.style.overflow = 'unset';
+      // Clean up body styles
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.width = '';
+      document.documentElement.style.overflow = '';
     };
   }, [isOpen, onClose]);
 
@@ -442,23 +463,34 @@ const BookingModal: React.FC<BookingModalProps> = ({
           {currentStep === 1 && (
             <div className="step-content variant-step">
               <div className="step-description">
-                <p>{getStepDescription()}</p>
+                <h3 className="step-title-mobile">Choose Your Variant</h3>
+                <p className="step-subtitle-mobile">Select the variant that suits you best</p>
+                <div className="hindi-message-box">
+                  <span className="hindi-text">आप सिर्फ ₹5000 बुकिंग अमाउंट पे करेंगे</span>
+                  <span className="english-text">You will only pay ₹5000 booking amount</span>
+                </div>
               </div>
-              <div className="variant-selector">
-                {variants.map((variant) => (
+              <div className="variant-selector-simple">
+                {variants.map((variant, index) => (
                   <div
                     key={variant.id}
-                    className="variant-option clickable"
+                    className="variant-card-simple"
                     onClick={() => handleVariantSelect(variant)}
                   >
-                    <div className="variant-details">
-                      <div className="variant-name">{variant.name}</div>
-                      <div className="variant-price">₹{variant.exShowroom.toLocaleString()}</div>
-                      <div className="variant-emi">EMI: ₹{variant.monthlyEmi.toLocaleString()}/month</div>
+                    <div className="variant-number-badge">{index + 1}</div>
+                    <div className="variant-info-simple">
+                      <h4 className="variant-name-simple">{variant.name}</h4>
+                      <div className="variant-booking-amount">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                          <circle cx="12" cy="12" r="10" strokeWidth={2}/>
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2"/>
+                        </svg>
+                        <span>Book for ₹{variant.bookingAmount.toLocaleString()}</span>
+                      </div>
                     </div>
-                    <div className="variant-arrow">
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 18l6-6-6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <div className="variant-arrow-simple">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
                       </svg>
                     </div>
                   </div>
@@ -471,49 +503,104 @@ const BookingModal: React.FC<BookingModalProps> = ({
           {currentStep === 2 && selectedVariant && (
             <div className="step-content booking-amount-step">
               <div className="step-description">
-                <p>{getStepDescription()}</p>
+                <h3 className="step-title-mobile">Booking Amount</h3>
+                <p className="step-subtitle-mobile">Review pricing details for your selected variant</p>
               </div>
-              <div className="selected-variant-info">
-                <div className="variant-badge">
-                  <span>Selected: {selectedVariant.name}</span>
+
+              {/* Selected Variant Card */}
+              <div className="selected-variant-card-mobile">
+                <div className="selected-badge-mobile">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Selected Variant</span>
                 </div>
+                <h4 className="selected-variant-name-mobile">{selectedVariant.name}</h4>
               </div>
-              
-              <div className="booking-amount-display">
-                <div className="amount-highlight">
-                  <h2>Booking Amount</h2>
-                  <div className="amount-value">₹{selectedVariant.bookingAmount.toLocaleString()}</div>
-                  <p>Secure your {selectedVariant.name} with this token amount</p>
+
+              {/* Booking Token Amount - Primary Focus */}
+              <div className="booking-token-card-mobile">
+                <div className="token-header-mobile">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <circle cx="12" cy="12" r="10" strokeWidth={2}/>
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6l4 2"/>
+                  </svg>
+                  <span>अभी सिर्फ यह अमाउंट पे करें | Pay Only This Amount Now</span>
                 </div>
-                
-                <div className="price-breakdown">
-                  <div className="price-item">
-                    <span>Ex-Showroom Price:</span>
-                    <span>₹{selectedVariant.exShowroom.toLocaleString()}</span>
+                <div className="token-amount-mobile">
+                  ₹{selectedVariant.bookingAmount.toLocaleString()}
+                </div>
+                <p className="token-description-mobile">
+                  <strong className="hindi-highlight">आप सिर्फ ₹5000 बुकिंग अमाउंट पे करेंगे</strong>
+                  <br/>
+                  Pay only ₹5000 to secure your {selectedVariant.name}
+                </p>
+              </div>
+
+              {/* Price Breakdown */}
+              <div className="price-breakdown-card-mobile">
+                <div className="breakdown-header-mobile">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                  </svg>
+                  <span>पूरी कीमत की जानकारी (सिर्फ देखने के लिए)</span>
+                </div>
+                <div className="pricing-info-note">
+                  <span>Complete Pricing Details (For Reference Only)</span>
+                </div>
+
+                <div className="price-items-mobile">
+                  <div className="price-row-mobile">
+                    <div className="price-label-mobile">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                      </svg>
+                      <span>Ex-Showroom Price</span>
+                    </div>
+                    <div className="price-value-mobile">₹{selectedVariant.exShowroom.toLocaleString()}</div>
                   </div>
-                  <div className="price-item">
-                    <span>On-Road Price:</span>
-                    <span>₹{selectedVariant.onRoadPrice.toLocaleString()}</span>
+
+                  <div className="price-row-mobile">
+                    <div className="price-label-mobile">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/>
+                      </svg>
+                      <span>On-Road Price</span>
+                    </div>
+                    <div className="price-value-mobile highlight">₹{selectedVariant.onRoadPrice.toLocaleString()}</div>
                   </div>
-                  <div className="price-item">
-                    <span>Monthly EMI:</span>
-                    <span>₹{selectedVariant.monthlyEmi.toLocaleString()}</span>
+
+                  <div className="price-row-mobile emi-row">
+                    <div className="price-label-mobile">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                      </svg>
+                      <span>EMI Starts From</span>
+                    </div>
+                    <div className="price-value-mobile emi-value">₹{selectedVariant.monthlyEmi.toLocaleString()}/mo</div>
                   </div>
                 </div>
               </div>
 
-              <div className="step-actions">
-                <button 
-                  className="booking-btn-outline"
+              {/* Action Buttons */}
+              <div className="step-actions-mobile">
+                <button
+                  className="booking-btn-back-mobile"
                   onClick={() => setCurrentStep(1)}
                 >
-                  ← Back
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7"/>
+                  </svg>
+                  Back
                 </button>
-                <button 
-                  className="booking-btn"
+                <button
+                  className="booking-btn-continue-mobile"
                   onClick={handleBookingConfirm}
                 >
-                  Continue to Details →
+                  Continue to Details
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"/>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -524,8 +611,12 @@ const BookingModal: React.FC<BookingModalProps> = ({
             <div className="step-content customer-details-step">
               <div className="step-description">
                 <p>{getStepDescription()}</p>
+                <div className="hindi-message-box">
+                  <span className="hindi-text">आप सिर्फ ₹5000 बुकिंग अमाउंट पे करेंगे</span>
+                  <span className="english-text">You will only pay ₹5000 booking amount</span>
+                </div>
               </div>
-              
+
               <form onSubmit={handleSubmit}>
                 <div className="customer-form">
                   <div className="booking-form-group">
@@ -667,9 +758,9 @@ const BookingModal: React.FC<BookingModalProps> = ({
 
         <div className="booking-modal-footer">
           <p className="booking-disclaimer">
-            {currentStep === 3 
-              ? "* By adding to cart, you can review your selection and proceed with payment later." 
-              : "* Secure booking with easy payment options available at checkout."
+            {currentStep === 3
+              ? "* कार्ट में जोड़ने के बाद आप अपनी बुकिंग देख सकते हैं | By adding to cart, you can review your selection and proceed with payment later."
+              : "* सुरक्षित बुकिंग - आसान पेमेंट विकल्प | Secure booking with easy payment options available at checkout."
             }
           </p>
         </div>

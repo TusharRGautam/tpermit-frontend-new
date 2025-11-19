@@ -43,7 +43,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
     <div className="dashboard-layout">
       <div className="dashboard-sidebar">
         <div className="dashboard-logo">
-          <h2>ASW Admin</h2>
+          <h2>GAUTAM MOTORS Admin</h2>
         </div>
         <nav className="dashboard-nav">
           <Link to="/dashboard" className={`nav-item ${isActive('/dashboard')}`}>

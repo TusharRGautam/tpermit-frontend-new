@@ -5,6 +5,13 @@ import './GallerySection.css';
 const GallerySection: React.FC = () => {
   // Use the client images from the public folder
   const galleryImages = [
+    '/Website-Images/our-clients/newphotos/A1.webp',
+    '/Website-Images/our-clients/newphotos/A4.webp',
+    '/Website-Images/our-clients/newphotos/A5.webp',
+    '/Website-Images/our-clients/newphotos/A6.webp',
+    '/Website-Images/our-clients/newphotos/A7.webp',
+    '/Website-Images/our-clients/newphotos/A8.webp',
+    '/Website-Images/our-clients/newphotos/A9.webp',
     '/Website-Images/our-clients/1 (1).webp',
     '/Website-Images/our-clients/1 (2).webp',
     '/Website-Images/our-clients/1 (3).webp',

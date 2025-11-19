@@ -156,14 +156,6 @@ const Header: React.FC = () => {
           </li>
           <li>
             <Link
-              to="/my-bookings"
-              className={location.pathname === '/my-bookings' ? 'active' : ''}
-            >
-              MY BOOKINGS
-            </Link>
-          </li>
-          <li>
-            <Link
               to="/about-us"
               className={location.pathname === '/about-us' ? 'active' : ''}
             >
@@ -240,6 +232,16 @@ const Header: React.FC = () => {
 
       <div className="right-space">
         <div className="header-actions">
+          <Link
+            to="/my-bookings"
+            className={`my-bookings-button ${location.pathname === '/my-bookings' ? 'active' : ''}`}
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 2H4v20h16V2h-5M9 2v4h6V2M9 2h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M9 11h6M9 15h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+            </svg>
+            MY BOOKINGS
+          </Link>
           <Link to="/cart" className="cart-button">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 17.6 16.6 18 16 18H8C7.4 18 7 17.6 7 17V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

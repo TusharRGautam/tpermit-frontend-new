@@ -107,7 +107,7 @@ const InvoiceViewPage: React.FC = () => {
       <div className="invoice-preview">
         <div className="invoice-preview-header">
           <div className="invoice-preview-company">
-            <h2>ASW Auto</h2>
+            <h2>GAUTAM MOTORS</h2>
             <p>123 Auto Street, Mumbai, Maharashtra</p>
             <p>GSTIN: 27AABCS1234Z1Z5</p>
           </div>

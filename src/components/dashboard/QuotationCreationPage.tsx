@@ -7,7 +7,7 @@ import quotationService from '../../services/quotationService';
 type CarBrand = keyof typeof carVariants;
 type CarVariant = string;
 
-// Real ASW Cars inventory with variants
+// Real GAUTAM MOTORS inventory with variants
 const carVariants = {
   'Maruti Suzuki Wagon-R': ['H3 CNG', 'LXI CNG', 'VXI CNG'],
   'Maruti Suzuki ERTIGA': ['Tour M CNG 1.5 MT', 'VXI CNG 1.5 MT', 'ZXI CNG 1.5 MT'],
