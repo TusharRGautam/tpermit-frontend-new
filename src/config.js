@@ -9,10 +9,10 @@ export const API_CONFIG = {
   //           `${window.location.origin}/api`),
   
   // NEW: Production configuration with backend subdomain
-  BASE_URL: process.env.REACT_APP_API_BASE_URL || 
-            (window.location.origin.includes('localhost') ? 
-            'http://localhost:5000/api' : 
-            'https://backend.t-permit.com/api'),
+  BASE_URL: process.env.REACT_APP_API_BASE_URL ||
+            (window.location.origin.includes('localhost') ?
+            'http://localhost:5001/api' :
+            'https://api.gautammotors.in/api'),
   TIMEOUT: 10000, // 10 seconds
 };
 
