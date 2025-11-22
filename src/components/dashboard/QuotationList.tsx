@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import './Dashboard.css';
 import quotationService from '../../services/quotationService';
+import { generateQuotationPDF } from '../../utils/quotationPdfGenerator';
 
 interface QuotationData {
   vendor_id: string;
@@ -109,6 +110,10 @@ const QuotationList: React.FC = () => {
   const handleDeleteQuotation = (quotation: QuotationData) => {
     setSelectedQuotation(quotation);
     setIsDeleteModalOpen(true);
+  };
+
+  const handleDownloadQuotation = (quotation: QuotationData) => {
+    generateQuotationPDF(quotation);
   };
 
   const closeDetailModal = () => {
@@ -563,19 +568,25 @@ const QuotationList: React.FC = () => {
                     </div>
                     
                     <div className="quotation-card-actions">
-                      <button 
+                      <button
                         className="view-btn"
                         onClick={() => handleViewQuotation(quotation)}
                       >
                         👁️ View
                       </button>
-                      <button 
+                      <button
                         className="edit-btn"
                         onClick={() => handleEditQuotation(quotation)}
                       >
                         ✏️ Edit
                       </button>
-                      <button 
+                      <button
+                        className="download-btn"
+                        onClick={() => handleDownloadQuotation(quotation)}
+                      >
+                        📥 Download
+                      </button>
+                      <button
                         className="delete-btn"
                         onClick={() => handleDeleteQuotation(quotation)}
                       >

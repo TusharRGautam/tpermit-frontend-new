@@ -4765,11 +4765,11 @@ input[readonly] {
 }
 
 /* Responsive Design */
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
   .quotation-details-modal {
     width: 95vw;
   }
-  
+
   .form-grid {
     grid-template-columns: 1fr;
   }
@@ -4847,6 +4847,7 @@ input[readonly] {
 
 .quotation-card-actions .view-btn,
 .quotation-card-actions .edit-btn,
+.quotation-card-actions .download-btn,
 .quotation-card-actions .delete-btn {
   flex: 1;
   min-width: 80px;
@@ -4878,6 +4879,17 @@ input[readonly] {
 .edit-btn:hover {
   background: linear-gradient(135deg, #059669, #047857);
   transform: translateY(-1px);
+}
+
+.download-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.download-btn:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
 }
 
 .delete-btn {
@@ -5073,6 +5085,7 @@ input[readonly] {
   
   .quotation-card-actions .view-btn,
   .quotation-card-actions .edit-btn,
+  .quotation-card-actions .download-btn,
   .quotation-card-actions .delete-btn {
     flex: none;
     width: 100%;
