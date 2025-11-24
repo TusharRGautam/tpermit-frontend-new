@@ -4546,6 +4546,15 @@ input[readonly] {
   gap: 1.5rem;
 }
 
+/* Ensure form-grid inside quotation modal is 2 columns on desktop */
+.quotation-modal .form-grid,
+.quotation-details-modal .form-grid,
+.quotation-modal .step-content .form-grid {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 1.5rem !important;
+}
+
 .cost-row, .form-row {
   display: flex;
   flex-direction: column;
@@ -4771,7 +4780,9 @@ input[readonly] {
     max-width: 90vw;
   }
 
-  .form-grid {
+  .form-grid,
+  .quotation-modal .form-grid,
+  .quotation-details-modal .form-grid {
     grid-template-columns: 1fr 1fr !important;
   }
 }
@@ -4782,8 +4793,10 @@ input[readonly] {
     width: 95vw;
   }
 
-  .form-grid {
-    grid-template-columns: 1fr;
+  .form-grid,
+  .quotation-modal .form-grid,
+  .quotation-details-modal .form-grid {
+    grid-template-columns: 1fr !important;
   }
 }
 
