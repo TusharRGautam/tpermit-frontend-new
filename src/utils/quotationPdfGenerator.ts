@@ -7,7 +7,8 @@ interface QuotationData {
   roi_emi_interest: number;
   sbi_bank: number;
   union_bank: number;
-  indusind_bank: number;
+  mahindra_finance: number;
+  cholamandalam_bank: number;
   au_bank: number;
   ex_showroom: number;
   tcs: number;
@@ -37,7 +38,8 @@ interface QuotationData {
 const getSelectedBank = (quotation: QuotationData) => {
   if (quotation.sbi_bank > 0) return { name: 'State Bank of India', rate: quotation.sbi_bank };
   if (quotation.union_bank > 0) return { name: 'Union Bank', rate: quotation.union_bank };
-  if (quotation.indusind_bank > 0) return { name: 'IndusInd Bank', rate: quotation.indusind_bank };
+  if (quotation.mahindra_finance > 0) return { name: 'Mahindra Finance', rate: quotation.mahindra_finance };
+  if (quotation.cholamandalam_bank > 0) return { name: 'Cholamandalam Bank', rate: quotation.cholamandalam_bank };
   if (quotation.au_bank > 0) return { name: 'AU Bank', rate: quotation.au_bank };
   return { name: 'None', rate: 0 };
 };

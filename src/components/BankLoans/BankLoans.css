@@ -90,7 +90,11 @@
   background: linear-gradient(135deg, #d97706, #b45309);
 }
 
-.bank-option-btn.apply-indusind {
+.bank-option-btn.apply-mahindra {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+.bank-option-btn.apply-cholamandalam {
   background: linear-gradient(135deg, #7c3aed, #6d28d9);
 }
 
@@ -255,11 +259,21 @@
   box-shadow: 0 6px 16px rgba(217, 119, 6, 0.3);
 }
 
-.call-now.apply-indusind {
+.call-now.apply-mahindra {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+}
+
+.call-now.apply-mahindra:hover {
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(220, 38, 38, 0.3);
+}
+
+.call-now.apply-cholamandalam {
   background: linear-gradient(135deg, #7c3aed, #6d28d9);
 }
 
-.call-now.apply-indusind:hover {
+.call-now.apply-cholamandalam:hover {
   background: linear-gradient(135deg, #6d28d9, #5b21b6);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(124, 58, 237, 0.3);

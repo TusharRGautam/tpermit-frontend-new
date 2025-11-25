@@ -128,17 +128,18 @@ const quotationService = {
     const bankRates = [
       quotationData.sbi_bank,
       quotationData.union_bank,
-      quotationData.indusind_bank,
+      quotationData.mahindra_finance,
+      quotationData.cholamandalam_bank,
       quotationData.au_bank
     ];
-    
+
     if (!bankRates.some(rate => rate && rate > 0)) {
       errors.push('At least one bank interest rate is required');
     }
-    
+
     // Numeric field validation
     const numericFields = [
-      'roi_emi_interest', 'sbi_bank', 'union_bank', 'indusind_bank', 'au_bank',
+      'roi_emi_interest', 'sbi_bank', 'union_bank', 'mahindra_finance', 'cholamandalam_bank', 'au_bank',
       'ex_showroom', 'tcs', 'registration', 'insurance', 'on_the_road',
       'loan_amount', 'down_payment', 'final_down_payment', 'monthly_emi'
     ];

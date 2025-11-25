@@ -69,7 +69,8 @@ interface QuotationData {
   // Bank percentage fields
   sbiBank: string;
   unionBank: string;
-  indusIndBank: string;
+  mahindraFinance: string;
+  cholamandalamBank: string;
   auBank: string;
   // Additional financial fields
   downPayment: string;
@@ -96,7 +97,8 @@ interface QuotationResponse {
   roi_emi_interest: number;
   sbi_bank: number;
   union_bank: number;
-  indusind_bank: number;
+  mahindra_finance: number;
+  cholamandalam_bank: number;
   au_bank: number;
   ex_showroom: number;
   tcs: number;
@@ -163,7 +165,8 @@ const QuotationCreationPage: React.FC = () => {
     // Bank percentage fields
     sbiBank: '',
     unionBank: '',
-    indusIndBank: '',
+    mahindraFinance: '',
+    cholamandalamBank: '',
     auBank: '',
     // Additional financial fields
     downPayment: '',
@@ -238,7 +241,8 @@ const QuotationCreationPage: React.FC = () => {
       // Bank percentage fields
       sbiBank: '',
       unionBank: '',
-      indusIndBank: '',
+      mahindraFinance: '',
+      cholamandalamBank: '',
       auBank: '',
       // Additional financial fields
       downPayment: '',
@@ -276,7 +280,8 @@ const QuotationCreationPage: React.FC = () => {
       // Bank percentage fields
       sbiBank: '',
       unionBank: '',
-      indusIndBank: '',
+      mahindraFinance: '',
+      cholamandalamBank: '',
       auBank: '',
       // Additional financial fields
       downPayment: '',
@@ -331,16 +336,17 @@ const QuotationCreationPage: React.FC = () => {
       });
     } 
     // Handle bank percentages
-    else if (name === 'sbiBank' || name === 'unionBank' || name === 'indusIndBank' || name === 'auBank') {
+    else if (name === 'sbiBank' || name === 'unionBank' || name === 'mahindraFinance' || name === 'cholamandalamBank' || name === 'auBank') {
       const bankPercentage = parseFloat(value) || 0;
-      
+
       // Clear other bank values (only one bank can be selected)
       const updatedFormData = {
         ...formData,
         [name]: value,
         sbiBank: name === 'sbiBank' ? value : '',
         unionBank: name === 'unionBank' ? value : '',
-        indusIndBank: name === 'indusIndBank' ? value : '',
+        mahindraFinance: name === 'mahindraFinance' ? value : '',
+        cholamandalamBank: name === 'cholamandalamBank' ? value : '',
         auBank: name === 'auBank' ? value : ''
       };
       
@@ -439,8 +445,13 @@ const QuotationCreationPage: React.FC = () => {
   const accessories = parseFloat(formData.accessories) || 0;
   const onRoadPriceDisplay = loanAmountBase + noPlate + gps + fastag + speedGovernor + accessories;
 
-  // 3. Margin = Displayed On-Road Price - Loan Amount
-  const marginLive = (onRoadPriceDisplay - loanAmountLive).toFixed(2);
+  // 3. Margin calculation - Special logic for AU Bank, Mahindra Finance, Cholamandalam Bank
+  const isSpecialBank = (formData.auBank && parseFloat(formData.auBank) > 0) ||
+                        (formData.mahindraFinance && parseFloat(formData.mahindraFinance) > 0) ||
+                        (formData.cholamandalamBank && parseFloat(formData.cholamandalamBank) > 0);
+  const marginLive = isSpecialBank
+    ? (exShowroom - loanAmountLive).toFixed(2)  // AU/Mahindra/Cholamandalam: Ex-Showroom - Loan Amount
+    : (onRoadPriceDisplay - loanAmountLive).toFixed(2);  // Other banks: On-Road Price - Loan Amount
 
   // Calculate on-road price - Exclude Number Plate/CRTm/AutoCard charges
   const calculateOnRoadPrice = (): string => {
@@ -462,17 +473,36 @@ const QuotationCreationPage: React.FC = () => {
     const accessories = parseFloat(formData.accessories) || 0;
     const onRoadPriceDisplay = loanAmountBase + noPlate + gps + fastag + speedGovernor + accessories;
     const loanAmountLive = parseFloat(formData.loanAmount) || 0;
-    const margin = onRoadPriceDisplay - loanAmountLive;
     const processFee = parseFloat(formData.processFee) || 0;
     const stampDuty = parseFloat(formData.stampDuty) || 0;
     const handlingCharge = parseFloat(formData.handlingCharge) || 0;
     const loanInsurance = parseFloat(formData.loanInsurance) || 0;
-    // Total Down Payment calculation as specified
-    const downPayment = (margin + processFee + stampDuty + handlingCharge + loanInsurance).toFixed(2);
+
+    // AU Bank, Mahindra Finance, Cholamandalam Bank specific calculation
+    const isSpecialBank = (formData.auBank && parseFloat(formData.auBank) > 0) ||
+                          (formData.mahindraFinance && parseFloat(formData.mahindraFinance) > 0) ||
+                          (formData.cholamandalamBank && parseFloat(formData.cholamandalamBank) > 0);
+
+    let margin = 0;
+    let downPayment = 0;
+
+    if (isSpecialBank) {
+      // AU Bank/Mahindra Finance/Cholamandalam Bank: Margin = Ex-Showroom - Loan Amount
+      margin = exShowroom - loanAmountLive;
+      // Special Banks: On-Road Price (Total Down Payment) = Margin + Processing Fee + Stamp Duty + GPS + Fastag + Speed Governor + Accessories + Number Plate + Insurance + Registration
+      downPayment = margin + processFee + stampDuty + gps + fastag + speedGovernor + accessories + noPlate + insurance + registration;
+    } else {
+      // Other banks: Margin = On-Road Price - Loan Amount
+      margin = onRoadPriceDisplay - loanAmountLive;
+      // Other banks: Total Down Payment = Margin + Process Fee + Stamp Duty + Handling Charge + Loan Insurance
+      downPayment = margin + processFee + stampDuty + handlingCharge + loanInsurance;
+    }
+
     setFormData(prevData => ({
       ...prevData,
-      downPayment: downPayment,
-      finalDownPayment: (parseFloat(downPayment) - (parseFloat(prevData.offers) || 0)).toFixed(2)
+      margin: margin.toFixed(2),
+      downPayment: downPayment.toFixed(2),
+      finalDownPayment: (downPayment - (parseFloat(prevData.offers) || 0)).toFixed(2)
     }));
   };
 
@@ -508,7 +538,37 @@ const QuotationCreationPage: React.FC = () => {
     const registration = parseFloat(data.registration) || 0;
     const insurance = parseFloat(data.insurance) || 0;
     const tcs = exShowroom > 1000000 ? (exShowroom * 0.01) : 0;
-    const loanAmountBase = exShowroom + registration + insurance + tcs;
+    const noPlate = parseFloat(data.noPlate) || 0;
+    const gps = parseFloat(data.gps) || 0;
+    const fastag = parseFloat(data.fastag) || 0;
+    const speedGovernor = parseFloat(data.speedGovernor) || 0;
+    const accessories = parseFloat(data.accessories) || 0;
+
+    let loanAmountBase = 0;
+
+    // Bank-specific loan calculation logic
+    switch(bankName) {
+      case 'sbiBank':
+        // SBI: Ex-Showroom + TCS + Insurance + Registration
+        loanAmountBase = exShowroom + tcs + insurance + registration;
+        break;
+
+      case 'unionBank':
+        // Union Bank: Full On Road Price (all components)
+        loanAmountBase = exShowroom + tcs + registration + insurance + noPlate + gps + fastag + speedGovernor + accessories;
+        break;
+
+      case 'mahindraFinance':
+      case 'cholamandalamBank':
+      case 'auBank':
+        // Mahindra Finance, Cholamandalam Bank & AU Bank: Ex-Showroom only
+        loanAmountBase = exShowroom;
+        break;
+
+      default:
+        loanAmountBase = exShowroom + registration + insurance + tcs;
+    }
+
     const loanAmount = (loanAmountBase * bankPercentage / 100);
     setFormData(prevData => ({
       ...prevData,
@@ -524,7 +584,8 @@ const QuotationCreationPage: React.FC = () => {
   const recalculateLoanAmount = (data: QuotationData) => {
     const selectedBank = data.sbiBank ? 'sbiBank' :
                         data.unionBank ? 'unionBank' :
-                        data.indusIndBank ? 'indusIndBank' :
+                        data.mahindraFinance ? 'mahindraFinance' :
+                        data.cholamandalamBank ? 'cholamandalamBank' :
                         data.auBank ? 'auBank' : null;
     
     if (selectedBank) {
@@ -557,7 +618,8 @@ const QuotationCreationPage: React.FC = () => {
         roi_emi_interest: parseFloat(formData.emiInterestRate) || 0,
         sbi_bank: parseFloat(formData.sbiBank) || 0,
         union_bank: parseFloat(formData.unionBank) || 0,
-        indusind_bank: parseFloat(formData.indusIndBank) || 0,
+        mahindra_finance: parseFloat(formData.mahindraFinance) || 0,
+        cholamandalam_bank: parseFloat(formData.cholamandalamBank) || 0,
         au_bank: parseFloat(formData.auBank) || 0,
         ex_showroom: parseFloat(formData.showroomCost) || 0,
         tcs: parseFloat(formData.tcs) || 0,
@@ -688,12 +750,25 @@ const QuotationCreationPage: React.FC = () => {
                     />
                     <small className="bank-help">Loan on: Full On Road Price (all components)</small>
                   </div>
-                  <div className="bank-field indusind">
-                    <label>IndusInd Bank:</label>
-                    <input 
-                      type="number" 
-                      name="indusIndBank"
-                      value={formData.indusIndBank}
+                  <div className="bank-field mahindra">
+                    <label>Mahindra Finance:</label>
+                    <input
+                      type="number"
+                      name="mahindraFinance"
+                      value={formData.mahindraFinance}
+                      onChange={handleInputChange}
+                      className="form-control"
+                      placeholder="Rate"
+                      step="0.01"
+                    />
+                    <small className="bank-help">Loan on: Ex-Showroom price only</small>
+                  </div>
+                  <div className="bank-field cholamandalam">
+                    <label>Cholamandalam Bank:</label>
+                    <input
+                      type="number"
+                      name="cholamandalamBank"
+                      value={formData.cholamandalamBank}
                       onChange={handleInputChange}
                       className="form-control"
                       placeholder="Rate"
@@ -703,8 +778,8 @@ const QuotationCreationPage: React.FC = () => {
                   </div>
                   <div className="bank-field au">
                     <label>AU Bank:</label>
-                    <input 
-                      type="number" 
+                    <input
+                      type="number"
                       name="auBank"
                       value={formData.auBank}
                       onChange={handleInputChange}

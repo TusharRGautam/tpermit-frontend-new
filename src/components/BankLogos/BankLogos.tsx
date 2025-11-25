@@ -20,16 +20,23 @@ const BankLogos: React.FC = () => {
     },
     {
       id: 3,
-      name: 'AU Bank',
-      image: '/Website-Images/Banks/AU BANk.jpg',
-      interestRate: '14.5%',
-      approvalRate: '90%'
+      name: 'Mahindra Finance',
+      image: '/Website-Images/Banks/mahindra.webp',
+      interestRate: '12.5%',
+      approvalRate: '88%'
     },
     {
       id: 4,
-      name: 'IndusInd Bank',
-      image: '/Website-Images/Banks/Indusind.webp',
-      interestRate: '12.5%',
+      name: 'Cholamandalam Bank',
+      image: '/Website-Images/Banks/chola.webp',
+      interestRate: '13.0%',
+      approvalRate: '87%'
+    },
+    {
+      id: 5,
+      name: 'AU Bank',
+      image: '/Website-Images/Banks/AU BANk.jpg',
+      interestRate: '14.5%',
       approvalRate: '90%'
     }
   ];

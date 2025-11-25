@@ -11,7 +11,8 @@ interface QuotationData {
   roi_emi_interest: number;
   sbi_bank: number;
   union_bank: number;
-  indusind_bank: number;
+  mahindra_finance: number;
+  cholamandalam_bank: number;
   au_bank: number;
   ex_showroom: number;
   tcs: number;
@@ -319,12 +320,14 @@ const QuotationList: React.FC = () => {
         quotation.sbi_bank > 0 ? 'State Bank' : '',
         quotation.union_bank > 0 ? 'Union Bank' : '',
         quotation.union_bank > 0 ? 'Union' : '',
-        quotation.indusind_bank > 0 ? 'IndusInd Bank' : '',
-        quotation.indusind_bank > 0 ? 'IndusInd' : '',
-        quotation.indusind_bank > 0 ? 'Indus Ind' : '',
+        quotation.mahindra_finance > 0 ? 'Mahindra Finance' : '',
+        quotation.mahindra_finance > 0 ? 'Mahindra' : '',
+        quotation.cholamandalam_bank > 0 ? 'Cholamandalam Bank' : '',
+        quotation.cholamandalam_bank > 0 ? 'Cholamandalam' : '',
+        quotation.cholamandalam_bank > 0 ? 'Chola' : '',
         quotation.au_bank > 0 ? 'AU Bank' : '',
         quotation.au_bank > 0 ? 'AU' : '',
-        
+
         // Price fields for search
         quotation.ex_showroom.toString(),
         quotation.on_the_road.toString(),
@@ -332,12 +335,13 @@ const QuotationList: React.FC = () => {
         quotation.down_payment.toString(),
         quotation.final_down_payment.toString(),
         quotation.loan_amount.toString(),
-        
+
         // Interest rates for search
         quotation.roi_emi_interest.toString(),
         quotation.sbi_bank.toString(),
         quotation.union_bank.toString(),
-        quotation.indusind_bank.toString(),
+        quotation.mahindra_finance.toString(),
+        quotation.cholamandalam_bank.toString(),
         quotation.au_bank.toString(),
         
         // EMI period
@@ -408,7 +412,8 @@ const QuotationList: React.FC = () => {
   const getSelectedBank = (quotation: QuotationData) => {
     if (quotation.sbi_bank > 0) return { name: 'SBI Bank', rate: quotation.sbi_bank };
     if (quotation.union_bank > 0) return { name: 'Union Bank', rate: quotation.union_bank };
-    if (quotation.indusind_bank > 0) return { name: 'IndusInd Bank', rate: quotation.indusind_bank };
+    if (quotation.mahindra_finance > 0) return { name: 'Mahindra Finance', rate: quotation.mahindra_finance };
+    if (quotation.cholamandalam_bank > 0) return { name: 'Cholamandalam Bank', rate: quotation.cholamandalam_bank };
     if (quotation.au_bank > 0) return { name: 'AU Bank', rate: quotation.au_bank };
     return { name: 'None', rate: 0 };
   };
@@ -803,12 +808,21 @@ const QuotationList: React.FC = () => {
                         />
                       </div>
                       <div className="form-group">
-                        <label>IndusInd Bank (%)</label>
+                        <label>Mahindra Finance (%)</label>
                         <input
                           type="number"
                           step="0.01"
-                          value={editFormData.indusind_bank || ''}
-                          onChange={(e) => handleEditFormChange('indusind_bank', parseFloat(e.target.value))}
+                          value={editFormData.mahindra_finance || ''}
+                          onChange={(e) => handleEditFormChange('mahindra_finance', parseFloat(e.target.value))}
+                        />
+                      </div>
+                      <div className="form-group">
+                        <label>Cholamandalam Bank (%)</label>
+                        <input
+                          type="number"
+                          step="0.01"
+                          value={editFormData.cholamandalam_bank || ''}
+                          onChange={(e) => handleEditFormChange('cholamandalam_bank', parseFloat(e.target.value))}
                         />
                       </div>
                       <div className="form-group">

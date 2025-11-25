@@ -28,7 +28,8 @@ interface QuotationData {
   roi_emi_interest: number;
   sbi_bank: number;
   union_bank: number;
-  indusind_bank: number;
+  mahindra_finance: number;
+  cholamandalam_bank: number;
   au_bank: number;
   ex_showroom: number;
   tcs: number;
@@ -88,9 +89,13 @@ const CarDetailWithInvoices: React.FC = () => {
   const [isBookingModalOpen, setIsBookingModalOpen] = useState<boolean>(false);
   const [bookingModalVariants, setBookingModalVariants] = useState<BookingModalVariant[]>([]);
 
-  // Bank options - Only SBI bank is supported
+  // Bank options - All banks supported
   const bankOptions: { [key: string]: BankOption } = {
-    'SBI': { name: 'State Bank of India', roi: '8.45%' }
+    'SBI': { name: 'State Bank of India', roi: '8.45%' },
+    'Union': { name: 'Union Bank of India', roi: '8.50%' },
+    'Mahindra': { name: 'Mahindra Finance', roi: '8.75%' },
+    'Cholamandalam': { name: 'Cholamandalam Bank', roi: '8.85%' },
+    'AU': { name: 'AU Small Finance Bank', roi: '9.00%' }
   };
 
   // Effect to scroll to top when component mounts
@@ -133,17 +138,21 @@ const CarDetailWithInvoices: React.FC = () => {
     return imageMap[carName] || '/Website-Images/Cars/default.jpg';
   };
 
-  // Function to get bank name from quotation data - Only SBI
+  // Function to get bank name from quotation data - All banks
   const getBankNameFromQuotation = (quotation: QuotationData): string => {
-    // Only return SBI bank for all quotations
-    return 'State Bank of India';
+    if (quotation.sbi_bank > 0) return 'State Bank of India';
+    if (quotation.union_bank > 0) return 'Union Bank of India';
+    if (quotation.mahindra_finance > 0) return 'Mahindra Finance';
+    if (quotation.cholamandalam_bank > 0) return 'Cholamandalam Bank';
+    if (quotation.au_bank > 0) return 'AU Small Finance Bank';
+    return 'State Bank of India'; // Default to SBI
   };
 
-  // Function to convert quotation to CarVariant - Only SBI data
+  // Function to convert quotation to CarVariant - All banks
   const convertQuotationToVariant = (quotation: QuotationData, index: number): CarVariant => {
-    const bankName = 'State Bank of India'; // Always SBI
+    const bankName = getBankNameFromQuotation(quotation);
     const imagePath = getCarImagePath(quotation.car_model);
-    
+
     return {
       id: index + 1,
       name: `${quotation.car_model.split(' ').slice(-1)[0]} ${quotation.model_variant}`,
@@ -192,16 +201,17 @@ const CarDetailWithInvoices: React.FC = () => {
         }
 
         setCarModel(modelName);
-        console.log(`Fetching SBI bank quotations for: ${modelName}`);
+        console.log(`Fetching quotations for all banks for: ${modelName}`);
 
-        // Get all quotations for this car model - Only SBI bank quotations
+        // Get all quotations for this car model - All banks
         const allQuotations = await quotationService.getAllQuotations();
-        const carQuotations = allQuotations.filter((q: QuotationData) => 
-          q.car_model === modelName && q.sbi_bank > 0
+        const carQuotations = allQuotations.filter((q: QuotationData) =>
+          q.car_model === modelName &&
+          (q.sbi_bank > 0 || q.union_bank > 0 || q.mahindra_finance > 0 || q.cholamandalam_bank > 0 || q.au_bank > 0)
         );
-        
+
         if (carQuotations.length === 0) {
-          setError('No SBI bank quotations found for this car model');
+          setError('No quotations found for this car model');
           navigate('/');
           return;
         }
@@ -233,12 +243,14 @@ const CarDetailWithInvoices: React.FC = () => {
         });
 
         setVariants(bestVariants);
-        
+
         // Set the first variant as selected
         if (bestVariants.length > 0) {
           setSelectedVariant(bestVariants[0]);
-          // Always set SBI bank since we only deal with SBI quotations
-          setSelectedBank(bankOptions['SBI']);
+          // Set bank based on the first variant's bank
+          const firstBankName = bestVariants[0].bankName;
+          const bankKey = Object.keys(bankOptions).find(key => bankOptions[key].name === firstBankName) || 'SBI';
+          setSelectedBank(bankOptions[bankKey]);
           // Prepare booking modal variants
           setBookingModalVariants(convertToBookingVariants(bestVariants));
         }
@@ -263,17 +275,18 @@ const CarDetailWithInvoices: React.FC = () => {
 
   const handleVariantSelect = (variant: CarVariant) => {
     setSelectedVariant(variant);
-    
-    // Always set SBI bank since we only deal with SBI quotations
-    setSelectedBank(bankOptions['SBI']);
-    
+
+    // Set bank based on the variant's bank
+    const bankKey = Object.keys(bankOptions).find(key => bankOptions[key].name === variant.bankName) || 'SBI';
+    setSelectedBank(bankOptions[bankKey]);
+
     scrollToTop();
   };
 
   const handleBankSelect = (bankKey: string) => {
-    // Only SBI bank is supported, so no bank switching needed
-    if (bankKey === 'SBI') {
-      setSelectedBank(bankOptions['SBI']);
+    // Set the selected bank
+    if (bankOptions[bankKey]) {
+      setSelectedBank(bankOptions[bankKey]);
     }
   };
 
@@ -633,15 +646,60 @@ const CarDetailWithInvoices: React.FC = () => {
           <div className="invoice-header-compact">
             <h2>T-PERMIT CARS & FINANCE</h2>
             <div className="bank-info-compact">
-              <img 
-                src="/Website-Images/Banks/SBI.webp" 
-                alt="State Bank of India" 
+              <img
+                src={`/Website-Images/Banks/${(() => {
+                  if (selectedVariant.bankName.includes('SBI')) return 'SBI.webp';
+                  if (selectedVariant.bankName.includes('Union')) return 'Union.webp';
+                  if (selectedVariant.bankName.includes('Mahindra')) return 'mahindra.webp';
+                  if (selectedVariant.bankName.includes('Cholamandalam')) return 'chola.webp';
+                  if (selectedVariant.bankName.includes('AU')) return 'AU BANk.jpg';
+                  return 'SBI.webp';
+                })()}`}
+                alt={selectedVariant.bankName}
                 className="bank-logo-compact"
               />
-              <span className="bank-name-compact">State Bank of India</span>
+              <span className="bank-name-compact">{selectedVariant.bankName}</span>
             </div>
           </div>
-          
+
+          {/* Bank Selection Buttons */}
+          <div className="bank-selection-buttons">
+            <button
+              className={`bank-btn ${selectedVariant.bankName.includes('SBI') ? 'active' : ''}`}
+              onClick={() => {
+                const sbiVariant = variants.find(v => v.bankName.includes('SBI'));
+                if (sbiVariant) handleVariantSelect(sbiVariant);
+              }}
+              disabled={!variants.some(v => v.bankName.includes('SBI'))}
+            >
+              <img src="/Website-Images/Banks/SBI.webp" alt="SBI" className="bank-btn-logo" />
+              SBI Bank
+            </button>
+            <button
+              className={`bank-btn ${selectedVariant.bankName.includes('Union') ||
+                                     selectedVariant.bankName.includes('Mahindra') ||
+                                     selectedVariant.bankName.includes('Cholamandalam') ||
+                                     selectedVariant.bankName.includes('AU') ? 'active' : ''}`}
+              onClick={() => {
+                const otherBankVariant = variants.find(v =>
+                  v.bankName.includes('Union') ||
+                  v.bankName.includes('Mahindra') ||
+                  v.bankName.includes('Cholamandalam') ||
+                  v.bankName.includes('AU')
+                );
+                if (otherBankVariant) handleVariantSelect(otherBankVariant);
+              }}
+              disabled={!variants.some(v =>
+                v.bankName.includes('Union') ||
+                v.bankName.includes('Mahindra') ||
+                v.bankName.includes('Cholamandalam') ||
+                v.bankName.includes('AU')
+              )}
+            >
+              Other Banks
+            </button>
+          </div>
+
           {/* Always visible quotation */}
           <div className="quotation-container-always-visible">
             <div className="invoice-content" ref={invoiceRef}>

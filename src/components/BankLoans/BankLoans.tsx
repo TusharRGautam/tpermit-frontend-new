@@ -65,21 +65,30 @@ const BankLoans: React.FC = () => {
     },
     {
       id: 3,
+      name: 'Mahindra Finance',
+      image: '/Website-Images/Banks/mahindra.webp',
+      interestRate: '8.0% - 10.0%',
+      approvalRate: '88%',
+      loanAmount: '₹85 Lakhs',
+      colorClass: 'apply-mahindra'
+    },
+    {
+      id: 4,
+      name: 'Cholamandalam Bank',
+      image: '/Website-Images/Banks/chola.webp',
+      interestRate: '8.2% - 10.3%',
+      approvalRate: '87%',
+      loanAmount: '₹80 Lakhs',
+      colorClass: 'apply-cholamandalam'
+    },
+    {
+      id: 5,
       name: 'AU Bank',
       image: '/Website-Images/Banks/AU BANk.jpg',
       interestRate: '7.9% - 10.2%',
       approvalRate: '90%',
       loanAmount: '₹70 Lakhs',
       colorClass: 'apply-au'
-    },
-    {
-      id: 4,
-      name: 'IndusInd Bank',
-      image: '/Website-Images/Banks/Indusind.webp',
-      interestRate: '8.1% - 10.5%',
-      approvalRate: '90%',
-      loanAmount: '₹85 Lakhs',
-      colorClass: 'apply-indusind'
     }
   ];
   
