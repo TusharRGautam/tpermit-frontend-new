@@ -763,29 +763,32 @@
 /* Bank Selection Buttons */
 .bank-selection-buttons {
   display: flex;
-  gap: 1rem;
-  padding: 1rem;
-  background: #f8fafc;
+  gap: 0.875rem;
+  padding: 1.25rem;
+  background: linear-gradient(135deg, #f8fafc 0%, #e6f2ff 100%);
   border-radius: 12px;
   margin-bottom: 1.5rem;
   justify-content: center;
   flex-wrap: wrap;
+  border: 1px solid #e2e8f0;
 }
 
 .bank-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
+  padding: 0.75rem 1.25rem;
   background: white;
   border: 2px solid #e2e8f0;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #334155;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  min-width: 160px;
+  white-space: nowrap;
 }
 
 .bank-btn:hover:not(:disabled) {
@@ -815,7 +818,33 @@
   border-radius: 4px;
 }
 
+@media (max-width: 1024px) {
+  .bank-btn {
+    min-width: 145px;
+    font-size: 0.85rem;
+    padding: 0.65rem 1rem;
+  }
+
+  .bank-btn-logo {
+    width: 26px;
+    height: 26px;
+  }
+}
+
 @media (max-width: 768px) {
+  .bank-selection-buttons {
+    gap: 0.625rem;
+    padding: 1rem;
+  }
+
+  .bank-btn {
+    flex: 1 1 calc(50% - 0.3125rem);
+    min-width: 140px;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
   .bank-selection-buttons {
     flex-direction: column;
     gap: 0.75rem;

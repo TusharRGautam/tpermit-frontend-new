@@ -133,11 +133,143 @@ const QuotationList: React.FC = () => {
     setSelectedQuotation(null);
   };
 
+  // Calculate dependent values based on edited fields
+  const recalculateEditFormValues = (updatedData: Partial<QuotationData>) => {
+    const exShowroom = parseFloat(String(updatedData.ex_showroom || 0));
+    const registration = parseFloat(String(updatedData.registration || 0));
+    const insurance = parseFloat(String(updatedData.insurance || 0));
+    const tcs = parseFloat(String(updatedData.tcs || 0));
+    const noPlate = parseFloat(String(updatedData.number_plate_crtm_autocard || 0));
+    const gps = parseFloat(String(updatedData.gps || 0));
+    const fastag = parseFloat(String(updatedData.fastag || 0));
+    const speedGovernor = parseFloat(String(updatedData.speed_governor || 0));
+    const accessories = parseFloat(String(updatedData.accessories || 0));
+    const loanAmount = parseFloat(String(updatedData.loan_amount || 0));
+    const processFee = parseFloat(String(updatedData.process_fee || 0));
+    const stampDuty = parseFloat(String(updatedData.stamp_duty || 0));
+    const handlingCharge = parseFloat(String(updatedData.handling_document_charge || 0));
+    const loanInsurance = parseFloat(String(updatedData.loan_suraksha_insurance || 0));
+    const offers = parseFloat(String(updatedData.offers || 0));
+    const emiYears = parseFloat(String(updatedData.emi_years || 0));
+    const roiEmiInterest = parseFloat(String(updatedData.roi_emi_interest || 0));
+
+    // Calculate On the Road Price
+    const onTheRoad = exShowroom + tcs + registration + insurance + noPlate + gps + fastag + speedGovernor + accessories;
+
+    // Check if special bank (AU Bank, Mahindra Finance, Cholamandalam Bank)
+    const isSpecialBank =
+      (updatedData.au_bank && parseFloat(String(updatedData.au_bank)) > 0) ||
+      (updatedData.mahindra_finance && parseFloat(String(updatedData.mahindra_finance)) > 0) ||
+      (updatedData.cholamandalam_bank && parseFloat(String(updatedData.cholamandalam_bank)) > 0);
+
+    // Calculate Margin and Down Payment
+    let margin = 0;
+    let downPayment = 0;
+
+    if (isSpecialBank) {
+      // Special Banks: Margin = Ex-Showroom - Loan Amount
+      margin = exShowroom - loanAmount;
+      // Special Banks: Down Payment = Margin + Processing Fee + Stamp Duty + GPS + Fastag + Speed Governor + Accessories + Number Plate + Insurance + Registration
+      downPayment = margin + processFee + stampDuty + gps + fastag + speedGovernor + accessories + noPlate + insurance + registration;
+    } else {
+      // Other banks: Margin = On-Road Price - Loan Amount
+      margin = onTheRoad - loanAmount;
+      // Other banks: Down Payment = Margin + Process Fee + Stamp Duty + Handling Charge + Loan Insurance
+      downPayment = margin + processFee + stampDuty + handlingCharge + loanInsurance;
+    }
+
+    // Calculate Final Down Payment
+    const finalDownPayment = downPayment - offers;
+
+    // Calculate Monthly EMI
+    let monthlyEmi = 0;
+    if (loanAmount > 0 && emiYears > 0 && roiEmiInterest > 0) {
+      const monthlyInterestRate = roiEmiInterest / (12 * 100);
+      const numberOfMonths = emiYears * 12;
+      monthlyEmi = (loanAmount * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, numberOfMonths)) /
+                   (Math.pow(1 + monthlyInterestRate, numberOfMonths) - 1);
+    }
+
+    return {
+      on_the_road: onTheRoad,
+      margin_down_payment: margin,
+      down_payment: downPayment,
+      final_down_payment: finalDownPayment,
+      monthly_emi: monthlyEmi
+    };
+  };
+
+  // Calculate bank loan amount based on bank-specific logic
+  const calculateBankLoanAmount = (bankField: keyof QuotationData, bankPercentage: number, data: Partial<QuotationData>) => {
+    const exShowroom = parseFloat(String(data.ex_showroom || 0));
+    const registration = parseFloat(String(data.registration || 0));
+    const insurance = parseFloat(String(data.insurance || 0));
+    const tcs = parseFloat(String(data.tcs || 0));
+    const noPlate = parseFloat(String(data.number_plate_crtm_autocard || 0));
+    const gps = parseFloat(String(data.gps || 0));
+    const fastag = parseFloat(String(data.fastag || 0));
+    const speedGovernor = parseFloat(String(data.speed_governor || 0));
+    const accessories = parseFloat(String(data.accessories || 0));
+
+    let loanAmountBase = 0;
+
+    // Bank-specific loan calculation logic
+    switch(bankField) {
+      case 'sbi_bank':
+        // SBI: Ex-Showroom + TCS + Insurance + Registration
+        loanAmountBase = exShowroom + tcs + insurance + registration;
+        break;
+
+      case 'union_bank':
+        // Union Bank: Full On Road Price (all components)
+        loanAmountBase = exShowroom + tcs + registration + insurance + noPlate + gps + fastag + speedGovernor + accessories;
+        break;
+
+      case 'mahindra_finance':
+      case 'cholamandalam_bank':
+      case 'au_bank':
+        // Mahindra Finance, Cholamandalam Bank & AU Bank: Ex-Showroom only
+        loanAmountBase = exShowroom;
+        break;
+
+      default:
+        loanAmountBase = exShowroom + registration + insurance + tcs;
+    }
+
+    return (loanAmountBase * bankPercentage / 100);
+  };
+
   const handleEditFormChange = (field: keyof QuotationData, value: string | number) => {
-    setEditFormData(prev => ({
-      ...prev,
+    let updatedData: Partial<QuotationData> = {
+      ...editFormData,
       [field]: value
-    }));
+    };
+
+    // If a bank percentage field is changed, recalculate loan amount
+    const bankFields: (keyof QuotationData)[] = ['sbi_bank', 'union_bank', 'mahindra_finance', 'cholamandalam_bank', 'au_bank'];
+    if (bankFields.includes(field)) {
+      // Clear other bank percentages
+      bankFields.forEach(bf => {
+        if (bf !== field) {
+          (updatedData as any)[bf] = 0;
+        }
+      });
+
+      // Recalculate loan amount based on the selected bank
+      const bankPercentage = parseFloat(String(value)) || 0;
+      if (bankPercentage > 0) {
+        const newLoanAmount = calculateBankLoanAmount(field, bankPercentage, updatedData);
+        updatedData.loan_amount = newLoanAmount;
+      }
+    }
+
+    // Recalculate dependent values
+    const calculatedValues = recalculateEditFormValues(updatedData);
+
+    setEditFormData({
+      ...updatedData,
+      ...calculatedValues
+    });
   };
 
   const handleUpdateQuotation = async () => {
@@ -921,27 +1053,30 @@ const QuotationList: React.FC = () => {
                     <h4>Loan Information</h4>
                     <div className="form-grid">
                       <div className="form-group">
-                        <label>On the Road Price (₹)</label>
+                        <label>On the Road Price (₹) <span style={{fontSize: '0.8em', color: '#888'}}>(Auto-calculated)</span></label>
                         <input
                           type="number"
                           value={editFormData.on_the_road || ''}
-                          onChange={(e) => handleEditFormChange('on_the_road', parseFloat(e.target.value))}
+                          readOnly
+                          style={{backgroundColor: '#f5f5f5', cursor: 'not-allowed'}}
                         />
                       </div>
                       <div className="form-group">
-                        <label>Loan Amount (₹)</label>
+                        <label>Loan Amount (₹) <span style={{fontSize: '0.8em', color: '#888'}}>(Auto-calculated)</span></label>
                         <input
                           type="number"
                           value={editFormData.loan_amount || ''}
-                          onChange={(e) => handleEditFormChange('loan_amount', parseFloat(e.target.value))}
+                          readOnly
+                          style={{backgroundColor: '#f5f5f5', cursor: 'not-allowed'}}
                         />
                       </div>
                       <div className="form-group">
-                        <label>Margin Down Payment (₹)</label>
+                        <label>Margin Down Payment (₹) <span style={{fontSize: '0.8em', color: '#888'}}>(Auto-calculated)</span></label>
                         <input
                           type="number"
                           value={editFormData.margin_down_payment || ''}
-                          onChange={(e) => handleEditFormChange('margin_down_payment', parseFloat(e.target.value))}
+                          readOnly
+                          style={{backgroundColor: '#f5f5f5', cursor: 'not-allowed'}}
                         />
                       </div>
                       <div className="form-group">
@@ -977,11 +1112,12 @@ const QuotationList: React.FC = () => {
                         />
                       </div>
                       <div className="form-group">
-                        <label>Down Payment (₹)</label>
+                        <label>Down Payment (₹) <span style={{fontSize: '0.8em', color: '#888'}}>(Auto-calculated)</span></label>
                         <input
                           type="number"
                           value={editFormData.down_payment || ''}
-                          onChange={(e) => handleEditFormChange('down_payment', parseFloat(e.target.value))}
+                          readOnly
+                          style={{backgroundColor: '#f5f5f5', cursor: 'not-allowed'}}
                         />
                       </div>
                       <div className="form-group">
@@ -993,11 +1129,12 @@ const QuotationList: React.FC = () => {
                         />
                       </div>
                       <div className="form-group">
-                        <label>Final Down Payment (₹)</label>
+                        <label>Final Down Payment (₹) <span style={{fontSize: '0.8em', color: '#888'}}>(Auto-calculated)</span></label>
                         <input
                           type="number"
                           value={editFormData.final_down_payment || ''}
-                          onChange={(e) => handleEditFormChange('final_down_payment', parseFloat(e.target.value))}
+                          readOnly
+                          style={{backgroundColor: '#f5f5f5', cursor: 'not-allowed'}}
                         />
                       </div>
                       <div className="form-group">
@@ -1009,11 +1146,12 @@ const QuotationList: React.FC = () => {
                         />
                       </div>
                       <div className="form-group">
-                        <label>Monthly EMI (₹)</label>
+                        <label>Monthly EMI (₹) <span style={{fontSize: '0.8em', color: '#888'}}>(Auto-calculated)</span></label>
                         <input
                           type="number"
                           value={editFormData.monthly_emi || ''}
-                          onChange={(e) => handleEditFormChange('monthly_emi', parseFloat(e.target.value))}
+                          readOnly
+                          style={{backgroundColor: '#f5f5f5', cursor: 'not-allowed'}}
                         />
                       </div>
                     </div>

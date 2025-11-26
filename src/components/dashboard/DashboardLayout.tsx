@@ -6,6 +6,8 @@ import QuotationCreationPage from './QuotationCreationPage';
 import QuotationList from './QuotationList';
 import ShowroomManagement from './ShowroomManagement';
 import BookingRelations from './BookingRelations';
+import PaymentReceipt from './PaymentReceipt';
+import ReceiptList from './ReceiptList';
 import apiService from '../../services/apiService';
 
 interface DashboardLayoutProps {
@@ -43,37 +45,67 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
     <div className="dashboard-layout">
       <div className="dashboard-sidebar">
         <div className="dashboard-logo">
-          <h2>GAUTAM MOTORS Admin</h2>
+          <div className="logo-icon">🚗</div>
+          <div className="logo-text">
+            <h2>GAUTAM MOTORS</h2>
+            <span className="logo-subtitle">Admin Portal</span>
+          </div>
         </div>
         <nav className="dashboard-nav">
-          <Link to="/dashboard" className={`nav-item ${isActive('/dashboard')}`}>
-            <span className="nav-icon">📊</span>
-            <span>Dashboard</span>
-          </Link>
-          <Link to="/dashboard/quotation" className={`nav-item ${isActive('/dashboard/quotation')}`}>
-            <span className="nav-icon">📝</span>
-            <span>Create Quotation</span>
-          </Link>
-          <Link to="/dashboard/quotations" className={`nav-item ${isActive('/dashboard/quotations')}`}>
-            <span className="nav-icon">📄</span>
-            <span>Manage Quotations</span>
-          </Link>
-          <Link to="/dashboard/showrooms" className={`nav-item ${isActive('/dashboard/showrooms')}`}>
-            <span className="nav-icon">🏢</span>
-            <span>Showrooms</span>
-          </Link>
-          <Link to="/dashboard/cars" className={`nav-item ${isActive('/dashboard/cars')}`}>
-            <span className="nav-icon">🚗</span>
-            <span>Cars</span>
-          </Link>
-          <Link to="/dashboard/booking-relations" className={`nav-item ${isActive('/dashboard/booking-relations')}`}>
-            <span className="nav-icon">📋</span>
-            <span>Booking Relations</span>
-          </Link>
-          <Link to="/" className="nav-item">
-            <span className="nav-icon">🏠</span>
-            <span>Back to Site</span>
-          </Link>
+          <div className="nav-section">
+            <div className="nav-section-title">MAIN</div>
+            <Link to="/dashboard" className={`nav-item ${isActive('/dashboard')}`}>
+              <span className="nav-icon">📊</span>
+              <span className="nav-text">Overview</span>
+            </Link>
+          </div>
+
+          <div className="nav-section">
+            <div className="nav-section-title">QUOTATIONS</div>
+            <Link to="/dashboard/quotation" className={`nav-item ${isActive('/dashboard/quotation')}`}>
+              <span className="nav-icon">✏️</span>
+              <span className="nav-text">New Quotation</span>
+            </Link>
+            <Link to="/dashboard/quotations" className={`nav-item ${isActive('/dashboard/quotations')}`}>
+              <span className="nav-icon">📄</span>
+              <span className="nav-text">All Quotations</span>
+            </Link>
+          </div>
+
+          <div className="nav-section">
+            <div className="nav-section-title">PAYMENTS</div>
+            <Link to="/dashboard/receipt/new" className={`nav-item ${isActive('/dashboard/receipt/new')}`}>
+              <span className="nav-icon">💳</span>
+              <span className="nav-text">New Receipt</span>
+            </Link>
+            <Link to="/dashboard/receipts" className={`nav-item ${isActive('/dashboard/receipts')}`}>
+              <span className="nav-icon">📋</span>
+              <span className="nav-text">All Receipts</span>
+            </Link>
+          </div>
+
+          <div className="nav-section">
+            <div className="nav-section-title">MANAGEMENT</div>
+            <Link to="/dashboard/showrooms" className={`nav-item ${isActive('/dashboard/showrooms')}`}>
+              <span className="nav-icon">🏢</span>
+              <span className="nav-text">Showrooms</span>
+            </Link>
+            <Link to="/dashboard/cars" className={`nav-item ${isActive('/dashboard/cars')}`}>
+              <span className="nav-icon">🚙</span>
+              <span className="nav-text">Vehicles</span>
+            </Link>
+            <Link to="/dashboard/booking-relations" className={`nav-item ${isActive('/dashboard/booking-relations')}`}>
+              <span className="nav-icon">🔗</span>
+              <span className="nav-text">Booking Relations</span>
+            </Link>
+          </div>
+
+          <div className="nav-section nav-section-bottom">
+            <Link to="/" className="nav-item">
+              <span className="nav-icon">🌐</span>
+              <span className="nav-text">Visit Website</span>
+            </Link>
+          </div>
         </nav>
       </div>
       
@@ -94,6 +126,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
             <Route path="/quotation" element={<QuotationCreationPage />} />
             <Route path="/quotations" element={<QuotationList />} />
             <Route path="/quotation/edit/:id" element={<QuotationCreationPage />} />
+            <Route path="/receipt/new" element={<PaymentReceipt />} />
+            <Route path="/receipts" element={<ReceiptList />} />
             <Route path="/showrooms" element={<ShowroomManagement />} />
             <Route path="/booking-relations" element={<BookingRelations />} />
           </Routes>

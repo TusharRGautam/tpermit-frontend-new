@@ -675,28 +675,53 @@ const CarDetailWithInvoices: React.FC = () => {
               <img src="/Website-Images/Banks/SBI.webp" alt="SBI" className="bank-btn-logo" />
               SBI Bank
             </button>
+
             <button
-              className={`bank-btn ${selectedVariant.bankName.includes('Union') ||
-                                     selectedVariant.bankName.includes('Mahindra') ||
-                                     selectedVariant.bankName.includes('Cholamandalam') ||
-                                     selectedVariant.bankName.includes('AU') ? 'active' : ''}`}
+              className={`bank-btn ${selectedVariant.bankName.includes('Union') ? 'active' : ''}`}
               onClick={() => {
-                const otherBankVariant = variants.find(v =>
-                  v.bankName.includes('Union') ||
-                  v.bankName.includes('Mahindra') ||
-                  v.bankName.includes('Cholamandalam') ||
-                  v.bankName.includes('AU')
-                );
-                if (otherBankVariant) handleVariantSelect(otherBankVariant);
+                const unionVariant = variants.find(v => v.bankName.includes('Union'));
+                if (unionVariant) handleVariantSelect(unionVariant);
               }}
-              disabled={!variants.some(v =>
-                v.bankName.includes('Union') ||
-                v.bankName.includes('Mahindra') ||
-                v.bankName.includes('Cholamandalam') ||
-                v.bankName.includes('AU')
-              )}
+              disabled={!variants.some(v => v.bankName.includes('Union'))}
             >
-              Other Banks
+              <img src="/Website-Images/Banks/Union Bank.webp" alt="Union Bank" className="bank-btn-logo" />
+              Union Bank
+            </button>
+
+            <button
+              className={`bank-btn ${selectedVariant.bankName.includes('Mahindra') ? 'active' : ''}`}
+              onClick={() => {
+                const mahindraVariant = variants.find(v => v.bankName.includes('Mahindra'));
+                if (mahindraVariant) handleVariantSelect(mahindraVariant);
+              }}
+              disabled={!variants.some(v => v.bankName.includes('Mahindra'))}
+            >
+              <img src="/Website-Images/Banks/mahindra.webp" alt="Mahindra Finance" className="bank-btn-logo" />
+              Mahindra Finance
+            </button>
+
+            <button
+              className={`bank-btn ${selectedVariant.bankName.includes('Cholamandalam') ? 'active' : ''}`}
+              onClick={() => {
+                const cholaVariant = variants.find(v => v.bankName.includes('Cholamandalam'));
+                if (cholaVariant) handleVariantSelect(cholaVariant);
+              }}
+              disabled={!variants.some(v => v.bankName.includes('Cholamandalam'))}
+            >
+              <img src="/Website-Images/Banks/chola.webp" alt="Cholamandalam Bank" className="bank-btn-logo" />
+              Cholamandalam
+            </button>
+
+            <button
+              className={`bank-btn ${selectedVariant.bankName.includes('AU') ? 'active' : ''}`}
+              onClick={() => {
+                const auVariant = variants.find(v => v.bankName.includes('AU'));
+                if (auVariant) handleVariantSelect(auVariant);
+              }}
+              disabled={!variants.some(v => v.bankName.includes('AU'))}
+            >
+              <img src="/Website-Images/Banks/AU BANk.jpg" alt="AU Small Finance Bank" className="bank-btn-logo" />
+              AU Bank
             </button>
           </div>
 
