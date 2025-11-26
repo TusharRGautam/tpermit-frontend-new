@@ -1,6 +1,6 @@
 // Application configuration
 
-// API configuration -- For Local
+// API configuration -- For Loca
 // export const API_CONFIG = {
 //   // Production configuration with api.gautammotors.in domain
 //   BASE_URL: 'http://localhost:5001/api',
