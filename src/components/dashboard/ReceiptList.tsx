@@ -283,8 +283,8 @@ const ReceiptList: React.FC = () => {
         </p>
       </div>
 
-      {/* Receipts Table */}
-      <div className="quotations-table-container">
+      {/* Receipts Table - Desktop View */}
+      <div className="quotations-table-container desktop-table-view">
         {filteredReceipts.length === 0 ? (
           <div className="no-data-message">
             <p>No receipts found. {searchTerm || Object.values(filters).some(v => v) ? 'Try adjusting your filters.' : 'Create your first receipt!'}</p>
@@ -344,6 +344,77 @@ const ReceiptList: React.FC = () => {
               ))}
             </tbody>
           </table>
+        )}
+      </div>
+
+      {/* Receipts Cards - Mobile View */}
+      <div className="receipts-cards-container mobile-card-view">
+        {filteredReceipts.length === 0 ? (
+          <div className="no-data-message">
+            <p>No receipts found. {searchTerm || Object.values(filters).some(v => v) ? 'Try adjusting your filters.' : 'Create your first receipt!'}</p>
+          </div>
+        ) : (
+          <div className="receipts-cards-grid">
+            {filteredReceipts.map(receipt => (
+              <div key={receipt.id} className="receipt-card">
+                <div className="receipt-card-header">
+                  <div className="receipt-card-number">
+                    <span className="label">Receipt #</span>
+                    <span className="receipt-number">{receipt.receipt_number}</span>
+                  </div>
+                  <div className="receipt-card-date">
+                    {formatDate(receipt.receipt_date)}
+                  </div>
+                </div>
+
+                <div className="receipt-card-body">
+                  <div className="receipt-card-row">
+                    <span className="label">Customer:</span>
+                    <span className="value">{receipt.customer_name}</span>
+                  </div>
+                  <div className="receipt-card-row">
+                    <span className="label">Mobile:</span>
+                    <span className="value">{receipt.mobile_number}</span>
+                  </div>
+                  <div className="receipt-card-row">
+                    <span className="label">Car Model:</span>
+                    <span className="value">{receipt.car_model}</span>
+                  </div>
+                  <div className="receipt-card-row amount-row">
+                    <span className="label">Amount:</span>
+                    <span className="value amount">{formatCurrency(receipt.receipt_amount)}</span>
+                  </div>
+                  <div className="receipt-card-row">
+                    <span className="label">Payment:</span>
+                    <span className={`payment-mode-badge ${receipt.payment_mode.toLowerCase().replace(/\s+/g, '-')}`}>
+                      {receipt.payment_mode}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="receipt-card-actions">
+                  <button
+                    onClick={() => handleViewDetails(receipt)}
+                    className="btn-card-action btn-view"
+                  >
+                    👁️ View
+                  </button>
+                  <button
+                    onClick={() => handleDownloadReceipt(receipt)}
+                    className="btn-card-action btn-download"
+                  >
+                    📥 Download
+                  </button>
+                  <button
+                    onClick={() => handleDeleteClick(receipt)}
+                    className="btn-card-action btn-delete"
+                  >
+                    🗑️ Delete
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
 

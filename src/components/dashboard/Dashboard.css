@@ -5658,43 +5658,994 @@ input[readonly] {
   color: #27ae60;
 }
 
-/* Responsive Design for Receipts */
+/* ==================== ENHANCED RESPONSIVE DESIGN FOR RECEIPTS ==================== */
+
+/* Tablet and smaller screens */
+@media (max-width: 992px) {
+  .dashboard-container {
+    padding: 1rem;
+  }
+
+  .dashboard-welcome {
+    padding: 1.5rem;
+  }
+
+  .dashboard-welcome h1 {
+    font-size: 1.75rem;
+  }
+
+  .filter-controls {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .filter-select,
+  .filter-input {
+    min-width: auto;
+  }
+}
+
+/* Mobile screens */
 @media (max-width: 768px) {
-  .receipt-form .form-grid,
-  .detail-grid {
-    grid-template-columns: 1fr;
+  /* Dashboard Container - Remove extra padding */
+  .dashboard-container {
+    padding: 0.3rem !important;
+    min-height: auto !important;
+    height: auto !important;
+    background: #f5f7fa;
+    margin: 0 !important;
   }
 
-  .receipt-form .form-actions {
-    flex-direction: column-reverse;
+  /* Remove all extra spacing from body/html */
+  body, html {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
   }
 
-  .receipt-form .form-actions button {
-    width: 100%;
+  /* Main content area */
+  .main-content {
+    padding: 0 !important;
+    margin: 0 !important;
   }
 
-  .payment-mode-badge {
-    font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
+  /* Dashboard Header - ULTRA COMPACT */
+  .dashboard-welcome {
+    padding: 0.3rem 0.3rem !important;
+    margin-bottom: 0.3rem !important;
+    background: white;
+    border-radius: 4px;
   }
 
-  .quotations-table .receipt-number {
-    font-size: 0.85rem;
+  .dashboard-welcome h1 {
+    font-size: 0.9rem !important;
+    margin-bottom: 0.15rem !important;
+    margin-top: 0 !important;
+    font-weight: 700;
+    line-height: 1.1;
   }
 
-  .btn-action {
-    padding: 0.4rem 0.6rem;
-    font-size: 0.75rem;
-    margin: 0.1rem;
+  .dashboard-welcome p {
+    font-size: 0.6rem !important;
+    margin-bottom: 0.3rem !important;
+    margin-top: 0 !important;
+    line-height: 1.1;
+    color: #666;
+  }
+
+  .dashboard-welcome .btn,
+  .dashboard-welcome button.btn,
+  button.btn-primary,
+  .btn-primary {
+    padding: 0.3rem 0.5rem !important;
+    font-size: 0.65rem !important;
+    height: 1.7rem !important;
+    line-height: 1.2 !important;
+    display: inline-block;
+    width: auto !important;
+    min-width: 110px !important;
+    max-width: 170px !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Search and Filters - ULTRA COMPACT */
+  .quotation-filters {
+    margin-bottom: 0.3rem;
+    padding: 0.3rem !important;
+    background: white;
+    border-radius: 4px;
+  }
+
+  .search-bar {
+    margin-bottom: 0.25rem;
+  }
+
+  .search-bar .search-input,
+  input.search-input,
+  .quotation-filters .search-input {
+    width: 100% !important;
+    padding: 0.3rem 0.35rem !important;
+    font-size: 0.65rem !important;
+    height: 1.7rem !important;
+    line-height: 1.2 !important;
+    border-radius: 4px;
+    box-sizing: border-box !important;
+    border: 1px solid #ddd !important;
+    margin: 0 !important;
+  }
+
+  .filter-controls {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.25rem;
+    margin-top: 0.25rem;
+  }
+
+  .filter-controls .filter-select,
+  .filter-controls select.filter-select,
+  select.filter-select,
+  .filter-controls .filter-input,
+  .filter-controls input.filter-input,
+  input.filter-input,
+  input[type="date"].filter-input {
+    width: 100% !important;
+    padding: 0.3rem 0.35rem !important;
+    font-size: 0.65rem !important;
+    height: 1.7rem !important;
+    line-height: 1.2 !important;
+    border-radius: 4px;
+    box-sizing: border-box !important;
+    border: 1px solid #ddd !important;
+    margin: 0 !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: none !important;
+    appearance: none !important;
+  }
+
+  .filter-controls .btn,
+  .filter-controls button.btn {
+    grid-column: 1 / -1;
+    padding: 0.3rem !important;
+    font-size: 0.65rem !important;
+    height: 1.7rem !important;
+    line-height: 1.2 !important;
+    border-radius: 4px;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    margin: 0 !important;
+  }
+
+  /* Results Summary - ULTRA COMPACT */
+  .results-summary {
+    padding: 0.25rem 0.3rem !important;
+    margin-bottom: 0.3rem !important;
+    margin-top: 0 !important;
+    font-size: 0.6rem !important;
+    background: white;
+    border-radius: 4px;
+  }
+
+  .results-summary p {
+    font-size: 0.6rem !important;
+    line-height: 1.1;
+    margin: 0 !important;
+  }
+
+  .results-summary span {
+    font-size: 0.6rem !important;
+    margin: 0 !important;
+    display: inline;
+  }
+
+  /* Hide table on mobile, show card view */
+  .desktop-table-view {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .mobile-card-view {
+    display: block !important;
+    visibility: visible !important;
+  }
+
+  /* Table - ULTRA COMPACT (for when it's visible on desktop) */
+  .quotations-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: white;
+    border-radius: 4px;
+    max-height: none;
   }
 
   .quotations-table {
-    font-size: 0.8rem;
+    font-size: 0.55rem;
+    min-width: 100%;
+    width: 100%;
+    margin: 0;
+    border-collapse: collapse;
+  }
+
+  .quotations-table tbody {
+    margin: 0;
+    padding: 0;
+  }
+
+  .quotations-table tbody tr:last-child td {
+    border-bottom: none;
+    padding-bottom: 0.25rem;
   }
 
   .quotations-table th,
   .quotations-table td {
-    padding: 0.5rem 0.25rem;
+    padding: 0.25rem 0.15rem !important;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .quotations-table th {
+    font-size: 0.55rem !important;
+    font-weight: 600;
+    background: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 0.3rem 0.15rem !important;
+  }
+
+  .quotations-table tbody tr {
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .quotations-table .receipt-number {
+    font-size: 0.6rem !important;
+    font-weight: 600;
+  }
+
+  .quotations-table .amount {
+    font-size: 0.65rem !important;
+    font-weight: 700;
+    color: #27ae60;
+  }
+
+  .payment-mode-badge {
+    font-size: 0.5rem !important;
+    padding: 0.1rem 0.25rem !important;
+    border-radius: 3px;
+    display: inline-block;
+  }
+
+  /* Action buttons in table - INLINE COMPACT */
+  .actions {
+    display: flex;
+    flex-direction: row;
+    gap: 0.1rem;
+    min-width: auto;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+  }
+
+  .btn-action {
+    padding: 0.2rem 0.3rem !important;
+    font-size: 0.5rem !important;
+    white-space: nowrap;
+    margin: 0 !important;
+    width: auto !important;
+    flex: 0 0 auto;
+    min-width: auto !important;
+  }
+
+  /* Mobile Card View - ULTRA COMPACT */
+  .receipts-cards-container {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: transparent !important;
+  }
+
+  .receipts-cards-grid {
+    padding: 0 !important;
+    gap: 0.3rem;
+    margin: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  .receipt-card {
+    margin: 0 !important;
+    margin-bottom: 0.3rem !important;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    background: white;
+  }
+
+  .receipt-card:last-child {
+    margin-bottom: 0 !important;
+  }
+
+  .receipt-card-header {
+    padding: 0.3rem 0.35rem !important;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 4px 4px 0 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .receipt-card-number .label {
+    font-size: 0.55rem !important;
+    color: rgba(255, 255, 255, 0.8);
+    display: block;
+  }
+
+  .receipt-card-number .receipt-number {
+    font-size: 0.7rem !important;
+    font-weight: 700;
+    color: white;
+  }
+
+  .receipt-card-date {
+    font-size: 0.55rem !important;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .receipt-card-body {
+    padding: 0.3rem 0.35rem !important;
+    gap: 0.2rem;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .receipt-card-row {
+    padding-bottom: 0.2rem !important;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .receipt-card-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0 !important;
+  }
+
+  .receipt-card-row .label {
+    font-size: 0.55rem !important;
+    color: #666;
+    font-weight: 500;
+  }
+
+  .receipt-card-row .value {
+    font-size: 0.6rem !important;
+    color: #333;
+    font-weight: 600;
+  }
+
+  .receipt-card-row.amount-row {
+    padding: 0.25rem 0.3rem !important;
+    margin: 0.1rem 0;
+    background: #f0fdf4;
+    border-radius: 3px;
+    border: none;
+  }
+
+  .receipt-card-row.amount-row .amount {
+    font-size: 0.75rem !important;
+    font-weight: 700;
+    color: #27ae60;
+  }
+
+  .receipt-card-actions {
+    gap: 0.2rem;
+    padding: 0.3rem 0.35rem !important;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    background: #f8f9fa;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .btn-card-action {
+    padding: 0.3rem 0.2rem !important;
+    font-size: 0.6rem !important;
+    height: auto;
+    border-radius: 3px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-card-action.btn-view {
+    background: #3498db;
+    color: white;
+  }
+
+  .btn-card-action.btn-download {
+    background: #27ae60;
+    color: white;
+  }
+
+  .btn-card-action.btn-delete {
+    background: #e74c3c;
+    color: white;
+  }
+
+  /* Form Sections - MORE COMPACT */
+  .quotation-form-container {
+    padding: 0;
+  }
+
+  .receipt-form {
+    padding: 0;
+  }
+
+  .form-section {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .form-section h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem;
+  }
+
+  .form-group {
+    margin-bottom: 0;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .form-control,
+  .form-control textarea,
+  .form-control select {
+    padding: 0.55rem;
+    font-size: 0.8rem;
+  }
+
+  .form-group.full-width {
+    grid-column: 1;
+  }
+
+  /* Form Actions - Stack vertically - MORE COMPACT */
+  .form-actions {
+    flex-direction: column-reverse;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    margin: 0 -1rem;
+    z-index: 10;
+  }
+
+  .form-actions button {
+    width: 100%;
+    padding: 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  /* Modal Improvements - ULTRA COMPACT */
+  .modal-overlay {
+    padding: 0;
+  }
+
+  .modal-content {
+    width: 100%;
+    max-width: 100%;
+    height: 100vh;
+    max-height: 100vh;
+    margin: 0;
+    border-radius: 0;
+    overflow-y: auto;
+  }
+
+  .modal-header {
+    padding: 0.5rem 0.6rem;
+    position: sticky;
+    top: 0;
+    background: white;
+    z-index: 10;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .modal-header h2 {
+    font-size: 0.9rem;
+    padding-right: 2rem;
+    line-height: 1.2;
+  }
+
+  .modal-body {
+    padding: 0.5rem;
+  }
+
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .detail-item {
+    padding: 0.4rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+  }
+
+  .detail-item label {
+    font-size: 0.65rem;
+    margin-bottom: 0.1rem;
+  }
+
+  .detail-item span {
+    font-size: 0.7rem;
+  }
+
+  .modal-footer {
+    padding: 0.5rem;
+    position: sticky;
+    bottom: 0;
+    background: white;
+    border-top: 1px solid #e9ecef;
+    flex-direction: column-reverse;
+    gap: 0.3rem;
+  }
+
+  .modal-footer .btn {
+    width: 100%;
+    margin: 0;
+    padding: 0.5rem;
+    font-size: 0.75rem;
+    height: 2rem;
+  }
+
+  /* Success/Error Messages - ULTRA COMPACT */
+  .success-message,
+  .error-banner {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    font-size: 0.7rem;
+    border-radius: 4px;
+  }
+
+  .success-message strong,
+  .error-banner strong {
+    font-size: 0.7rem;
+  }
+
+  .success-message p {
+    font-size: 0.65rem;
+    margin-top: 0.2rem;
+  }
+
+  /* No Data Message - ULTRA COMPACT */
+  .no-data-message {
+    padding: 1rem 0.5rem;
+    margin: 0.5rem;
+  }
+
+  .no-data-message p {
+    font-size: 0.75rem;
+    margin: 0;
+    line-height: 1.3;
+  }
+
+  /* Modal Small (Delete confirmation) - ULTRA COMPACT */
+  .modal-small {
+    max-width: 90%;
+    height: auto;
+    max-height: 80vh;
+  }
+
+  .modal-small .modal-body {
+    padding: 0.5rem;
+  }
+
+  .modal-small .modal-body p {
+    font-size: 0.75rem;
+    margin-bottom: 0.3rem;
+    line-height: 1.3;
+  }
+
+  .modal-small .warning-text {
+    font-size: 0.7rem;
+    color: #e74c3c;
+    margin-top: 0.4rem;
+  }
+
+  /* ==================== MANAGE QUOTATIONS PAGE - MOBILE COMPACT ==================== */
+  /* Quotation Grid - More compact */
+  .quotation-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  /* Quotation Cards - Reduce size */
+  .quotation-card {
+    padding: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  .quotation-card-header {
+    padding: 0.65rem;
+    font-size: 0.8rem;
+  }
+
+  .quotation-id {
+    font-size: 0.8rem;
+  }
+
+  .quotation-date {
+    font-size: 0.7rem;
+  }
+
+  .quotation-card-body {
+    padding: 0.65rem;
+  }
+
+  .quotation-card-body .vehicle-info h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .quotation-card-body .vehicle-info .variant {
+    font-size: 0.75rem;
+  }
+
+  .price-info {
+    margin-top: 0.4rem;
+  }
+
+  .price-row {
+    padding: 0.35rem 0;
+    font-size: 0.8rem;
+  }
+
+  .price-row span {
+    font-size: 0.75rem;
+  }
+
+  .price-row strong {
+    font-size: 0.8rem;
+  }
+
+  .bank-tag {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  /* Quotation Card Actions - More compact */
+  .quotation-card-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.35rem;
+    padding: 0.65rem;
+    background: #f8f9fa;
+  }
+
+  .quotation-card-actions button {
+    padding: 0.45rem 0.35rem;
+    font-size: 0.75rem;
+    border-radius: 6px;
+  }
+
+  /* Search section - More compact */
+  .quotation-list-controls {
+    margin-bottom: 0.75rem;
+  }
+
+  .search-section .search-input {
+    padding: 0.55rem;
+    font-size: 0.8rem;
+  }
+
+  /* Action buttons at top - More compact */
+  .quotation-list-controls .action-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+  }
+
+  .create-quotation-btn,
+  .refresh-btn {
+    padding: 0.55rem;
+    font-size: 0.8rem;
+    width: 100%;
+  }
+
+  .quotation-list-header h3 {
+    font-size: 1rem;
+  }
+}
+
+/* Extra small mobile screens - EXTRA COMPACT */
+@media (max-width: 480px) {
+  .dashboard-welcome h1 {
+    font-size: 1rem;
+  }
+
+  .dashboard-welcome p {
+    font-size: 0.7rem;
+  }
+
+  .dashboard-welcome .btn {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .form-section h3 {
+    font-size: 0.9rem;
+  }
+
+  .quotations-table {
+    font-size: 0.7rem;
+  }
+
+  .btn-action {
+    font-size: 0.65rem;
+    padding: 0.3rem 0.4rem;
+  }
+
+  .results-summary p {
+    font-size: 0.7rem;
+  }
+
+  .modal-header h2 {
+    font-size: 0.9rem;
+  }
+
+  /* Search and filters - Extra compact */
+  .search-input {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .filter-select,
+  .filter-input {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .filter-controls .btn {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  /* Form elements - Extra compact */
+  .form-section {
+    padding: 0.6rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .form-group label {
+    font-size: 0.75rem;
+  }
+
+  .form-control,
+  .form-control textarea,
+  .form-control select {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .form-actions {
+    padding: 0.6rem;
+    gap: 0.4rem;
+  }
+
+  .form-actions button {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  /* Quotation cards - Extra compact */
+  .quotation-card-header {
+    padding: 0.5rem;
+  }
+
+  .quotation-card-body {
+    padding: 0.5rem;
+  }
+
+  .quotation-card-actions {
+    padding: 0.5rem;
+    gap: 0.3rem;
+  }
+
+  .quotation-card-actions button {
+    padding: 0.4rem 0.25rem;
+    font-size: 0.7rem;
+  }
+
+  .price-row {
+    font-size: 0.7rem;
+    padding: 0.3rem 0;
+  }
+
+  .quotation-card-body .vehicle-info h4 {
+    font-size: 0.8rem;
+  }
+
+  .search-section .search-input {
+    padding: 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .create-quotation-btn,
+  .refresh-btn {
+    padding: 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  /* Receipt cards - Extra compact */
+  .receipt-card-header {
+    padding: 0.5rem;
+  }
+
+  .receipt-card-body {
+    padding: 0.5rem;
+  }
+
+  .receipt-card-actions {
+    padding: 0.5rem;
+    gap: 0.3rem;
+  }
+
+  .btn-card-action {
+    padding: 0.45rem 0.3rem;
+    font-size: 0.7rem;
+  }
+
+  .receipt-card-row.amount-row .amount {
+    font-size: 0.9rem;
+  }
+
+  /* Modal - Extra compact */
+  .modal-header {
+    padding: 0.6rem;
+  }
+
+  .modal-body {
+    padding: 0.6rem;
+  }
+
+  .modal-footer {
+    padding: 0.6rem;
+  }
+
+  .modal-footer .btn {
+    padding: 0.5rem;
+    font-size: 0.75rem;
+  }
+}
+
+/* Very small mobile screens (360px) - EXTRA EXTRA COMPACT */
+@media (max-width: 360px) {
+  .dashboard-container {
+    padding: 0.4rem !important;
+  }
+
+  .dashboard-welcome h1 {
+    font-size: 0.9rem;
+  }
+
+  .dashboard-welcome p {
+    font-size: 0.6rem;
+  }
+
+  .dashboard-welcome .btn {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.65rem;
+    min-width: 120px;
+  }
+
+  .quotation-filters {
+    padding: 0.3rem;
+  }
+
+  .search-input {
+    padding: 0.3rem;
+    font-size: 0.65rem;
+    height: 1.8rem;
+  }
+
+  .filter-select,
+  .filter-input {
+    padding: 0.3rem;
+    font-size: 0.65rem;
+    height: 1.8rem;
+  }
+
+  .filter-controls .btn {
+    padding: 0.35rem;
+    font-size: 0.65rem;
+    height: 1.8rem;
+  }
+
+  .results-summary {
+    padding: 0.25rem 0.3rem;
+  }
+
+  .results-summary p {
+    font-size: 0.6rem;
+  }
+
+  .quotations-table {
+    font-size: 0.55rem;
+  }
+
+  .quotations-table th,
+  .quotations-table td {
+    padding: 0.25rem 0.15rem;
+  }
+
+  .btn-action {
+    padding: 0.2rem 0.3rem;
+    font-size: 0.55rem;
+  }
+
+  .receipt-card-header {
+    padding: 0.3rem;
+  }
+
+  .receipt-card-body {
+    padding: 0.3rem;
+  }
+
+  .receipt-card-actions {
+    padding: 0.3rem;
+    gap: 0.2rem;
+  }
+
+  .btn-card-action {
+    padding: 0.3rem 0.2rem;
+    font-size: 0.6rem;
+  }
+
+  .modal-header h2 {
+    font-size: 0.85rem;
+  }
+
+  .detail-item {
+    padding: 0.3rem;
+  }
+
+  .detail-item label {
+    font-size: 0.6rem;
+  }
+
+  .detail-item span {
+    font-size: 0.65rem;
+  }
+
+  .payment-mode-badge {
+    font-size: 0.5rem;
+    padding: 0.1rem 0.25rem;
+  }
+}
+
+/* Landscape mobile optimization */
+@media (max-width: 768px) and (orientation: landscape) {
+  .modal-content {
+    height: 100vh;
+  }
+
+  .form-actions {
+    position: relative;
+    margin: 1rem 0;
   }
 }
 
@@ -5754,4 +6705,452 @@ input[readonly] {
   color: #5a6c7d;
   font-size: 1.1rem;
   margin: 0;
+}
+
+/* ==================== MOBILE CARD LAYOUT FOR RECEIPTS ==================== */
+
+/* Hide mobile cards on desktop, show table */
+.mobile-card-view {
+  display: none;
+}
+
+.desktop-table-view {
+  display: block;
+}
+
+/* Receipt Cards Grid */
+.receipts-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+/* Individual Receipt Card */
+.receipt-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.receipt-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Receipt Card Header */
+.receipt-card-header {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.receipt-card-number {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.receipt-card-number .label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.receipt-card-number .receipt-number {
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+}
+
+.receipt-card-date {
+  font-size: 0.85rem;
+  opacity: 0.95;
+}
+
+/* Receipt Card Body */
+.receipt-card-body {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.receipt-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.receipt-card-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.receipt-card-row .label {
+  font-size: 0.85rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.receipt-card-row .value {
+  font-size: 0.9rem;
+  color: #2c3e50;
+  font-weight: 600;
+  text-align: right;
+}
+
+.receipt-card-row.amount-row {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  border: none;
+}
+
+.receipt-card-row.amount-row .amount {
+  font-size: 1.2rem;
+  color: #27ae60;
+  font-weight: 700;
+}
+
+/* Receipt Card Actions */
+.receipt-card-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+}
+
+.btn-card-action {
+  padding: 0.65rem 0.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.btn-card-action.btn-view {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-card-action.btn-view:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.4);
+}
+
+.btn-card-action.btn-download {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  color: white;
+}
+
+.btn-card-action.btn-download:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(79, 172, 254, 0.4);
+}
+
+.btn-card-action.btn-delete {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  color: white;
+}
+
+.btn-card-action.btn-delete:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(250, 112, 154, 0.4);
+}
+
+/* ==================== ENHANCED PAYMENT RECEIPTS RESPONSIVENESS ==================== */
+
+/* Better responsive payment mode badges */
+.payment-mode-badge {
+  display: inline-block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+/* Improved filter section for receipts */
+@media (max-width: 992px) {
+  .quotation-filters {
+    background: white;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .filter-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+
+  .filter-controls .btn {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Improved dashboard container */
+  .dashboard-container {
+    padding: 0.75rem;
+    background: #f5f7fa;
+  }
+
+  /* Better dashboard welcome section */
+  .dashboard-welcome {
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    border-radius: 8px;
+  }
+
+  /* Enhanced filter section - Collapsible style */
+  .quotation-filters {
+    background: white;
+    padding: 0.75rem;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .search-bar {
+    margin-bottom: 0.5rem;
+  }
+
+  /* Better results summary */
+  .results-summary {
+    background: white;
+    padding: 0.6rem 0.75rem;
+    border-radius: 6px;
+    margin-bottom: 0.75rem;
+    font-size: 0.75rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+
+  .results-summary p {
+    margin: 0;
+    line-height: 1.4;
+  }
+
+  .results-summary span {
+    display: block;
+    margin-top: 0.25rem;
+    font-weight: 600;
+    color: #27ae60;
+  }
+
+  /* Enhanced receipt cards with better shadows */
+  .receipt-card {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    border: 1px solid #e9ecef;
+    transition: all 0.2s ease;
+  }
+
+  .receipt-card:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+
+  /* Better visual hierarchy in cards */
+  .receipt-card-number .receipt-number {
+    letter-spacing: 0.5px;
+  }
+
+  /* Enhanced payment mode badges in cards */
+  .receipt-card .payment-mode-badge {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  /* Improved button grid */
+  .receipt-card-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  /* Better loading and empty states */
+  .loading-spinner {
+    padding: 2rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .no-data-message {
+    padding: 2rem 1rem;
+    margin: 0.75rem;
+    border-radius: 8px;
+  }
+
+  /* Improved table container with scroll hint */
+  .quotations-table-container {
+    position: relative;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  .quotations-table-container::before {
+    content: 'Swipe to see more →';
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    background: rgba(102, 126, 234, 0.9);
+    color: white;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    z-index: 5;
+    pointer-events: none;
+    animation: fadeInOut 3s ease-in-out infinite;
+  }
+
+  @keyframes fadeInOut {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+  }
+
+  /* Better modal transitions */
+  .modal-overlay {
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.2s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .modal-content {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  @keyframes slideUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+
+  /* Enhanced modal header with gradient */
+  .modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+  }
+
+  .modal-header h2 {
+    color: white;
+  }
+
+  .modal-header .close-btn {
+    color: white;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Better detail grid in modal */
+  .detail-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .detail-item {
+    background: #f8f9fa;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border-left: 3px solid #667eea;
+  }
+
+  .detail-item.full-width {
+    grid-column: 1;
+  }
+
+  .detail-item label {
+    display: block;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+  }
+
+  .detail-item span {
+    display: block;
+    color: #2c3e50;
+  }
+
+  .detail-item .amount-highlight {
+    color: #27ae60;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  /* Enhanced sticky elements */
+  .modal-header,
+  .modal-footer {
+    backdrop-filter: blur(10px);
+  }
+
+  /* Better button styles in modal */
+  .modal-footer .btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+  }
+
+  .modal-footer .btn-secondary {
+    background: #6c757d;
+    border: none;
+  }
+
+  .modal-footer .btn-danger {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    border: none;
+  }
+}
+
+/* Ultra compact for very small screens */
+@media (max-width: 360px) {
+  .dashboard-container {
+    padding: 0.5rem;
+  }
+
+  .receipt-card-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-card-action {
+    padding: 0.5rem;
+  }
+
+  .quotation-filters {
+    padding: 0.5rem;
+  }
+
+  .filter-controls {
+    grid-template-columns: 1fr;
+  }
 }

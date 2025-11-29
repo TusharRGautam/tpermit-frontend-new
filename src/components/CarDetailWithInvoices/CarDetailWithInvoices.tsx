@@ -361,15 +361,7 @@ const CarDetailWithInvoices: React.FC = () => {
       const showTCS = exShowroom > 1000000;
       const tcs = showTCS ? Math.round(exShowroom * 0.01) : 0;
 
-      const onTheRoad = Math.round(
-        exShowroom +
-        tcs +
-        (quotationData?.registration || 0) +
-        (quotationData?.insurance || 0) +
-        (quotationData?.gps || 0) +
-        (quotationData?.speed_governor || 0) +
-        (quotationData?.accessories || 0)
-      );
+      const onTheRoad = quotationData?.on_the_road || 0;
 
       const tableData: any[] = [
         ['car model :', selectedVariant.modelName],
@@ -385,7 +377,9 @@ const CarDetailWithInvoices: React.FC = () => {
       tableData.push(
         ['Registration', `Rs.${(quotationData?.registration || 0).toLocaleString('en-IN')}`],
         ['Insurance', `Rs.${(quotationData?.insurance || 0).toLocaleString('en-IN')}`],
+        ['Number Plate + CRTM + Autocard', `Rs.${(quotationData?.number_plate_crtm_autocard || 0).toLocaleString('en-IN')}`],
         ['GPS', `Rs.${(quotationData?.gps || 0).toLocaleString('en-IN')}`],
+        ['Fastag', `Rs.${(quotationData?.fastag || 0).toLocaleString('en-IN')}`],
         ['Speed Governor', `Rs.${(quotationData?.speed_governor || 0).toLocaleString('en-IN')}`],
         ['On the road', `Rs.${onTheRoad.toLocaleString('en-IN')}`],
         ['Loan Amount', `Rs.${(quotationData?.loan_amount || 0).toLocaleString('en-IN')}`],
@@ -473,12 +467,12 @@ const CarDetailWithInvoices: React.FC = () => {
       setIsDownloading(true);
       
       const quotationData = selectedVariant.quotationData;
-      
+
       // Calculate TCS based on ex-showroom price - Only if > ₹10,00,000
       const exShowroom = quotationData?.ex_showroom || 0;
       const calculatedTCS = exShowroom > 1000000 ? exShowroom * 0.01 : 0;
       const showTCS = exShowroom > 1000000;
-      
+
       const data = [
         ['T-PERMIT CARS & FINANCE', ''],
         ['', ''],
@@ -491,21 +485,11 @@ const CarDetailWithInvoices: React.FC = () => {
         ...(showTCS ? [['TCS', `₹${Math.round(calculatedTCS).toLocaleString('en-IN')}`]] : []),
         ['Registration', `₹${quotationData?.registration?.toLocaleString('en-IN') || '39,500'}`],
         ['Insurance', `₹${quotationData?.insurance?.toLocaleString('en-IN') || '39,500'}`],
+        ['Number Plate + CRTM + Autocard', `₹${quotationData?.number_plate_crtm_autocard?.toLocaleString('en-IN') || '0'}`],
         ['GPS', `₹${quotationData?.gps?.toLocaleString('en-IN') || '18,500'}`],
+        ['Fastag', `₹${quotationData?.fastag?.toLocaleString('en-IN') || '0'}`],
         ['Speed Governor', `₹${quotationData?.speed_governor?.toLocaleString('en-IN') || '0'}`],
-        ['On the road', `₹${(() => {
-          // Calculate On-Road Price excluding Number Plate/CRTm/AutoCard charges
-          const total = 
-            exShowroom + 
-            calculatedTCS + 
-            (quotationData?.registration || 0) + 
-            (quotationData?.insurance || 0) + 
-            (quotationData?.gps || 0) + 
-            (quotationData?.speed_governor || 0) + 
-            (quotationData?.accessories || 0);
-            // Note: number_plate_crtm_autocard is excluded from On-Road Price
-          return Math.round(total).toLocaleString('en-IN');
-        })()}`],
+        ['On the road', `₹${quotationData?.on_the_road?.toLocaleString('en-IN') || '0'}`],
         ['Loan Amount', `₹${quotationData?.loan_amount?.toLocaleString('en-IN') || '10,10,000'}`],
         ['Margin (Down payment)', `₹${quotationData?.margin_down_payment?.toLocaleString('en-IN') || '2,01,105'}`],
         ['Process fee', `₹${quotationData?.process_fee?.toLocaleString('en-IN') || '16,500'}`],
@@ -777,8 +761,16 @@ const CarDetailWithInvoices: React.FC = () => {
                     <td>₹{selectedVariant.quotationData?.insurance?.toLocaleString('en-IN') || '39,500'}</td>
                   </tr>
                   <tr>
+                    <td>Number Plate + CRTM + Autocard</td>
+                    <td>₹{selectedVariant.quotationData?.number_plate_crtm_autocard?.toLocaleString('en-IN') || '0'}</td>
+                  </tr>
+                  <tr>
                     <td>GPS</td>
                     <td>₹{selectedVariant.quotationData?.gps?.toLocaleString('en-IN') || '18,500'}</td>
+                  </tr>
+                  <tr>
+                    <td>Fastag</td>
+                    <td>₹{selectedVariant.quotationData?.fastag?.toLocaleString('en-IN') || '0'}</td>
                   </tr>
                   <tr>
                     <td>Speed Governor</td>
@@ -786,27 +778,7 @@ const CarDetailWithInvoices: React.FC = () => {
                   </tr>
                   <tr className="on-road-row highlighted-field">
                     <td>On the road</td>
-                    <td>₹{(() => {
-                      const quotationData = selectedVariant.quotationData;
-                      if (!quotationData) return '12,11,105';
-                      
-                      const exShowroom = quotationData.ex_showroom || 0;
-                      // Only include TCS if Ex-Showroom > ₹10,00,000
-                      const tcs = exShowroom > 1000000 ? exShowroom * 0.01 : 0;
-                      
-                      // Calculate On-Road Price excluding Number Plate/CRTm/AutoCard charges
-                      const total = 
-                        exShowroom + 
-                        tcs + 
-                        (quotationData.registration || 0) + 
-                        (quotationData.insurance || 0) + 
-                        (quotationData.gps || 0) + 
-                        (quotationData.speed_governor || 0) + 
-                        (quotationData.accessories || 0);
-                        // Note: number_plate_crtm_autocard is excluded from On-Road Price
-                      
-                      return Math.round(total).toLocaleString('en-IN');
-                    })()}</td>
+                    <td>₹{selectedVariant.quotationData?.on_the_road?.toLocaleString('en-IN') || '12,11,105'}</td>
                   </tr>
                   <tr>
                     <td>Loan Amount</td>

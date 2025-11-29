@@ -791,21 +791,7 @@ const QuotationList: React.FC = () => {
                     </div>
                     <div className="detail-item highlight">
                       <span>On Road Price:</span>
-                      <strong>{formatCurrency((() => {
-                        // Calculate corrected On-Road Price excluding Number Plate/CRTm/AutoCard charges
-                        const tcsAmount = selectedQuotation.ex_showroom > 1000000 ? selectedQuotation.tcs : 0;
-                        const correctedOnRoadPrice = 
-                          selectedQuotation.ex_showroom + 
-                          tcsAmount + 
-                          selectedQuotation.registration + 
-                          selectedQuotation.insurance + 
-                          selectedQuotation.gps + 
-                          selectedQuotation.fastag + 
-                          selectedQuotation.speed_governor + 
-                          selectedQuotation.accessories;
-                          // Note: number_plate_crtm_autocard is excluded from On-Road Price
-                        return correctedOnRoadPrice;
-                      })())}</strong>
+                      <strong>{formatCurrency(selectedQuotation.on_the_road)}</strong>
                     </div>
                   </div>
                 </div>
