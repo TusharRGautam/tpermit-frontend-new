@@ -393,13 +393,18 @@ const QuotationCreationPage: React.FC = () => {
     } 
     // Handle additional charges that affect down payment
     else if (name === 'processFee' || name === 'stampDuty' || name === 'handlingCharge' || name === 'loanInsurance') {
-      setFormData({
-        ...formData,
-        [name]: value
-      });
-      
-      // Recalculate down payment when these fields change
-      setTimeout(() => calculateDownPayment(), 10);
+      const updatedData = { ...formData, [name]: value };
+      setFormData(updatedData);
+
+      // For Loan Suraksha: Recalculate loan amount for special banks, then down payment
+      if (name === 'loanInsurance') {
+        setTimeout(() => {
+          recalculateLoanAmount(updatedData);
+        }, 10);
+      } else {
+        // For other fields: Just recalculate down payment
+        setTimeout(() => calculateDownPayment(), 10);
+      }
     } else {
       setFormData({
         ...formData,
@@ -487,10 +492,10 @@ const QuotationCreationPage: React.FC = () => {
     let downPayment = 0;
 
     if (isSpecialBank) {
-      // AU Bank/Mahindra Finance/Cholamandalam Bank: Margin = Ex-Showroom - Loan Amount
-      margin = exShowroom - loanAmountLive;
-      // Special Banks: On-Road Price (Total Down Payment) = Margin + Processing Fee + Stamp Duty + GPS + Fastag + Speed Governor + Accessories + Number Plate + Insurance + Registration
-      downPayment = margin + processFee + stampDuty + gps + fastag + speedGovernor + accessories + noPlate + insurance + registration;
+      // AU Bank/Mahindra Finance/Cholamandalam Bank: Margin = Ex-Showroom - (Loan Amount - Loan Suraksha)
+      margin = exShowroom - (loanAmountLive - loanInsurance);
+      // Special Banks: Total Down Payment = Margin + TCS + Processing Fee + Stamp Duty + GPS + Fastag + Speed Governor + Accessories + Number Plate + Insurance + Registration
+      downPayment = margin + tcs + processFee + stampDuty + gps + fastag + speedGovernor + accessories + noPlate + insurance + registration;
     } else {
       // Other banks: Margin = On-Road Price - Loan Amount
       margin = onRoadPriceDisplay - loanAmountLive;
@@ -543,6 +548,7 @@ const QuotationCreationPage: React.FC = () => {
     const fastag = parseFloat(data.fastag) || 0;
     const speedGovernor = parseFloat(data.speedGovernor) || 0;
     const accessories = parseFloat(data.accessories) || 0;
+    const loanInsurance = parseFloat(data.loanInsurance) || 0;
 
     let loanAmountBase = 0;
 
@@ -569,7 +575,13 @@ const QuotationCreationPage: React.FC = () => {
         loanAmountBase = exShowroom + registration + insurance + tcs;
     }
 
-    const loanAmount = (loanAmountBase * bankPercentage / 100);
+    let loanAmount = (loanAmountBase * bankPercentage / 100);
+
+    // For AU Bank, Mahindra Finance, Cholamandalam Bank: Add Loan Suraksha to final loan amount
+    if (bankName === 'auBank' || bankName === 'mahindraFinance' || bankName === 'cholamandalamBank') {
+      loanAmount = loanAmount + loanInsurance;
+    }
+
     setFormData(prevData => ({
       ...prevData,
       loanAmount: loanAmount.toFixed(2)
@@ -1007,14 +1019,14 @@ const QuotationCreationPage: React.FC = () => {
                   />
                 </div>
                 <div className="cost-row">
-                  <label>Loan Insurance:</label>
-                  <input 
-                    type="number" 
+                  <label>Loan Suraksha:</label>
+                  <input
+                    type="number"
                     name="loanInsurance"
                     value={formData.loanInsurance}
                     onChange={handleInputChange}
                     className="form-control"
-                    placeholder="Loan insurance"
+                    placeholder="Loan Suraksha"
                   />
                 </div>
                 <div className="cost-row">

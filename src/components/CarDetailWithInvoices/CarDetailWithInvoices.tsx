@@ -223,7 +223,7 @@ const CarDetailWithInvoices: React.FC = () => {
           convertQuotationToVariant(quotation, index)
         );
 
-        // Group by variant name and select best offer for each variant
+        // Group by variant name and select the most recent quotation for each variant
         const variantGroups: { [key: string]: CarVariant[] } = {};
         carVariants.forEach(variant => {
           const variantKey = variant.name;
@@ -233,12 +233,12 @@ const CarDetailWithInvoices: React.FC = () => {
           variantGroups[variantKey].push(variant);
         });
 
-        // Select the best variant from each group (lowest down payment)
+        // Select the most recent variant from each group (by created_at/updated_at timestamp)
         const bestVariants = Object.values(variantGroups).map(group => {
-          return group.reduce((best, current) => {
-            const bestDownPayment = parseFloat(best.downPayment.replace(/[₹,]/g, ''));
-            const currentDownPayment = parseFloat(current.downPayment.replace(/[₹,]/g, ''));
-            return currentDownPayment < bestDownPayment ? current : best;
+          return group.reduce((latest, current) => {
+            const latestTimestamp = new Date(latest.quotationData?.updated_at || latest.quotationData?.created_at || 0).getTime();
+            const currentTimestamp = new Date(current.quotationData?.updated_at || current.quotationData?.created_at || 0).getTime();
+            return currentTimestamp > latestTimestamp ? current : latest;
           });
         });
 
