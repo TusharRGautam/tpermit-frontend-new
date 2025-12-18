@@ -8,6 +8,8 @@ import ShowroomManagement from './ShowroomManagement';
 import BookingRelations from './BookingRelations';
 import PaymentReceipt from './PaymentReceipt';
 import ReceiptList from './ReceiptList';
+import BookingOrder from './BookingOrder';
+import BookingOrderList from './BookingOrderList';
 import apiService from '../../services/apiService';
 
 interface DashboardLayoutProps {
@@ -17,7 +19,7 @@ interface DashboardLayoutProps {
 const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
+
   const isActive = (path: string) => {
     return location.pathname === path ? 'active' : '';
   };
@@ -34,7 +36,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
       // Clear local storage regardless of API response
       localStorage.removeItem('aswSessionToken');
       localStorage.removeItem('aswUser');
-      
+
       console.log('Cleared session data, redirecting to login...');
       // Redirect to login
       navigate('/login');
@@ -85,6 +87,18 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
           </div>
 
           <div className="nav-section">
+            <div className="nav-section-title">BOOKING ORDERS</div>
+            <Link to="/dashboard/booking-order/new" className={`nav-item ${isActive('/dashboard/booking-order/new')}`}>
+              <span className="nav-icon">📝</span>
+              <span className="nav-text">New Booking Order</span>
+            </Link>
+            <Link to="/dashboard/booking-orders" className={`nav-item ${isActive('/dashboard/booking-orders')}`}>
+              <span className="nav-icon">📋</span>
+              <span className="nav-text">All Booking Orders</span>
+            </Link>
+          </div>
+
+          <div className="nav-section">
             <div className="nav-section-title">MANAGEMENT</div>
             <Link to="/dashboard/showrooms" className={`nav-item ${isActive('/dashboard/showrooms')}`}>
               <span className="nav-icon">🏢</span>
@@ -108,7 +122,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
           </div>
         </nav>
       </div>
-      
+
       <div className="dashboard-content">
         <div className="dashboard-header">
           <div className="user-profile">
@@ -128,6 +142,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
             <Route path="/quotation/edit/:id" element={<QuotationCreationPage />} />
             <Route path="/receipt/new" element={<PaymentReceipt />} />
             <Route path="/receipts" element={<ReceiptList />} />
+            <Route path="/booking-order/new" element={<BookingOrder />} />
+            <Route path="/booking-orders" element={<BookingOrderList />} />
             <Route path="/showrooms" element={<ShowroomManagement />} />
             <Route path="/booking-relations" element={<BookingRelations />} />
           </Routes>
