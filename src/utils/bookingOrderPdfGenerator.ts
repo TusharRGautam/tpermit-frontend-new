@@ -10,6 +10,7 @@ interface BookingOrderData {
   color: string;
   rtoPassing: string;
   customerName: string;
+  customerContact: string;
   customerAddress: string;
 }
 
@@ -90,9 +91,9 @@ export const generateBookingOrderPDF = async (order: BookingOrderData) => {
   pdf.setFont('helvetica', 'normal');
   pdf.setFontSize(8);
   const addressLines = [
-    'Room no 07, Astamangal',
-    'Building, Dhartri Nagar, Aagasan',
-    'Road Diva East 405612'
+    '304 Astavinayak Building,',
+    'Aagasan Road, Near RK Dance Studio,',
+    'Diva East'
   ];
   
   let addressY = yPosition + 8;
@@ -153,8 +154,11 @@ export const generateBookingOrderPDF = async (order: BookingOrderData) => {
 
   yPosition += 10;
 
-  // Customer Name
+  // Customer Name & Contact
   pdf.text(`Customer Name - ${order.customerName}`, 15, yPosition);
+  
+  yPosition += 7;
+  pdf.text(`Contact No. - ${order.customerContact}`, 15, yPosition);
 
   yPosition += 7;
 

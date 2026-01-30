@@ -1,0 +1,56 @@
+/* Table Border Styles - Added for better data visibility */
+.quotations-table-container table,
+.quotations-table,
+table.quotations-table {
+  border-collapse: collapse;
+  border: 1px solid #dee2e6;
+  width: 100%;
+}
+
+.quotations-table-container table th,
+.quotations-table th,
+table.quotations-table th {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+  font-weight: 600;
+  text-align: left;
+}
+
+.quotations-table-container table td,
+.quotations-table td,
+table.quotations-table td {
+  border: 1px solid #dee2e6;
+  padding: 0.75rem;
+}
+
+.quotations-table-container table tbody tr:hover,
+.quotations-table tbody tr:hover,
+table.quotations-table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* User Request: Reduce text by ~5px (assuming base 16px -> 11-12px) */
+.quotations-table-container table td,
+.quotations-table-container table th,
+.quotations-table td, 
+.quotations-table th {
+    font-size: 12px !important;
+    padding: 0.5rem !important; /* Reduced padding for smaller text */
+}
+
+/* Highlighted Name Style - Bold and Distinct */
+.highlighted-name {
+    font-weight: 700 !important;
+    color: #2c3e50;
+    font-size: 12px !important; /* Ensure match */
+    background-color: #ffc10740 !important; /* Yellow tint */
+}
+
+/* Highlighted Company Style - Different Color */
+.highlighted-company {
+    font-weight: 700 !important;
+    color: #2c3e50;
+    font-size: 12px !important;
+    background-color: #0d6efd26 !important; /* Blue tint */
+}

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useLocation, Routes, Route, useNavigate } from 'react-router-dom';
 import './Dashboard.css';
+import './DashboardSidebar.css';
+import './DashboardFullWidth.css';
 import DashboardHome from './DashboardHome';
 import QuotationCreationPage from './QuotationCreationPage';
 import QuotationList from './QuotationList';
@@ -10,6 +12,9 @@ import PaymentReceipt from './PaymentReceipt';
 import ReceiptList from './ReceiptList';
 import BookingOrder from './BookingOrder';
 import BookingOrderList from './BookingOrderList';
+import AllDocuments from './AllDocuments';
+import ProformaInvoice from './ProformaInvoice';
+import UnifiedBookingFlow from './UnifiedBookingFlow';
 import apiService from '../../services/apiService';
 
 interface DashboardLayoutProps {
@@ -44,87 +49,20 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
   };
 
   return (
-    <div className="dashboard-layout">
-      <div className="dashboard-sidebar">
-        <div className="dashboard-logo">
-          <div className="logo-icon">🚗</div>
-          <div className="logo-text">
-            <h2>GAUTAM MOTORS</h2>
-            <span className="logo-subtitle">Admin Portal</span>
-          </div>
-        </div>
-        <nav className="dashboard-nav">
-          <div className="nav-section">
-            <div className="nav-section-title">MAIN</div>
-            <Link to="/dashboard" className={`nav-item ${isActive('/dashboard')}`}>
-              <span className="nav-icon">📊</span>
-              <span className="nav-text">Overview</span>
-            </Link>
-          </div>
+    <div className="dashboard-layout no-sidebar">
+      {/* Sidebar hidden - all navigation in Quick Actions */}
 
-          <div className="nav-section">
-            <div className="nav-section-title">QUOTATIONS</div>
-            <Link to="/dashboard/quotation" className={`nav-item ${isActive('/dashboard/quotation')}`}>
-              <span className="nav-icon">✏️</span>
-              <span className="nav-text">New Quotation</span>
-            </Link>
-            <Link to="/dashboard/quotations" className={`nav-item ${isActive('/dashboard/quotations')}`}>
-              <span className="nav-icon">📄</span>
-              <span className="nav-text">All Quotations</span>
-            </Link>
-          </div>
-
-          <div className="nav-section">
-            <div className="nav-section-title">PAYMENTS</div>
-            <Link to="/dashboard/receipt/new" className={`nav-item ${isActive('/dashboard/receipt/new')}`}>
-              <span className="nav-icon">💳</span>
-              <span className="nav-text">New Receipt</span>
-            </Link>
-            <Link to="/dashboard/receipts" className={`nav-item ${isActive('/dashboard/receipts')}`}>
-              <span className="nav-icon">📋</span>
-              <span className="nav-text">All Receipts</span>
-            </Link>
-          </div>
-
-          <div className="nav-section">
-            <div className="nav-section-title">BOOKING ORDERS</div>
-            <Link to="/dashboard/booking-order/new" className={`nav-item ${isActive('/dashboard/booking-order/new')}`}>
-              <span className="nav-icon">📝</span>
-              <span className="nav-text">New Booking Order</span>
-            </Link>
-            <Link to="/dashboard/booking-orders" className={`nav-item ${isActive('/dashboard/booking-orders')}`}>
-              <span className="nav-icon">📋</span>
-              <span className="nav-text">All Booking Orders</span>
-            </Link>
-          </div>
-
-          <div className="nav-section">
-            <div className="nav-section-title">MANAGEMENT</div>
-            <Link to="/dashboard/showrooms" className={`nav-item ${isActive('/dashboard/showrooms')}`}>
-              <span className="nav-icon">🏢</span>
-              <span className="nav-text">Showrooms</span>
-            </Link>
-            <Link to="/dashboard/cars" className={`nav-item ${isActive('/dashboard/cars')}`}>
-              <span className="nav-icon">🚙</span>
-              <span className="nav-text">Vehicles</span>
-            </Link>
-            <Link to="/dashboard/booking-relations" className={`nav-item ${isActive('/dashboard/booking-relations')}`}>
-              <span className="nav-icon">🔗</span>
-              <span className="nav-text">Booking Relations</span>
-            </Link>
-          </div>
-
-          <div className="nav-section nav-section-bottom">
-            <Link to="/" className="nav-item">
-              <span className="nav-icon">🌐</span>
-              <span className="nav-text">Visit Website</span>
-            </Link>
-          </div>
-        </nav>
-      </div>
-
-      <div className="dashboard-content">
+      <div className="dashboard-content full-width">
         <div className="dashboard-header">
+          <div className="header-left">
+            <Link to="/" className="dashboard-logo-header" style={{ textDecoration: 'none' }}>
+              <span className="logo-icon">🚗</span>
+              <div className="logo-text">
+                <h2>GAUTAM MOTORS</h2>
+                <span className="logo-subtitle">Admin Portal</span>
+              </div>
+            </Link>
+          </div>
           <div className="user-profile">
             <span className="user-avatar">👤</span>
             <span>Admin</span>
@@ -137,15 +75,16 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
         <div className="dashboard-main-content">
           <Routes>
             <Route path="/" element={<DashboardHome />} />
+            <Route path="/all-documents" element={<AllDocuments />} />
             <Route path="/quotation" element={<QuotationCreationPage />} />
             <Route path="/quotations" element={<QuotationList />} />
             <Route path="/quotation/edit/:id" element={<QuotationCreationPage />} />
-            <Route path="/receipt/new" element={<PaymentReceipt />} />
-            <Route path="/receipts" element={<ReceiptList />} />
-            <Route path="/booking-order/new" element={<BookingOrder />} />
-            <Route path="/booking-orders" element={<BookingOrderList />} />
+            <Route path="/unified-entry" element={<UnifiedBookingFlow />} />
+            <Route path="/booking-order" element={<BookingOrder />} />
+            <Route path="/receipt" element={<PaymentReceipt />} />
             <Route path="/showrooms" element={<ShowroomManagement />} />
             <Route path="/booking-relations" element={<BookingRelations />} />
+            <Route path="/reciept/proforma-invoice" element={<ProformaInvoice />} />
           </Routes>
         </div>
       </div>

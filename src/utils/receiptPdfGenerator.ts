@@ -194,9 +194,23 @@ export const generateReceiptPDF = async (receipt: ReceiptData) => {
   yPosition += 10;
 
   // ===== CUSTOMER DETAILS BOX =====
+  // Calculate heights first
+  pdf.setFont('helvetica', 'normal');
+  pdf.setFontSize(10);
+  
+  const labelX = 20;
+  const valueX = 45;
+  const maxWidth = pageWidth - 30 - (valueX - 15) - 5; // Box width - left padding - margin
+  
+  const splitAddress = pdf.splitTextToSize(receipt.customerAddress, maxWidth);
+  const addressHeight = splitAddress.length * 5; // 5mm per line
+  
+  // Total height needed: Header(8) + Name(7) + Address(addressHeight) + Mobile(7) + Padding(5)
+  const boxHeight = 8 + 7 + Math.max(7, addressHeight) + 7 + 5;
+  
   const boxY = yPosition;
   pdf.setFillColor(lightGray[0], lightGray[1], lightGray[2]);
-  pdf.roundedRect(15, boxY, pageWidth - 30, 38, 2, 2, 'F');
+  pdf.roundedRect(15, boxY, pageWidth - 30, boxHeight, 2, 2, 'F');
 
   pdf.setFont('helvetica', 'bold');
   pdf.setFontSize(11);
@@ -205,18 +219,40 @@ export const generateReceiptPDF = async (receipt: ReceiptData) => {
   yPosition += 8;
   pdf.text('Customer Details:', 20, yPosition);
 
+  // Name
   yPosition += 8;
-  pdf.setFont('helvetica', 'normal');
+  pdf.setFont('helvetica', 'bold');
   pdf.setFontSize(10);
-  pdf.text(`Name: ${receipt.customerName}`, 20, yPosition);
+  pdf.setTextColor(80, 80, 80);
+  pdf.text('Name:', labelX, yPosition);
+  
+  pdf.setFont('helvetica', 'normal');
+  pdf.setTextColor(0, 0, 0);
+  pdf.text(receipt.customerName, valueX, yPosition);
 
+  // Address
   yPosition += 7;
-  pdf.text(`Address: ${receipt.customerAddress}`, 20, yPosition);
+  pdf.setFont('helvetica', 'bold');
+  pdf.setTextColor(80, 80, 80);
+  pdf.text('Address:', labelX, yPosition);
+  
+  pdf.setFont('helvetica', 'normal');
+  pdf.setTextColor(0, 0, 0);
+  pdf.text(splitAddress, valueX, yPosition);
+  
+  // Update Y position based on address lines
+  yPosition += (splitAddress.length * 5) + 2;
 
-  yPosition += 7;
-  pdf.text(`Mobile: ${receipt.mobileNumber}`, 20, yPosition);
+  // Mobile
+  pdf.setFont('helvetica', 'bold');
+  pdf.setTextColor(80, 80, 80);
+  pdf.text('Mobile:', labelX, yPosition);
+  
+  pdf.setFont('helvetica', 'normal');
+  pdf.setTextColor(0, 0, 0);
+  pdf.text(receipt.mobileNumber, valueX, yPosition);
 
-  yPosition += 12;
+  yPosition += 10;
 
   // ===== PAYMENT DETAILS =====
   pdf.setFont('helvetica', 'bold');

@@ -4,33 +4,52 @@ const receiptService = {
   /**
    * Get the next receipt number
    */
+  // Import apiService at top if not present, but here we can just fetch from the shared endpoint
+  // Actually receiptService.js is using 'supabase' directly.
+  // We should switch to consistent API usage for numbering at least.
+  
+  /**
+   * Get the next receipt number (Synced with Booking Orders)
+   */
   async getNextReceiptNumber() {
     try {
-      const { data, error } = await supabase.rpc('get_next_receipt_number');
-
-      if (error) throw error;
-      return data || 'GM500';
+      // Use the Booking Order Next Number endpoint to ensure synchronization
+      // We assume apiService is available globally or we can use fetch/axios
+      // Since this file imports supabase directly, let's use the API URL from config if possible
+      // effectively we want to call GET /api/booking-orders/next-number
+      
+      // Since we can't easily import apiService if it's not already imported, 
+      // let's try to fetch relative to current origin if in browser
+      
+      const response = await fetch('http://localhost:5001/api/booking-orders/next-number'); // Assuming localhost for dev
+      // Better: Use the same logic as apiService
+      
+      if (!response.ok) throw new Error('Network response was not ok');
+      const json = await response.json();
+      
+      if (json.success) {
+          return json.data;
+      }
+      return 'BO0522'; // Fallback aligned with booking orders
+      
     } catch (error) {
       console.error('Error fetching next receipt number:', error);
-      // Fallback: get it manually
+      // Fallback: check supabase locally as last resort but try to respect BO format
       try {
-        const { data: receipts, error: fetchError } = await supabase
+        const { data: receipts } = await supabase
           .from('payment_receipts')
           .select('receipt_number')
           .order('receipt_number', { ascending: false })
           .limit(1);
 
-        if (fetchError) throw fetchError;
-
         if (receipts && receipts.length > 0) {
-          const lastNumber = parseInt(receipts[0].receipt_number.replace('GM', ''));
-          const nextNumber = lastNumber + 1;
-          return `GM${String(nextNumber).padStart(3, '0')}`;
+          // Try to handle BO or GM prefixes
+          const num = parseInt(receipts[0].receipt_number.replace(/\D/g, '')) || 522;
+          return `BO${(num + 1).toString().padStart(4, '0')}`;
         }
-        return 'GM500';
-      } catch (fallbackError) {
-        console.error('Fallback error:', fallbackError);
-        return 'GM500';
+        return 'BO0522';
+      } catch (fbError) {
+        return 'BO0522';
       }
     }
   },

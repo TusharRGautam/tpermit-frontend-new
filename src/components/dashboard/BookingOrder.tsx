@@ -14,6 +14,7 @@ interface BookingOrderFormData {
     color: string;
     rtoPassing: string;
     customerName: string;
+    customerContact: string;
     customerAddress: string;
 }
 
@@ -76,7 +77,7 @@ const BookingOrder: React.FC = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [errors, setErrors] = useState<FormErrors>({});
-    const [nextOrderNumber, setNextOrderNumber] = useState<string>('BO0001');
+    const [nextOrderNumber, setNextOrderNumber] = useState<string>('BO0522');
 
     const [formData, setFormData] = useState<BookingOrderFormData>({
         orderNumber: '',
@@ -88,6 +89,7 @@ const BookingOrder: React.FC = () => {
         color: '',
         rtoPassing: '',
         customerName: '',
+        customerContact: '',
         customerAddress: ''
     });
 
@@ -161,6 +163,13 @@ const BookingOrder: React.FC = () => {
             newErrors.customerName = 'Customer name is required';
         }
 
+        if (!formData.customerContact.trim()) {
+            newErrors.customerContact = 'Customer contact number is required';
+        } else if (!/^\d{10}$/.test(formData.customerContact.replace(/\D/g, ''))) {
+            // Basic validation for 10 digits
+            newErrors.customerContact = 'Please enter a valid 10-digit contact number';
+        }
+
         if (!formData.customerAddress.trim()) {
             newErrors.customerAddress = 'Customer address is required';
         }
@@ -191,6 +200,7 @@ const BookingOrder: React.FC = () => {
                 color: formData.color,
                 rto_passing: formData.rtoPassing,
                 customer_name: formData.customerName,
+                customer_contact: formData.customerContact,
                 customer_address: formData.customerAddress
             };
 
@@ -225,6 +235,7 @@ const BookingOrder: React.FC = () => {
                 color: formData.color,
                 rtoPassing: formData.rtoPassing,
                 customerName: formData.customerName,
+                customerContact: formData.customerContact,
                 customerAddress: formData.customerAddress
             });
         } catch (error) {
@@ -245,6 +256,7 @@ const BookingOrder: React.FC = () => {
             color: '',
             rtoPassing: '',
             customerName: '',
+            customerContact: '',
             customerAddress: ''
         });
         setErrors({});
@@ -432,6 +444,21 @@ const BookingOrder: React.FC = () => {
                                     required
                                 />
                                 {errors.customerName && <span className="error-text">{errors.customerName}</span>}
+                            </div>
+
+                            <div className="form-group">
+                                <label>Customer Contact Number <span className="required">*</span></label>
+                                <input
+                                    type="tel"
+                                    name="customerContact"
+                                    value={formData.customerContact}
+                                    onChange={handleInputChange}
+                                    className={`form-control ${errors.customerContact ? 'error' : ''}`}
+                                    placeholder="Enter contact number"
+                                    maxLength={10}
+                                    required
+                                />
+                                {errors.customerContact && <span className="error-text">{errors.customerContact}</span>}
                             </div>
 
                             <div className="form-group full-width">

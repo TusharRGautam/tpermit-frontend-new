@@ -1,4 +1,4 @@
-import { supabase } from '../config/supabaseClient';
+import apiService from './apiService';
 
 const bookingOrderService = {
   /**
@@ -6,23 +6,14 @@ const bookingOrderService = {
    */
   async getNextOrderNumber() {
     try {
-      const { data: orders, error } = await supabase
-        .from('booking_orders')
-        .select('order_number')
-        .order('order_number', { ascending: false })
-        .limit(1);
-
-      if (error) throw error;
-
-      if (orders && orders.length > 0) {
-        const lastNumber = parseInt(orders[0].order_number.replace('BO', ''));
-        const nextNumber = lastNumber + 1;
-        return `BO${String(nextNumber).padStart(4, '0')}`;
+      const response = await apiService.get('/booking-orders/next-number');
+      if (response.success) {
+        return response.data;
       }
-      return 'BO0001';
+      return 'BO0522';
     } catch (error) {
       console.error('Error fetching next order number:', error);
-      return 'BO0001';
+      return 'BO0522';
     }
   },
 
@@ -31,15 +22,38 @@ const bookingOrderService = {
    */
   async createBookingOrder(orderData) {
     try {
-      const { data, error } = await supabase
-        .from('booking_orders')
-        .insert([orderData])
-        .select();
-
-      if (error) throw error;
-      return data[0];
+      // Map frontend fields to backend fields if necessary, or ensure they match
+      // Frontend uses camelCase, backend (SQL) uses snake_case
+      // We should probably map them here or ensure the API handles it.
+      // The API implementation I wrote passes req.body directly to Supabase insert.
+      // And BookingOrder.tsx sends snake_case keys in `orderData` object!
+      // checking BookingOrder.tsx:
+      // const orderData = { order_number: ..., order_date: ..., company_name: ..., ... }
+      // So the keys ARE snake_case. Good.
+      
+      const response = await apiService.post('/booking-orders', orderData);
+      if (response.success) {
+        return response.data;
+      }
+      throw new Error(response.message || 'Failed to create booking order');
     } catch (error) {
       console.error('Error creating booking order:', error);
+      throw error;
+    }
+  },
+
+  /**
+   * Update a booking order
+   */
+  async updateBookingOrder(id, orderData) {
+    try {
+      const response = await apiService.put(`/booking-orders/${id}`, orderData);
+      if (response.success) {
+        return response.data;
+      }
+      throw new Error(response.message || 'Failed to update booking order');
+    } catch (error) {
+      console.error('Error updating booking order:', error);
       throw error;
     }
   },
@@ -49,40 +63,30 @@ const bookingOrderService = {
    */
   async getAllBookingOrders(filters = {}) {
     try {
-      let query = supabase
-        .from('booking_orders')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      // Apply filters
-      if (filters.customerName) {
-        query = query.ilike('customer_name', `%${filters.customerName}%`);
+      // Current API doesn't support filters yet, but returns all
+      // We can implement client-side filtering or update API later
+      const response = await apiService.get('/booking-orders');
+      
+      if (response.success) {
+        let orders = response.data;
+        
+        // Client-side filtering as fallback until API supports it
+        if (filters.customerName) {
+            orders = orders.filter(o => o.customer_name?.toLowerCase().includes(filters.customerName.toLowerCase()));
+        }
+        if (filters.companyName) {
+            orders = orders.filter(o => o.company_name?.toLowerCase().includes(filters.companyName.toLowerCase()));
+        }
+        if (filters.carModel) {
+            orders = orders.filter(o => o.car_model?.toLowerCase().includes(filters.carModel.toLowerCase()));
+        }
+        if (filters.orderNumber) {
+            orders = orders.filter(o => o.order_number?.toLowerCase().includes(filters.orderNumber.toLowerCase()));
+        }
+        
+        return orders;
       }
-
-      if (filters.companyName) {
-        query = query.ilike('company_name', `%${filters.companyName}%`);
-      }
-
-      if (filters.carModel) {
-        query = query.ilike('car_model', `%${filters.carModel}%`);
-      }
-
-      if (filters.orderNumber) {
-        query = query.ilike('order_number', `%${filters.orderNumber}%`);
-      }
-
-      if (filters.fromDate) {
-        query = query.gte('order_date', filters.fromDate);
-      }
-
-      if (filters.toDate) {
-        query = query.lte('order_date', filters.toDate);
-      }
-
-      const { data, error } = await query;
-
-      if (error) throw error;
-      return data;
+      return [];
     } catch (error) {
       console.error('Error fetching booking orders:', error);
       throw error;
@@ -94,14 +98,11 @@ const bookingOrderService = {
    */
   async getBookingOrderById(id) {
     try {
-      const { data, error } = await supabase
-        .from('booking_orders')
-        .select('*')
-        .eq('id', id)
-        .single();
-
-      if (error) throw error;
-      return data;
+      const response = await apiService.get(`/booking-orders/${id}`);
+      if (response.success) {
+        return response.data;
+      }
+      throw new Error(response.message || 'Booking order not found');
     } catch (error) {
       console.error('Error fetching booking order:', error);
       throw error;
@@ -113,72 +114,27 @@ const bookingOrderService = {
    */
   async getBookingOrderByNumber(orderNumber) {
     try {
-      const { data, error } = await supabase
-        .from('booking_orders')
-        .select('*')
-        .eq('order_number', orderNumber)
-        .single();
-
-      if (error) throw error;
-      return data;
+      // We don't have a specific API for this yet, so we'll fetch all and find
+      // Or we can add a new endpoint. For now, fetch all.
+      const orders = await this.getAllBookingOrders();
+      return orders.find(o => o.order_number === orderNumber);
     } catch (error) {
       console.error('Error fetching booking order by number:', error);
       throw error;
     }
   },
-
-  /**
-   * Update a booking order
-   */
-  async updateBookingOrder(id, updates) {
-    try {
-      const { data, error } = await supabase
-        .from('booking_orders')
-        .update(updates)
-        .eq('id', id)
-        .select();
-
-      if (error) throw error;
-      return data[0];
-    } catch (error) {
-      console.error('Error updating booking order:', error);
-      throw error;
-    }
-  },
-
   /**
    * Delete a booking order
    */
   async deleteBookingOrder(id) {
     try {
-      const { error } = await supabase
-        .from('booking_orders')
-        .delete()
-        .eq('id', id);
-
-      if (error) throw error;
-      return true;
+      const response = await apiService.delete(`/booking-orders/${id}`);
+      if (response.success) {
+        return true;
+      }
+      throw new Error(response.message || 'Failed to delete booking order');
     } catch (error) {
       console.error('Error deleting booking order:', error);
-      throw error;
-    }
-  },
-
-  /**
-   * Search booking orders
-   */
-  async searchBookingOrders(searchTerm) {
-    try {
-      const { data, error } = await supabase
-        .from('booking_orders')
-        .select('*')
-        .or(`customer_name.ilike.%${searchTerm}%,company_name.ilike.%${searchTerm}%,car_model.ilike.%${searchTerm}%,order_number.ilike.%${searchTerm}%`)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Error searching booking orders:', error);
       throw error;
     }
   }

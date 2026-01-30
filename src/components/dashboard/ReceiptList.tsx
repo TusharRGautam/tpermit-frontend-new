@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Dashboard.css';
+import './TableBorders.css';
 import receiptService from '../../services/receiptService';
 import { generateReceiptPDF } from '../../utils/receiptPdfGenerator';
 
@@ -32,6 +33,10 @@ const ReceiptList: React.FC = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [receiptToDelete, setReceiptToDelete] = useState<Receipt | null>(null);
 
+  // Edit State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editFormData, setEditFormData] = useState<Partial<Receipt>>({});
+
   // Filters
   const [filters, setFilters] = useState({
     carModel: '',
@@ -58,6 +63,30 @@ const ReceiptList: React.FC = () => {
       console.error('Error fetching receipts:', error);
     } finally {
       setIsLoading(false);
+    };
+  };
+
+  const handleEditClick = (receipt: Receipt) => {
+    setSelectedReceipt(receipt);
+    setEditFormData({ ...receipt });
+    setIsEditModalOpen(true);
+  };
+
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setEditFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleUpdate = async () => {
+    if (!selectedReceipt) return;
+    try {
+      await receiptService.updateReceipt(selectedReceipt.id, editFormData);
+      setIsEditModalOpen(false);
+      fetchReceipts();
+      alert('Receipt Updated Successfully');
+    } catch (error) {
+      console.error('Error updating receipt:', error);
+      alert('Failed to update receipt');
     }
   };
 
@@ -193,7 +222,7 @@ const ReceiptList: React.FC = () => {
   }
 
   return (
-    <div className="dashboard-container">
+    <div className="dashboard-container" style={{ maxWidth: '100%' }}>
       <div className="dashboard-welcome">
         <h1>Payment Receipts</h1>
         <p>View, search, and manage all payment receipts</p>
@@ -308,7 +337,7 @@ const ReceiptList: React.FC = () => {
                 <tr key={receipt.id}>
                   <td className="receipt-number">{receipt.receipt_number}</td>
                   <td>{formatDate(receipt.receipt_date)}</td>
-                  <td>{receipt.customer_name}</td>
+                  <td className="highlighted-name">{receipt.customer_name}</td>
                   <td>{receipt.mobile_number}</td>
                   <td>{receipt.car_model}</td>
                   <td className="amount">{formatCurrency(receipt.receipt_amount)}</td>
@@ -324,6 +353,13 @@ const ReceiptList: React.FC = () => {
                       title="View Details"
                     >
                       View
+                    </button>
+                    <button
+                      onClick={() => handleEditClick(receipt)}
+                      className="btn-action btn-view"
+                      title="Edit"
+                    >
+                      Edit
                     </button>
                     <button
                       onClick={() => handleDownloadReceipt(receipt)}
@@ -404,6 +440,12 @@ const ReceiptList: React.FC = () => {
                     className="btn-card-action btn-download"
                   >
                     📥 Download
+                  </button>
+                  <button
+                    onClick={() => handleEditClick(receipt)}
+                    className="btn-card-action btn-view"
+                  >
+                    ✏️ Edit
                   </button>
                   <button
                     onClick={() => handleDeleteClick(receipt)}
@@ -491,6 +533,77 @@ const ReceiptList: React.FC = () => {
               >
                 Close
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {isEditModalOpen && (
+        <div className="modal-overlay" onClick={() => setIsEditModalOpen(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Edit Receipt {editFormData.receipt_number}</h2>
+              <button className="close-btn" onClick={() => setIsEditModalOpen(false)}>×</button>
+            </div>
+            <div className="modal-body">
+              <div className="form-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="form-group">
+                  <label>Customer Name</label>
+                  <input name="customer_name" value={editFormData.customer_name || ''} onChange={handleEditChange} className="form-control" />
+                </div>
+                <div className="form-group">
+                  <label>Mobile Number</label>
+                  <input name="mobile_number" value={editFormData.mobile_number || ''} onChange={handleEditChange} className="form-control" />
+                </div>
+                <div className="form-group full-width">
+                  <label>Address</label>
+                  <textarea name="customer_address" value={editFormData.customer_address || ''} onChange={handleEditChange} className="form-control" rows={2} />
+                </div>
+                <div className="form-group">
+                  <label>Car Model</label>
+                  <select name="car_model" value={editFormData.car_model || ''} onChange={handleEditChange} className="form-control">
+                    <option value="Wagon-R">Wagon-R</option>
+                    <option value="ERTIGA">ERTIGA</option>
+                    <option value="RUMION">RUMION</option>
+                    <option value="AURA">AURA</option>
+                    <option value="Dzire">Dzire</option>
+                    <option value="Innova Crysta">Innova Crysta</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Amount</label>
+                  <input type="number" name="receipt_amount" value={editFormData.receipt_amount || ''} onChange={handleEditChange} className="form-control" />
+                </div>
+                <div className="form-group">
+                  <label>Payment Mode</label>
+                  <select name="payment_mode" value={editFormData.payment_mode || ''} onChange={handleEditChange} className="form-control">
+                    <option value="Cash">Cash</option>
+                    <option value="Cheque">Cheque</option>
+                    <option value="Online Transfer">Online Transfer</option>
+                    <option value="UPI">UPI</option>
+                    <option value="Card">Card</option>
+                    <option value="RTGS/NEFT">RTGS/NEFT</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Date</label>
+                  <input type="date" name="receipt_date" value={editFormData.receipt_date ? new Date(String(editFormData.receipt_date)).toISOString().split('T')[0] : ''} onChange={handleEditChange} className="form-control" />
+                </div>
+                <div className="form-group">
+                  <label>Sales Executive</label>
+                  <input name="sales_executive_name" value={editFormData.sales_executive_name || ''} onChange={handleEditChange} className="form-control" />
+                </div>
+                <div className="form-group full-width">
+                  <label>Remarks</label>
+                  <textarea name="remarks" value={editFormData.remarks || ''} onChange={handleEditChange} className="form-control" rows={2} />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-primary" onClick={handleUpdate}>Save Changes</button>
+              <button className="btn btn-secondary" onClick={() => setIsEditModalOpen(false)}>Cancel</button>
             </div>
           </div>
         </div>
