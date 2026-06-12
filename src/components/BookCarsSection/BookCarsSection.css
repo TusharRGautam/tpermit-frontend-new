@@ -1,430 +1,278 @@
-/* Book Cars Section - Modern Clean Design */
+/* ========== BOOK CARS SECTION - Feature Strip ========== */
 .book-cars-section {
-  padding: 2rem 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  width: 100%;
+  background: linear-gradient(135deg, #1a1a1a 0%, #111 50%, #200a0a 100%);
   position: relative;
   overflow: hidden;
-  margin-bottom: 0;
+  margin: 0;
+  padding: 0;
 }
 
-/* Animated Background Shapes */
-.book-cars-background-shapes {
+/* Top red accent */
+.book-cars-section::before {
+  content: '';
   position: absolute;
-  width: 100%;
-  height: 100%;
   top: 0;
   left: 0;
-  overflow: hidden;
-  z-index: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #dc2626, #ef4444, #dc2626, transparent);
 }
 
-.shape {
+/* Bottom red accent */
+.book-cars-section::after {
+  content: '';
   position: absolute;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.08);
-  animation: float 20s infinite ease-in-out;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #dc2626, #ef4444, #dc2626, transparent);
 }
 
-.shape-1 {
-  width: 300px;
-  height: 300px;
-  top: -150px;
-  left: -100px;
-  animation-delay: 0s;
-}
-
-.shape-2 {
-  width: 200px;
-  height: 200px;
-  bottom: -100px;
-  right: -50px;
-  animation-delay: 3s;
-}
-
-.shape-3 {
-  width: 150px;
-  height: 150px;
-  top: 50%;
-  right: 10%;
-  animation-delay: 6s;
-}
-
-@keyframes float {
-  0%, 100% {
-    transform: translate(0, 0) scale(1);
-  }
-  25% {
-    transform: translate(20px, -20px) scale(1.1);
-  }
-  50% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-  75% {
-    transform: translate(20px, 20px) scale(1.05);
-  }
-}
-
+/* ========== CONTAINER ========== */
 .book-cars-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   padding: 0 2rem;
-  text-align: center;
-  position: relative;
-  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  min-height: 90px;
 }
 
-.book-cars-content {
-  position: relative;
+/* ========== BRAND LEFT ========== */
+.book-cars-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-right: 2rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
 }
 
-/* Car Icon */
 .book-cars-icon {
-  width: 60px;
-  height: 60px;
-  margin: 0 auto 1rem;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
+  width: 44px;
+  height: 44px;
+  background: var(--gradient-primary);
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  animation: fadeInScale 0.8s ease;
+  color: white;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
+  animation: float 3s ease-in-out infinite;
 }
 
 .book-cars-icon svg {
-  width: 40px;
-  height: 40px;
-  color: white;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  width: 26px;
+  height: 26px;
 }
 
-@keyframes fadeInScale {
-  from {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-/* Title */
 .book-cars-title {
-  font-size: 2.5rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  color: white;
-  margin-bottom: 0;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-  animation: fadeInUp 0.8s ease 0.2s both;
-  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.9) 100%);
+  letter-spacing: 2.5px;
+  background: linear-gradient(135deg, #fff, rgba(255,255,255,0.7));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
+  margin: 0;
+  white-space: nowrap;
+  /* Override global h2 gradient-clip */
+  display: block;
 }
 
-/* Divider */
-.book-cars-divider {
+/* ========== FEATURE BADGES ========== */
+.book-cars-features {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  padding: 0 2rem;
+  gap: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.book-cars-features::-webkit-scrollbar {
+  display: none;
+}
+
+.feature-badge {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0.85rem 1.5rem;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+  cursor: default;
+  flex-shrink: 0;
+  flex: 1;
+  justify-content: center;
+}
+
+.feature-badge:hover {
+  background: rgba(220, 38, 38, 0.1);
+}
+
+.feature-badge-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(220, 38, 38, 0.15);
+  color: #ef4444;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  margin: 0 auto 1rem;
-  animation: fadeInUp 0.8s ease 0.4s both;
-}
-
-.divider-line {
-  width: 60px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, white, transparent);
-  border-radius: 2px;
-}
-
-.divider-dot {
-  width: 8px;
-  height: 8px;
-  background: white;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  50% {
-    transform: scale(1.3);
-    opacity: 0.7;
-  }
-}
-
-/* Subtitle */
-.book-cars-subtitle {
-  font-size: 1.15rem;
-  color: rgba(255, 255, 255, 0.95);
-  margin-bottom: 1rem;
-  font-weight: 300;
-  line-height: 1.6;
-  animation: fadeInUp 0.8s ease 0.6s both;
-  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-}
-
-.subtitle-highlight {
-  font-weight: 600;
-  color: #FFD700;
-  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-}
-
-/* Badge */
-.book-cars-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.25rem;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50px;
-  color: white;
-  font-weight: 600;
-  font-size: 0.9rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  animation: fadeInUp 0.8s ease 0.8s both;
+  flex-shrink: 0;
   transition: all 0.3s ease;
 }
 
-.book-cars-badge:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+.feature-badge:hover .feature-badge-icon {
+  background: rgba(220, 38, 38, 0.25);
+  transform: scale(1.08);
 }
 
-.badge-icon {
-  font-size: 1.2rem;
-  animation: sparkle 2s infinite;
+.feature-badge-icon.token {
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
 }
 
-@keyframes sparkle {
-  0%, 100% {
-    transform: scale(1) rotate(0deg);
-  }
-  50% {
-    transform: scale(1.2) rotate(180deg);
-  }
+.feature-badge-icon.fast {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
 }
 
-.badge-text {
+.feature-badge-icon.emi {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+}
+
+.feature-badge:hover .feature-badge-icon.token {
+  background: rgba(245, 158, 11, 0.28);
+}
+
+.feature-badge:hover .feature-badge-icon.fast {
+  background: rgba(59, 130, 246, 0.28);
+}
+
+.feature-badge:hover .feature-badge-icon.emi {
+  background: rgba(16, 185, 129, 0.28);
+}
+
+.feature-badge-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.feature-badge-text strong {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  white-space: nowrap;
+}
+
+.feature-badge-text span {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+}
+
+.feature-divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+/* ========== TAGLINE ========== */
+.book-cars-tagline {
+  padding-left: 2rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+}
+
+.book-cars-tagline span {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.4);
   letter-spacing: 0.5px;
+  white-space: nowrap;
+  font-weight: 500;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1200px) {
+  .book-cars-tagline {
+    display: none;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .book-cars-section {
-    padding: 3rem 0;
-  }
-
-  .book-cars-icon {
-    width: 65px;
-    height: 65px;
-    margin-bottom: 1.25rem;
-  }
-
-  .book-cars-icon svg {
-    width: 36px;
-    height: 36px;
-  }
-
-  .book-cars-title {
-    font-size: 2.5rem;
-    letter-spacing: 3px;
-    margin-bottom: 1.25rem;
-  }
-
-  .book-cars-subtitle {
-    font-size: 1.15rem;
-  }
-
-  .book-cars-badge {
-    font-size: 0.9rem;
-    padding: 0.7rem 1.3rem;
+  .feature-badge {
+    padding: 0.75rem 1rem;
   }
 }
 
-@media (max-width: 768px) {
-  .book-cars-section {
-    padding: 2.5rem 0;
-  }
-
+@media (max-width: 900px) {
   .book-cars-container {
-    padding: 0 1.5rem;
+    flex-direction: column;
+    padding: 1.25rem 1.5rem;
+    gap: 1rem;
+    min-height: unset;
   }
-
-  .book-cars-icon {
-    width: 60px;
-    height: 60px;
-    margin-bottom: 1rem;
+  .book-cars-brand {
+    border-right: none;
+    padding-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 0.75rem;
+    width: 100%;
+    justify-content: center;
   }
-
-  .book-cars-icon svg {
-    width: 32px;
-    height: 32px;
+  .book-cars-features {
+    padding: 0;
+    width: 100%;
+    justify-content: space-between;
+    gap: 0.25rem;
   }
+  .feature-badge {
+    flex: 1;
+    padding: 0.6rem 0.5rem;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+    justify-content: center;
+  }
+  .feature-badge-text {
+    align-items: center;
+  }
+  .feature-divider {
+    display: none;
+  }
+  .feature-badge-icon {
+    width: 38px;
+    height: 38px;
+  }
+  .feature-badge-text strong {
+    font-size: 0.8rem;
+  }
+  .feature-badge-text span {
+    font-size: 0.68rem;
+  }
+}
 
+@media (max-width: 576px) {
+  .book-cars-container {
+    padding: 1rem;
+  }
   .book-cars-title {
-    font-size: 2rem;
-    letter-spacing: 2.5px;
-    margin-bottom: 1rem;
-  }
-
-  .divider-line {
-    width: 50px;
-  }
-
-  .divider-dot {
-    width: 7px;
-    height: 7px;
-  }
-
-  .book-cars-subtitle {
-    font-size: 1rem;
-    margin-bottom: 1.25rem;
-  }
-
-  .book-cars-badge {
-    font-size: 0.85rem;
-    padding: 0.65rem 1.2rem;
-  }
-
-  .badge-icon {
     font-size: 1.1rem;
   }
-
-  .shape-1 {
-    width: 250px;
-    height: 250px;
-  }
-
-  .shape-2 {
-    width: 180px;
-    height: 180px;
-  }
-
-  .shape-3 {
-    width: 120px;
-    height: 120px;
-  }
-}
-
-@media (max-width: 480px) {
-  .book-cars-section {
-    padding: 2rem 0;
-  }
-
-  .book-cars-container {
-    padding: 0 1rem;
-  }
-
   .book-cars-icon {
-    width: 55px;
-    height: 55px;
-    margin-bottom: 1rem;
-    border-radius: 16px;
+    width: 38px;
+    height: 38px;
   }
-
-  .book-cars-icon svg {
-    width: 28px;
-    height: 28px;
-  }
-
-  .book-cars-title {
-    font-size: 1.75rem;
-    letter-spacing: 2px;
-    margin-bottom: 1rem;
-  }
-
-  .divider-line {
-    width: 40px;
-  }
-
-  .divider-dot {
-    width: 6px;
-    height: 6px;
-  }
-
-  .book-cars-subtitle {
-    font-size: 0.95rem;
-    margin-bottom: 1rem;
-  }
-
-  .book-cars-badge {
-    font-size: 0.8rem;
-    padding: 0.6rem 1rem;
-  }
-
-  .badge-icon {
-    font-size: 1rem;
-  }
-
-  .shape-1 {
-    width: 200px;
-    height: 200px;
-  }
-
-  .shape-2 {
-    width: 150px;
-    height: 150px;
-  }
-
-  .shape-3 {
-    width: 100px;
-    height: 100px;
-  }
-}
-
-@media (max-width: 360px) {
-  .book-cars-section {
-    padding: 1.75rem 0;
-  }
-
-  .book-cars-icon {
-    width: 50px;
-    height: 50px;
-  }
-
-  .book-cars-icon svg {
-    width: 26px;
-    height: 26px;
-  }
-
-  .book-cars-title {
-    font-size: 1.5rem;
-    letter-spacing: 1.5px;
-  }
-
-  .book-cars-subtitle {
-    font-size: 0.85rem;
-  }
-
-  .book-cars-badge {
+  .feature-badge-text strong {
     font-size: 0.75rem;
-    padding: 0.5rem 0.9rem;
+  }
+  .feature-badge-text span {
+    display: none;
   }
 }

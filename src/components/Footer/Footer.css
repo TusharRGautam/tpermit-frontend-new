@@ -1,164 +1,251 @@
+/* ========== FOOTER ========== */
 .footer {
-  background: linear-gradient(135deg, var(--secondary-color) 0%, var(--secondary-dark) 50%, var(--secondary-color) 100%); /* Gautam Motors black gradient */
+  background: linear-gradient(160deg, #111111 0%, #1a1a1a 40%, #200a0a 100%);
   color: var(--text-light);
-  padding-top: 3rem;
+  padding-top: 0;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 -4px 20px rgba(220, 38, 38, 0.2); /* Red shadow */
 }
 
+/* Decorative wave at top */
+.footer-wave {
+  width: 100%;
+  line-height: 0;
+  overflow: hidden;
+  margin-bottom: 2.5rem;
+}
+
+.footer-wave svg {
+  display: block;
+  width: 100%;
+  height: 60px;
+}
+
+/* Red accent line */
 .footer::before {
   content: '';
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: 4px;
-  background: var(--gradient-primary); /* Gautam Motors red gradient */
+  height: 3px;
+  background: linear-gradient(90deg, #b91c1c, #dc2626, #ef4444, #dc2626, #b91c1c);
+  background-size: 200% auto;
+  animation: footerBar 4s linear infinite;
 }
 
+@keyframes footerBar {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Background decorative orbs */
+.footer::after {
+  content: '';
+  position: absolute;
+  top: -100px;
+  right: -100px;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ========== FOOTER CONTAINER ========== */
 .footer-container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 2rem 0;
   position: relative;
   z-index: 2;
 }
 
 .footer-content {
   display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr;
-  gap: 2.5rem;
+  grid-template-columns: 1.6fr 1fr 1fr;
+  gap: 3rem;
   margin-bottom: 2.5rem;
 }
 
+/* ========== HEADING ========== */
 .footer-heading {
-  font-size: 1.6rem;
-  margin-bottom: 1.75rem;
+  font-size: 1.1rem;
+  margin-bottom: 1.5rem;
   position: relative;
-  color: var(--text-light);
-  font-weight: 600;
+  color: #ffffff;
+  font-weight: 700;
   font-family: var(--heading-font);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding-bottom: 0.75rem;
 }
 
 .footer-heading::after {
   content: '';
   position: absolute;
   left: 0;
-  bottom: -8px;
-  width: 50px;
+  bottom: 0;
+  width: 36px;
   height: 3px;
-  background: var(--gradient-primary); /* Gautam Motors red gradient */
+  background: var(--gradient-primary);
   border-radius: var(--border-radius-full);
+  transition: width 0.3s ease;
 }
 
+.footer-section:hover .footer-heading::after {
+  width: 56px;
+}
+
+/* ========== ABOUT SECTION ========== */
 .footer-section.about p {
-  margin-bottom: 1.25rem;
-  line-height: 1.7;
-  color: var(--text-tertiary);
-  font-size: 0.95rem;
+  margin-bottom: 1rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.9rem;
+}
+
+/* ========== CONTACT ========== */
+.contact {
+  margin-top: 1.25rem;
 }
 
 .contact p {
-  margin-bottom: 1rem;
-  color: var(--text-tertiary);
+  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
   display: flex;
   align-items: center;
-  font-size: 0.95rem;
+  gap: 10px;
+  font-size: 0.88rem;
+  transition: color 0.2s;
 }
 
-.contact i {
-  margin-right: 12px;
-  color: var(--primary-color); /* Gautam Motors red */
-  font-size: 1.1rem;
-  width: 20px;
-  text-align: center;
-}
-
-.socials {
-  margin-top: 1.75rem;
+.contact p a {
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
   display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: color 0.25s;
 }
 
-.socials a {
-  margin-right: 18px;
-  width: 44px;
-  height: 44px;
+.contact p a:hover {
+  color: #ef4444;
+}
+
+.contact-icon {
+  width: 28px;
+  height: 28px;
+  background: rgba(220, 38, 38, 0.15);
   border-radius: 50%;
-  background-color: rgba(255, 255, 255, 0.08);
-  color: var(--text-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: var(--transition-fast);
-  font-size: 1.1rem;
+  color: #ef4444;
+  flex-shrink: 0;
+  transition: all 0.25s;
+}
+
+.contact p:hover .contact-icon,
+.contact p a:hover .contact-icon {
+  background: rgba(220, 38, 38, 0.3);
+  transform: scale(1.1);
+}
+
+.whatsapp-icon {
+  background: rgba(37, 211, 102, 0.15) !important;
+  color: #25d366 !important;
+}
+
+.contact p a:has(.whatsapp-icon):hover {
+  color: #25d366;
+}
+
+/* ========== SOCIALS ========== */
+.socials {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 10px;
+}
+
+.socials a {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  font-size: 1rem;
   position: relative;
   overflow: hidden;
   text-decoration: none;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
-  touch-action: manipulation;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .socials a::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: var(--gradient-primary); /* Gautam Motors red gradient */
+  inset: 0;
+  background: var(--gradient-primary);
   opacity: 0;
   transition: opacity 0.3s ease;
-  z-index: -1;
+  border-radius: 50%;
 }
 
 .socials a:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 20px rgba(220, 38, 38, 0.3); /* Gautam Motors red shadow */
+  transform: translateY(-4px) scale(1.1);
+  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.4);
   color: white;
+  border-color: transparent;
 }
 
 .socials a:hover::before {
   opacity: 1;
 }
 
+.socials a svg {
+  position: relative;
+  z-index: 1;
+}
+
+/* ========== QUICK LINKS ========== */
 .footer-section.links ul {
   list-style: none;
   padding: 0;
-  columns: 2;
-  column-gap: 24px;
 }
 
 .footer-section.links li {
-  margin-bottom: 14px;
-  break-inside: avoid;
+  margin-bottom: 10px;
 }
 
 .footer-section.links a {
-  color: var(--text-tertiary);
+  color: rgba(255, 255, 255, 0.55);
   text-decoration: none;
-  transition: var(--transition);
-  display: inline-block;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 500;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   position: relative;
-  padding-left: 15px;
+  padding-left: 0;
 }
 
 .footer-section.links a::before {
-  content: '→';
-  position: absolute;
-  left: 0;
-  top: 0;
-  color: var(--primary-color); /* Gautam Motors red */
+  content: '›';
+  color: #dc2626;
+  font-size: 1.2rem;
+  line-height: 1;
   opacity: 0;
-  transform: translateX(-10px);
-  transition: all 0.3s ease;
+  transform: translateX(-8px);
+  transition: all 0.25s ease;
 }
 
 .footer-section.links a:hover {
-  color: var(--primary-color); /* Gautam Motors red */
-  transform: translateX(5px);
+  color: #fff;
+  transform: translateX(6px);
 }
 
 .footer-section.links a:hover::before {
@@ -166,36 +253,50 @@
   transform: translateX(0);
 }
 
+/* ========== SERVICES ========== */
 .footer-section.services ul {
   list-style: none;
   padding: 0;
 }
 
 .footer-section.services li {
-  margin-bottom: 12px;
-  color: var(--text-tertiary);
+  margin-bottom: 9px;
+  color: rgba(255, 255, 255, 0.55);
   display: flex;
   align-items: center;
-  font-size: 0.95rem;
-  transition: var(--transition);
+  gap: 10px;
+  font-size: 0.88rem;
+  transition: all 0.25s ease;
+  cursor: default;
 }
 
 .footer-section.services li:hover {
-  color: var(--primary-color); /* Gautam Motors red */
-  transform: translateX(5px);
+  color: rgba(255, 255, 255, 0.9);
+  transform: translateX(4px);
 }
 
-.footer-section.services i {
-  margin-right: 12px;
-  color: var(--primary-color); /* Gautam Motors red */
-  font-size: 0.9rem;
-  width: 16px;
-  text-align: center;
+.service-check {
+  width: 22px;
+  height: 22px;
+  background: rgba(220, 38, 38, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ef4444;
+  flex-shrink: 0;
+  transition: all 0.25s;
 }
 
+.footer-section.services li:hover .service-check {
+  background: rgba(220, 38, 38, 0.3);
+  transform: scale(1.1);
+}
+
+/* ========== FOOTER BOTTOM ========== */
 .footer-bottom {
   border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 1.75rem 0;
+  padding: 1.5rem 0;
   text-align: center;
   position: relative;
 }
@@ -206,96 +307,76 @@
   top: -1px;
   left: 50%;
   transform: translateX(-50%);
-  width: 150px;
+  width: 120px;
   height: 2px;
-  background: var(--gradient-primary); /* Gautam Motors red gradient */
+  background: var(--gradient-primary);
+  border-radius: var(--border-radius-full);
 }
 
 .footer-bottom p {
-  color: var(--text-tertiary);
+  color: rgba(255, 255, 255, 0.4);
   margin: 0;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
 }
 
 .designer {
-  color: var(--primary-color); /* Gautam Motors red */
+  color: #ef4444;
   font-weight: 600;
-  position: relative;
-  padding-left: 10px;
-  margin-left: 8px;
+  margin-left: 6px;
 }
 
-.designer::before {
-  content: '•';
-  position: absolute;
-  left: -2px;
-  color: rgba(255, 255, 255, 0.3);
-}
-
+/* ========== RESPONSIVE ========== */
 @media (max-width: 992px) {
-  .footer {
-    padding-top: 2.5rem;
-  }
-  
   .footer-content {
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 2rem;
   }
 }
 
 @media (max-width: 768px) {
-  .footer {
-    padding-top: 2rem;
+  .footer-wave svg {
+    height: 40px;
   }
-  
   .footer-content {
     grid-template-columns: 1fr;
     gap: 2rem;
     text-align: center;
   }
-  
-  .footer-heading {
-    font-size: 1.4rem;
-    margin-bottom: 1.5rem;
+  .footer-heading::after {
+    left: 50%;
+    transform: translateX(-50%);
   }
-  
-  .footer-section.links ul {
-    columns: 2;
-    column-gap: 20px;
+  .footer-section:hover .footer-heading::after {
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
   }
-  
+  .contact p {
+    justify-content: center;
+  }
+  .contact p a {
+    justify-content: center;
+  }
   .socials {
     justify-content: center;
+  }
+  .footer-section.links a:hover {
+    transform: none;
+  }
+  .footer-section.services li:hover {
+    transform: none;
   }
 }
 
 @media (max-width: 576px) {
   .footer-container {
-    padding: 0 16px;
+    padding: 0 1rem 0;
   }
-  
   .footer-content {
     gap: 1.5rem;
   }
-  
-  .footer-heading {
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-  }
-  
-  .footer-section.links ul {
-    columns: 1;
-  }
-  
   .socials a {
-    margin: 0 8px;
-    width: 40px;
-    height: 40px;
+    width: 36px;
+    height: 36px;
   }
-  
-  .contact p {
-    font-size: 0.9rem;
-    justify-content: center;
-    text-align: center;
-  }
-} 
+}

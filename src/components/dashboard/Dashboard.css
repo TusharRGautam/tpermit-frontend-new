@@ -5711,7 +5711,6 @@ input[readonly] {
   body, html {
     margin: 0;
     padding: 0;
-    overflow-x: hidden;
   }
 
   /* Main content area */
