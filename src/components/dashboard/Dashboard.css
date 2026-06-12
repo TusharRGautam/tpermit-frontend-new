@@ -5707,10 +5707,13 @@ input[readonly] {
     margin: 0 !important;
   }
 
-  /* Remove all extra spacing from body/html */
+  /* Remove all extra spacing from body/html - preserve scroll ability */
   body, html {
     margin: 0;
     padding: 0;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    height: auto;
   }
 
   /* Main content area */
@@ -7206,4 +7209,83 @@ input[readonly] {
 .static-value {
   padding: 8px;
   font-weight: bold;
+}
+
+/* ==================== MOBILE SCROLLING FIX ==================== */
+/* Ensures all dashboard pages scroll correctly on mobile devices (iOS Safari, Android Chrome) */
+@media (max-width: 768px) {
+  /* Force html/body to be scrollable - critical for iOS Safari */
+  html {
+    height: auto;
+    min-height: 100%;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    height: auto;
+    min-height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    position: relative;
+  }
+
+  /* Dashboard layout containers - must not clip content */
+  .dashboard-layout,
+  .dashboard-layout.no-sidebar {
+    display: block !important;
+    min-height: 100%;
+    height: auto !important;
+    overflow: visible !important;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .dashboard-content,
+  .dashboard-content.full-width {
+    display: block !important;
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    -webkit-overflow-scrolling: touch;
+    margin-left: 0 !important;
+  }
+
+  .dashboard-main-content {
+    height: auto !important;
+    min-height: auto !important;
+    overflow: visible !important;
+    padding: 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Page containers inside dashboard pages */
+  .dashboard-container {
+    overflow: visible !important;
+    height: auto !important;
+    min-height: auto !important;
+  }
+
+  .quotation-form-container,
+  .receipt-form,
+  .form-section {
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* Enable touch scrolling for all major content wrappers */
+  .showroom-management,
+  .booking-relations {
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch;
+    min-height: auto !important;
+    height: auto !important;
+  }
+
+  /* Prevent form-actions sticky bottom from causing layout issues */
+  .form-actions {
+    position: relative !important;
+    margin: 0 !important;
+  }
 }
