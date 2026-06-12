@@ -350,13 +350,14 @@ const BookingOrderList: React.FC = () => {
                                 </div>
                                 <div className="form-group">
                                     <label>Company Name</label>
-                                    <select name="company_name" value={editFormData.company_name || ''} onChange={handleEditChange} className="form-control">
-                                        <option value="VELOX MOTORS PVT. LTD">VELOX MOTORS PVT. LTD</option>
-                                        <option value="GAUTAM MOTORS">GAUTAM MOTORS</option>
-                                        <option value="Modi Hyundai Malad">Modi Hyundai Malad</option>
-                                        <option value="Excell Autovista Private Limited">Excell Autovista Private Limited</option>
-                                        <option value="Other">Other</option>
-                                    </select>
+                                    <input
+                                        type="text"
+                                        name="company_name"
+                                        value={editFormData.company_name || ''}
+                                        onChange={handleEditChange}
+                                        className="form-control"
+                                        placeholder="Enter company name"
+                                    />
                                 </div>
                                 <div className="form-group">
                                     <label>Tours & Travels</label>

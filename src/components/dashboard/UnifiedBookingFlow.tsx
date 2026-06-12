@@ -293,14 +293,16 @@ const UnifiedBookingFlow = () => {
                                 </div>
                                 <div className="form-group">
                                     <label style={{ fontSize: '0.8rem', marginBottom: '0.2rem' }}>Company Name *</label>
-                                    <select name="company_name" value={formData.company_name} onChange={handleChange} className="form-control" style={{ padding: '0.4rem', fontSize: '0.85rem' }}>
-                                        <option value="">Select Company</option>
-                                        <option value="VELOX MOTORS PVT. LTD">VELOX MOTORS PVT. LTD</option>
-                                        <option value="GAUTAM MOTORS">GAUTAM MOTORS</option>
-                                        <option value="Modi Hyundai Malad">Modi Hyundai Malad</option>
-                                        <option value="Excell Autovista Private Limited">Excell Autovista Private Limited</option>
-                                        <option value="Other">Other</option>
-                                    </select>
+                                    <input
+                                        type="text"
+                                        name="company_name"
+                                        value={formData.company_name}
+                                        onChange={handleChange}
+                                        className="form-control"
+                                        placeholder="Enter company name"
+                                        style={{ padding: '0.4rem', fontSize: '0.85rem' }}
+                                        required
+                                    />
                                 </div>
                                 <div className="form-group">
                                     <label style={{ fontSize: '0.8rem', marginBottom: '0.2rem' }}>Tours & Travels Name *</label>

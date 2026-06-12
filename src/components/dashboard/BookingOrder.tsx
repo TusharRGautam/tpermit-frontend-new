@@ -22,13 +22,7 @@ interface FormErrors {
     [key: string]: string;
 }
 
-// Company options
-const companyOptions = [
-    'VELOX MOTORS PVT. LTD',
-    'GAUTAM MOTORS',
-    'EXCEL AUTO VISTA',
-    'Other'
-];
+
 
 // Car variants data (same as receipt)
 const carVariants = {
@@ -324,18 +318,15 @@ const BookingOrder: React.FC = () => {
                         <div className="form-grid">
                             <div className="form-group">
                                 <label>Company Name <span className="required">*</span></label>
-                                <select
+                                <input
+                                    type="text"
                                     name="companyName"
                                     value={formData.companyName}
                                     onChange={handleInputChange}
                                     className={`form-control ${errors.companyName ? 'error' : ''}`}
+                                    placeholder="Enter company name"
                                     required
-                                >
-                                    <option value="">-- Select Company --</option>
-                                    {companyOptions.map(company => (
-                                        <option key={company} value={company}>{company}</option>
-                                    ))}
-                                </select>
+                                />
                                 {errors.companyName && <span className="error-text">{errors.companyName}</span>}
                             </div>
 
