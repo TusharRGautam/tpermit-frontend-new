@@ -15,6 +15,7 @@ import BookingOrderList from './BookingOrderList';
 import AllDocuments from './AllDocuments';
 import ProformaInvoice from './ProformaInvoice';
 import UnifiedBookingFlow from './UnifiedBookingFlow';
+import AllLeads from './AllLeads';
 import apiService from '../../services/apiService';
 
 interface DashboardLayoutProps {
@@ -85,6 +86,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
             <Route path="/showrooms" element={<ShowroomManagement />} />
             <Route path="/booking-relations" element={<BookingRelations />} />
             <Route path="/reciept/proforma-invoice" element={<ProformaInvoice />} />
+            <Route path="/leads" element={<AllLeads />} />
           </Routes>
         </div>
       </div>
