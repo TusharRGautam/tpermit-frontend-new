@@ -40,14 +40,20 @@ class ApiService {
       
       console.log(`API Response Status: ${response.status}`);
       
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      let responseData = null;
+      try {
+        responseData = await response.json();
+      } catch (e) {
+        // Not JSON
       }
 
-      const data = await response.json();
-      console.log('API Response Data:', data);
-      
-      return data;
+      if (!response.ok) {
+        const errorMsg = responseData?.message || `HTTP error! status: ${response.status}`;
+        throw new Error(errorMsg);
+      }
+ 
+      console.log('API Response Data:', responseData);
+      return responseData;
     } catch (error) {
       console.error('API Request Error:', error);
       
