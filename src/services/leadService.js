@@ -44,7 +44,16 @@ class LeadService {
       throw error;
     }
   }
-
+  // Sync and fetch historical leads from Meta Leadgen Forms
+  async syncExistingLeads() {
+    try {
+      const response = await apiService.post('/leads/sync');
+      return response;
+    } catch (error) {
+      console.error('Error in leadService.syncExistingLeads:', error);
+      throw error;
+    }
+  }
   // Simulate Facebook Meta Webhook submission (end-to-end testing)
   async simulateWebhookLead(leadData) {
     try {
@@ -93,6 +102,39 @@ class LeadService {
       return { success: true, leadgen_id: randomLeadGenId, response };
     } catch (error) {
       console.error('Error simulating webhook lead:', error);
+      throw error;
+    }
+  }
+
+  // Get current Google Sheets sync configuration & status
+  async getSheetsConfig() {
+    try {
+      const response = await apiService.get('/leads/sheets-config');
+      return response.data || null;
+    } catch (error) {
+      console.error('Error in leadService.getSheetsConfig:', error);
+      throw error;
+    }
+  }
+
+  // Update Google Sheets URL and run initial sync
+  async saveSheetsConfig(url) {
+    try {
+      const response = await apiService.post('/leads/sheets-config', { url });
+      return response;
+    } catch (error) {
+      console.error('Error in leadService.saveSheetsConfig:', error);
+      throw error;
+    }
+  }
+
+  // Manually trigger Google Sheets synchronization
+  async triggerSheetsSync() {
+    try {
+      const response = await apiService.post('/leads/sheets-config/sync');
+      return response;
+    } catch (error) {
+      console.error('Error in leadService.triggerSheetsSync:', error);
       throw error;
     }
   }
