@@ -152,6 +152,62 @@
   border-color: rgba(59, 130, 246, 0.35);
 }
 
+.sync-status-label.meta-stopped-badge {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
+}
+
+.btn-leads-status-active {
+  background: rgba(16, 185, 129, 0.12) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+}
+.btn-leads-status-active:hover:not(:disabled) {
+  background: rgba(16, 185, 129, 0.22) !important;
+  border-color: rgba(16, 185, 129, 0.55) !important;
+}
+
+.btn-leads-status-stopped {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.3) !important;
+}
+.btn-leads-status-stopped:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.5) !important;
+}
+
+.btn-leads .status-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  margin-right: 0.15rem;
+}
+.btn-leads-status-active .status-dot {
+  background: #34d399;
+}
+.btn-leads-status-stopped .status-dot {
+  background: #f87171;
+}
+
+.btn-leads .status-dot.pulse {
+  animation: dotPulse 1.6s infinite;
+}
+
+@keyframes dotPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.65);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(52, 211, 153, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0);
+  }
+}
+
 .leads-header-actions {
   display: flex;
   gap: 0.5rem;

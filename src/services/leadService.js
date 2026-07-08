@@ -138,6 +138,28 @@ class LeadService {
       throw error;
     }
   }
+
+  // Get current Meta Ads sync active status
+  async getMetaSyncConfig() {
+    try {
+      const response = await apiService.get('/leads/meta-config');
+      return response;
+    } catch (error) {
+      console.error('Error in leadService.getMetaSyncConfig:', error);
+      throw error;
+    }
+  }
+
+  // Update Meta Ads sync active status
+  async updateMetaSyncConfig(active) {
+    try {
+      const response = await apiService.post('/leads/meta-config', { active });
+      return response;
+    } catch (error) {
+      console.error('Error in leadService.updateMetaSyncConfig:', error);
+      throw error;
+    }
+  }
 }
 
 const leadService = new LeadService();

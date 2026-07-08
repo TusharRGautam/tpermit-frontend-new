@@ -41,6 +41,42 @@ const AllLeads: React.FC = () => {
   const [syncMessage, setSyncMessage] = useState<string | null>(null);
   const [syncIsError, setSyncIsError] = useState(false);
 
+  // Meta Campaign Sync toggle state
+  const [isSyncActive, setIsSyncActive] = useState(true);
+  const [isTogglingSync, setIsTogglingSync] = useState(false);
+
+  const fetchMetaSyncConfig = async () => {
+    try {
+      const response = await leadService.getMetaSyncConfig();
+      if (response && response.success) {
+        setIsSyncActive(response.active);
+      }
+    } catch (err) {
+      console.error('Error fetching meta sync config:', err);
+    }
+  };
+
+  const handleToggleSyncActive = async () => {
+    setIsTogglingSync(true);
+    try {
+      const targetState = !isSyncActive;
+      const response = await leadService.updateMetaSyncConfig(targetState);
+      if (response && response.success) {
+        setIsSyncActive(response.active);
+        setSyncIsError(false);
+        setSyncMessage(`Meta Lead Sync has been ${response.active ? 'STARTED' : 'STOPPED'}.`);
+        setTimeout(() => setSyncMessage(null), 5000);
+      }
+    } catch (err: any) {
+      console.error('Error toggling meta sync active:', err);
+      setSyncIsError(true);
+      setSyncMessage(`Failed to update sync state: ${err.message}`);
+      setTimeout(() => setSyncMessage(null), 5000);
+    } finally {
+      setIsTogglingSync(false);
+    }
+  };
+
   // Google Sheets state
   const [sheetsUrlInput, setSheetsUrlInput] = useState('');
   const [hasLoadedUrl, setHasLoadedUrl] = useState(false);
@@ -204,6 +240,7 @@ const AllLeads: React.FC = () => {
   useEffect(() => {
     fetchLeads(true);
     fetchSheetsConfig();
+    fetchMetaSyncConfig();
     const interval = setInterval(() => {
       fetchLeads(false);
       // Retrieve fresh sheets config state logs
@@ -221,6 +258,15 @@ const AllLeads: React.FC = () => {
           }
         })
         .catch(err => console.error('Interval fetch config error:', err));
+
+      // Retrieve fresh Meta sync status config
+      leadService.getMetaSyncConfig()
+        .then(res => {
+          if (res && res.success) {
+            setIsSyncActive(res.active);
+          }
+        })
+        .catch(err => console.error('Interval fetch meta config error:', err));
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -366,7 +412,9 @@ const AllLeads: React.FC = () => {
             <span className="leads-title-icon">🎯</span>
             <h1>Meta Campaign Leads</h1>
             <span className="live-dot" title="Live polling active" />
-            <span className="sync-status-label meta-active-badge">📘 Meta Auto-Sync Active</span>
+            <span className={`sync-status-label ${isSyncActive ? 'meta-active-badge' : 'meta-stopped-badge'}`}>
+              {isSyncActive ? '📘 Meta Auto-Sync Active' : '📕 Meta Sync Stopped'}
+            </span>
             {isSyncing && <span className="sync-status-label">Syncing...</span>}
           </div>
           <p className="leads-subtitle">
@@ -374,10 +422,24 @@ const AllLeads: React.FC = () => {
           </p>
         </div>
         <div className="leads-header-actions">
+          <button 
+            className={`btn-leads ${isSyncActive ? 'btn-leads-status-active' : 'btn-leads-status-stopped'}`} 
+            onClick={handleToggleSyncActive} 
+            disabled={isTogglingSync}
+            title={isSyncActive ? "Click to stop automatic lead fetching" : "Click to start automatic lead fetching"}
+          >
+            <span className={`status-dot ${isSyncActive ? 'pulse' : ''}`} />
+            {isSyncActive ? 'Sync: Running' : 'Sync: Stopped'}
+          </button>
           <button className="btn-leads btn-leads-outline" onClick={() => fetchLeads(false)} disabled={isSyncing}>
             ↻ Reload
           </button>
-          <button className="btn-leads btn-leads-primary btn-sync" onClick={handleSyncLeads} disabled={isSyncing}>
+          <button 
+            className="btn-leads btn-leads-primary btn-sync" 
+            onClick={handleSyncLeads} 
+            disabled={isSyncing || !isSyncActive}
+            title={!isSyncActive ? "Historical sync is disabled when Sync is Stopped" : "Sync history from Meta ads"}
+          >
             {isSyncing ? '⟳ Syncing...' : '⟳ Sync History'}
           </button>
           <button className="btn-leads btn-leads-secondary" onClick={() => setIsSimulatorOpen(true)}>
