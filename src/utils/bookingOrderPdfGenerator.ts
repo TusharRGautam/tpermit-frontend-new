@@ -127,44 +127,45 @@ export const generateBookingOrderPDF = async (order: BookingOrderData) => {
   yPosition += 8;
   pdf.setFontSize(12);
   pdf.setFont('helvetica', 'bold');
-  pdf.text(order.companyName, 15, yPosition);
+  pdf.text(String(order.companyName || 'Gautam Motors'), 15, yPosition);
 
   yPosition += 10;
 
   // Tours and Travels Name
   pdf.setFontSize(11);
   pdf.setFont('helvetica', 'normal');
-  pdf.text(order.toursAndTravelsName, 15, yPosition);
+  pdf.text(String(order.toursAndTravelsName || 'N/A'), 15, yPosition);
 
   yPosition += 10;
 
   // Booking Car Details
-  const carDetails = `Booking Car : ${order.carModel}${order.variant ? ' ' + order.variant : ''} T-PERMIT`;
+  const carDetails = `Booking Car : ${order.carModel || ''}${order.variant ? ' ' + order.variant : ''} T-PERMIT`;
   pdf.text(carDetails, 15, yPosition);
 
   yPosition += 7;
 
   // Color
-  pdf.text(`Colour : ${order.color}`, 15, yPosition);
+  pdf.text(`Colour : ${order.color || 'White'}`, 15, yPosition);
 
   yPosition += 10;
 
   // RTO Passing
-  pdf.text(`RTO Passing - ${order.rtoPassing}`, 15, yPosition);
+  pdf.text(`RTO Passing - ${order.rtoPassing || 'MH'}`, 15, yPosition);
 
   yPosition += 10;
 
   // Customer Name & Contact
-  pdf.text(`Customer Name - ${order.customerName}`, 15, yPosition);
+  pdf.text(`Customer Name - ${order.customerName || ''}`, 15, yPosition);
   
   yPosition += 7;
-  pdf.text(`Contact No. - ${order.customerContact}`, 15, yPosition);
+  pdf.text(`Contact No. - ${order.customerContact || ''}`, 15, yPosition);
 
   yPosition += 7;
 
   // Customer Address
   pdf.text('Address - ', 15, yPosition);
-  const addressSplit = pdf.splitTextToSize(order.customerAddress, pageWidth - 60);
+  const addressText = String(order.customerAddress || 'N/A');
+  const addressSplit = pdf.splitTextToSize(addressText, pageWidth - 60);
   pdf.text(addressSplit, 15, yPosition + 7);
 
   yPosition += addressSplit.length * 7 + 15;

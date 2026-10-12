@@ -284,15 +284,7 @@
 
 /* Highlighted Fields */
 .highlighted-field td:last-child {
-  position: relative;
-  padding-left: 2rem !important;
-}
-
-.highlighted-field td:last-child::before {
-  content: '⭐';
-  position: absolute;
-  left: 0.5rem;
-  font-size: 1rem;
+  font-weight: 800;
 }
 
 /* Download Section - Modern Cards */

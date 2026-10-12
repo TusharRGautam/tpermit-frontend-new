@@ -85,15 +85,6 @@ const OurPartners: React.FC = () => {
     }));
   };
 
-  const handleBrandMouseLeave = (brand: string) => {
-    setTimeout(() => {
-      setExpandedBrands(prev => ({
-        ...prev,
-        [brand]: false
-      }));
-    }, 300); // Small delay to allow hover transition
-  };
-
   if (loading) {
     return (
       <section className="our-partners">
@@ -154,7 +145,6 @@ const OurPartners: React.FC = () => {
               <div 
                 key={brand} 
                 className="brand-section"
-                onMouseLeave={() => handleBrandMouseLeave(brand)}
               >
                 <h3 className="brand-title">{brand}</h3>
                 
@@ -182,15 +172,20 @@ const OurPartners: React.FC = () => {
                       
                       {brandShowrooms.length > 1 && (
                         <button 
+                          type="button"
                           className={`expand-btn ${isExpanded ? 'expanded' : ''}`}
-                          onClick={() => handleBrandClick(brand)}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleBrandClick(brand);
+                          }}
                           title={isExpanded ? 'Hide other locations' : `Show ${brandShowrooms.length - 1} more locations`}
                         >
                           <span className="expand-text">
                             {isExpanded ? 'Less' : `+${brandShowrooms.length - 1} More`}
                           </span>
                           <span className={`arrow ${isExpanded ? 'up' : 'down'}`}>
-                            ▼
+                            {isExpanded ? '▲' : '▼'}
                           </span>
                         </button>
                       )}

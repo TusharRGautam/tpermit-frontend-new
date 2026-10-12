@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import './Dashboard.css';
+import './QuotationWizard.css';
 import quotationService from '../../services/quotationService';
 
 // Define types for car variants
@@ -698,108 +699,135 @@ const QuotationCreationPage: React.FC = () => {
     switch (currentStep) {
       case 1:
         return (
-          <div className="step-content">
-            <div className="step-header">
-              <h3>Step 1: Vehicle & Financing Information</h3>
-              <div className="step-progress">
-                <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: '33%' }}></div>
+          <div className="qw-step-pane">
+            <div className="qw-form-grid">
+              <div className="qw-form-card">
+                <div className="qw-card-header">
+                  <h4>Vehicle & Financing</h4>
                 </div>
-                <span>1 of 3</span>
-              </div>
-            </div>
-            
-            <div className="form-grid">
-              <div className="form-section">
-                <h4>Vehicle Information</h4>
-                <div className="form-row highlight-row">
-                  <label>Selected Vehicle:</label>
-                  <div className="form-value">{`${selectedBrand} ${selectedVariant}`}</div>
+                <div className="qw-selected-car-badge">
+                  <span className="qw-car-label">Selected Commercial Model</span>
+                  <div className="qw-car-name">{selectedBrand} • {selectedVariant}</div>
                 </div>
-                <div className="form-row">
-                  <label>ROI / EMI Interest (%):</label>
-                  <input 
-                    type="number" 
-                    name="emiInterestRate"
-                    value={formData.emiInterestRate}
-                    onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Enter interest rate"
-                    step="0.01"
-                  />
+                <div className="qw-input-group">
+                  <label>Annual ROI / EMI Interest Rate (%):</label>
+                  <div className="qw-input-wrapper">
+                    <input 
+                      type="number" 
+                      name="emiInterestRate"
+                      value={formData.emiInterestRate}
+                      onChange={handleInputChange}
+                      className="qw-input"
+                      placeholder="e.g. 9.5"
+                      step="0.01"
+                    />
+                    <span className="qw-suffix">%</span>
+                  </div>
+                  <span className="qw-input-hint">Used for tenure-based monthly EMI calculation</span>
                 </div>
               </div>
 
-              <div className="form-section">
-                <h4>Bank Interest Rates (%) - Select One</h4>
-                <div className="bank-info-text">
-                  <small>Each bank has different loan calculation methods. Select one bank and enter the loan percentage.</small>
+              <div className="qw-form-card">
+                <div className="qw-card-header">
+                  <h4>Bank Financing Scheme (Select One)</h4>
                 </div>
-                <div className="bank-grid">
-                  <div className="bank-field sbi">
-                    <label>SBI Bank:</label>
-                    <input 
-                      type="number" 
-                      name="sbiBank"
-                      value={formData.sbiBank}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Rate"
-                      step="0.01"
-                    />
-                    <small className="bank-help">Loan on: Ex-Showroom + TCS + Insurance + Registration</small>
+                <div className="qw-bank-notice">
+                  Enter loan percentage in any one bank. Calculation applies according to bank scheme.
+                </div>
+                <div className="qw-bank-grid">
+                  <div className={`qw-bank-box ${formData.sbiBank ? 'selected' : ''}`}>
+                    <div className="qw-bank-box-top">
+                      <span className="qw-bank-tag">SBI Bank</span>
+                      <div className="qw-bank-input-wrap">
+                        <input 
+                          type="number" 
+                          name="sbiBank"
+                          value={formData.sbiBank}
+                          onChange={handleInputChange}
+                          className="qw-bank-input"
+                          placeholder="Rate"
+                          step="0.01"
+                        />
+                        <span className="qw-pct">%</span>
+                      </div>
+                    </div>
+                    <span className="qw-bank-desc">Ex-Showroom + TCS + Ins + Reg</span>
                   </div>
-                  <div className="bank-field union">
-                    <label>Union Bank:</label>
-                    <input 
-                      type="number" 
-                      name="unionBank"
-                      value={formData.unionBank}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Rate"
-                      step="0.01"
-                    />
-                    <small className="bank-help">Loan on: Full On Road Price (all components)</small>
+
+                  <div className={`qw-bank-box ${formData.unionBank ? 'selected' : ''}`}>
+                    <div className="qw-bank-box-top">
+                      <span className="qw-bank-tag">Union Bank</span>
+                      <div className="qw-bank-input-wrap">
+                        <input 
+                          type="number" 
+                          name="unionBank"
+                          value={formData.unionBank}
+                          onChange={handleInputChange}
+                          className="qw-bank-input"
+                          placeholder="Rate"
+                          step="0.01"
+                        />
+                        <span className="qw-pct">%</span>
+                      </div>
+                    </div>
+                    <span className="qw-bank-desc">Full On Road Price (all components)</span>
                   </div>
-                  <div className="bank-field mahindra">
-                    <label>Mahindra Finance:</label>
-                    <input
-                      type="number"
-                      name="mahindraFinance"
-                      value={formData.mahindraFinance}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Rate"
-                      step="0.01"
-                    />
-                    <small className="bank-help">Loan on: Ex-Showroom price only</small>
+
+                  <div className={`qw-bank-box ${formData.mahindraFinance ? 'selected' : ''}`}>
+                    <div className="qw-bank-box-top">
+                      <span className="qw-bank-tag">Mahindra Fin</span>
+                      <div className="qw-bank-input-wrap">
+                        <input 
+                          type="number" 
+                          name="mahindraFinance"
+                          value={formData.mahindraFinance}
+                          onChange={handleInputChange}
+                          className="qw-bank-input"
+                          placeholder="Rate"
+                          step="0.01"
+                        />
+                        <span className="qw-pct">%</span>
+                      </div>
+                    </div>
+                    <span className="qw-bank-desc">Ex-Showroom price only</span>
                   </div>
-                  <div className="bank-field cholamandalam">
-                    <label>Cholamandalam Bank:</label>
-                    <input
-                      type="number"
-                      name="cholamandalamBank"
-                      value={formData.cholamandalamBank}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Rate"
-                      step="0.01"
-                    />
-                    <small className="bank-help">Loan on: Ex-Showroom price only</small>
+
+                  <div className={`qw-bank-box ${formData.cholamandalamBank ? 'selected' : ''}`}>
+                    <div className="qw-bank-box-top">
+                      <span className="qw-bank-tag">Cholamandalam</span>
+                      <div className="qw-bank-input-wrap">
+                        <input 
+                          type="number" 
+                          name="cholamandalamBank"
+                          value={formData.cholamandalamBank}
+                          onChange={handleInputChange}
+                          className="qw-bank-input"
+                          placeholder="Rate"
+                          step="0.01"
+                        />
+                        <span className="qw-pct">%</span>
+                      </div>
+                    </div>
+                    <span className="qw-bank-desc">Ex-Showroom price only</span>
                   </div>
-                  <div className="bank-field au">
-                    <label>AU Bank:</label>
-                    <input
-                      type="number"
-                      name="auBank"
-                      value={formData.auBank}
-                      onChange={handleInputChange}
-                      className="form-control"
-                      placeholder="Rate"
-                      step="0.01"
-                    />
-                    <small className="bank-help">Loan on: Ex-Showroom price only</small>
+
+                  <div className={`qw-bank-box ${formData.auBank ? 'selected' : ''}`}>
+                    <div className="qw-bank-box-top">
+                      <span className="qw-bank-tag">AU Bank</span>
+                      <div className="qw-bank-input-wrap">
+                        <input 
+                          type="number" 
+                          name="auBank"
+                          value={formData.auBank}
+                          onChange={handleInputChange}
+                          className="qw-bank-input"
+                          placeholder="Rate"
+                          step="0.01"
+                        />
+                        <span className="qw-pct">%</span>
+                      </div>
+                    </div>
+                    <span className="qw-bank-desc">Ex-Showroom price only</span>
                   </div>
                 </div>
               </div>
@@ -808,306 +836,287 @@ const QuotationCreationPage: React.FC = () => {
         );
       case 2:
         return (
-          <div className="step-content">
-            <div className="step-header">
-              <h3>Step 2: Cost Breakdown</h3>
-              <div className="step-progress">
-                <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: '66%' }}></div>
+          <div className="qw-step-pane">
+            <div className="qw-form-grid">
+              <div className="qw-form-card">
+                <div className="qw-card-header">
+                  <h4>Base Vehicle Costs</h4>
                 </div>
-                <span>2 of 3</span>
-              </div>
-            </div>
-            
-            <div className="form-grid">
-              <div className="form-section">
-                <h4>Base Vehicle Costs</h4>
-                <div className="cost-row">
-                  <label>Ex-Showroom Price: <span className="required">*</span></label>
+                <div className="qw-input-group">
+                  <label>Ex-Showroom Price: <span className="req">*</span></label>
                   <input 
                     type="number" 
                     name="showroomCost"
                     value={formData.showroomCost}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Enter ex-showroom price"
+                    className="qw-input"
+                    placeholder="Enter price in ₹"
                     required
                   />
                 </div>
-                {/* Only show TCS if Ex-Showroom > ₹10,00,000 */}
                 {(parseFloat(formData.showroomCost) || 0) > 1000000 && (
-                  <div className="cost-row">
-                    <label>TCS (1%):</label>
+                  <div className="qw-input-group">
+                    <label>TCS (1% auto-calculated):</label>
                     <input 
                       type="number" 
                       name="tcs"
                       value={formData.tcs}
                       onChange={handleInputChange}
-                      className="form-control readonly"
+                      className="qw-input readonly"
                       readOnly
                     />
-                    <small className="field-note">Automatically calculated at 1% of Ex-Showroom price</small>
+                    <span className="qw-input-hint">Mandatory 1% for Ex-Showroom &gt; ₹10,00,000</span>
                   </div>
                 )}
-                <div className="cost-row">
-                  <label>Registration: <span className="required">*</span></label>
+                <div className="qw-input-group">
+                  <label>Registration Charges: <span className="req">*</span></label>
                   <input 
                     type="number" 
                     name="registration"
                     value={formData.registration}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Registration fee"
+                    className="qw-input"
+                    placeholder="Enter RTO registration in ₹"
                     required
                   />
                 </div>
-                <div className="cost-row">
-                  <label>Insurance: <span className="required">*</span></label>
+                <div className="qw-input-group">
+                  <label>Insurance: <span className="req">*</span></label>
                   <input 
                     type="number" 
                     name="insurance"
                     value={formData.insurance}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Insurance amount"
+                    className="qw-input"
+                    placeholder="Insurance premium in ₹"
                     required
                   />
                 </div>
               </div>
-              
-              <div className="form-section">
-                <h4>Additional Components</h4>
-                <div className="cost-row">
+
+              <div className="qw-form-card">
+                <div className="qw-card-header">
+                  <h4>Additional Components</h4>
+                </div>
+                <div className="qw-input-group">
                   <label>Number Plate + CRTM + Autocard:</label>
                   <input 
                     type="number" 
                     name="noPlate"
                     value={formData.noPlate}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Amount"
+                    className="qw-input"
+                    placeholder="Amount in ₹"
                   />
                 </div>
-                <div className="cost-row">
-                  <label>GPS:</label>
+                <div className="qw-input-group">
+                  <label>Commercial GPS:</label>
                   <input 
                     type="number" 
                     name="gps"
                     value={formData.gps}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="GPS cost"
+                    className="qw-input"
+                    placeholder="GPS device cost in ₹"
                   />
                 </div>
-                <div className="cost-row">
+                <div className="qw-input-group">
                   <label>Fastag:</label>
                   <input 
                     type="number" 
                     name="fastag"
                     value={formData.fastag}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Fastag cost"
+                    className="qw-input"
+                    placeholder="Fastag charge in ₹"
                   />
                 </div>
-                <div className="cost-row">
+                <div className="qw-input-group">
                   <label>Speed Governor:</label>
                   <input 
                     type="number" 
                     name="speedGovernor"
                     value={formData.speedGovernor}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Speed governor cost"
+                    className="qw-input"
+                    placeholder="Speed governor cost in ₹"
                   />
                 </div>
-                <div className="cost-row">
+                <div className="qw-input-group">
                   <label>Accessories:</label>
                   <input 
                     type="number" 
                     name="accessories"
                     value={formData.accessories}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Accessories cost"
+                    className="qw-input"
+                    placeholder="Accessories cost in ₹"
                   />
                 </div>
               </div>
             </div>
-            
-            <div className="total-section">
-              <div className="total-row highlight-row">
-                <label>On the Road Price:</label>
-                <div className="total-value">₹{onRoadPriceDisplay.toLocaleString('en-IN')}</div>
+
+            <div className="qw-onroad-summary">
+              <div className="qw-summary-left">
+                <span className="qw-summary-label">Estimated Total Commercial Cost</span>
+                <span className="qw-summary-title">On The Road Price</span>
               </div>
+              <div className="qw-summary-amount">₹{onRoadPriceDisplay.toLocaleString('en-IN')}</div>
             </div>
           </div>
         );
       case 3:
         return (
-          <div className="step-content">
-            <div className="step-header">
-              <h3>Step 3: Loan & Payment Details</h3>
-              <div className="step-progress">
-                <div className="progress-bar">
-                  <div className="progress-fill" style={{ width: '100%' }}></div>
+          <div className="qw-step-pane">
+            <div className="qw-form-grid">
+              <div className="qw-form-card">
+                <div className="qw-card-header">
+                  <h4>Loan Information</h4>
                 </div>
-                <span>3 of 3</span>
-              </div>
-            </div>
-            
-            <div className="form-grid">
-              <div className="form-section">
-                <h4>Loan Information</h4>
-                <div className="cost-row">
-                  <label>Loan Amount:</label>
+                <div className="qw-input-group">
+                  <label>Calculated Loan Amount:</label>
                   <input 
                     type="number" 
                     name="loanAmount"
                     value={formData.loanAmount}
                     onChange={handleInputChange}
-                    className="form-control readonly"
+                    className="qw-input readonly"
                     readOnly
                   />
-                  <small className="help-text">Calculated based on bank rate</small>
+                  <span className="qw-input-hint">Derived from selected bank percentage scheme</span>
                 </div>
-                <div className="cost-row">
-                  <label>Margin (Down Payment):</label>
+                <div className="qw-input-group">
+                  <label>Margin (Base Down Payment):</label>
                   <input 
                     type="number" 
                     name="margin"
                     value={marginLive}
-                    className="form-control readonly"
+                    className="qw-input readonly"
                     readOnly
                   />
                 </div>
-                <div className="cost-row">
+                <div className="qw-input-group">
                   <label>Process Fee:</label>
                   <input 
                     type="number" 
                     name="processFee"
                     value={formData.processFee}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Process fee"
+                    className="qw-input"
+                    placeholder="Processing fee in ₹"
                   />
                 </div>
-                <div className="cost-row">
+                <div className="qw-input-group">
                   <label>Stamp Duty:</label>
                   <input 
                     type="number" 
                     name="stampDuty"
                     value={formData.stampDuty}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Stamp duty"
+                    className="qw-input"
+                    placeholder="Stamp duty in ₹"
                   />
                 </div>
               </div>
-              
-              <div className="form-section">
-                <h4>Payment Details</h4>
-                <div className="cost-row">
+
+              <div className="qw-form-card">
+                <div className="qw-card-header">
+                  <h4>Payment & Down Payment</h4>
+                </div>
+                <div className="qw-input-group">
                   <label>Handling & Document Charge:</label>
                   <input 
                     type="number" 
                     name="handlingCharge"
                     value={formData.handlingCharge}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Handling charge"
+                    className="qw-input"
+                    placeholder="Handling charges in ₹"
                   />
                 </div>
-                <div className="cost-row">
-                  <label>Loan Suraksha:</label>
-                  <input
-                    type="number"
+                <div className="qw-input-group">
+                  <label>Loan Suraksha / Insurance:</label>
+                  <input 
+                    type="number" 
                     name="loanInsurance"
                     value={formData.loanInsurance}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Loan Suraksha"
+                    className="qw-input"
+                    placeholder="Loan suraksha in ₹"
                   />
                 </div>
-                <div className="cost-row">
+                <div className="qw-input-group">
                   <label>Total Down Payment:</label>
                   <input 
                     type="number" 
                     name="downPayment"
                     value={formData.downPayment}
                     onChange={handleInputChange}
-                    className="form-control readonly"
+                    className="qw-input readonly"
                     readOnly
                   />
                 </div>
-                <div className="cost-row">
-                  <label>Offers/Discounts:</label>
+                <div className="qw-input-group">
+                  <label>Dealer Offers / Discounts:</label>
                   <input 
                     type="number" 
                     name="offers"
                     value={formData.offers}
                     onChange={handleInputChange}
-                    className="form-control"
-                    placeholder="Discount/offers"
+                    className="qw-input"
+                    placeholder="Discounts in ₹"
                   />
                 </div>
-                <div className="cost-row highlight-row">
-                  <label>Final Down Payment:</label>
+                <div className="qw-highlight-cost-card">
+                  <label>Final Down Payment Payable:</label>
                   <input 
                     type="number" 
                     name="finalDownPayment"
                     value={formData.finalDownPayment}
                     onChange={handleInputChange}
-                    className="form-control readonly"
+                    className="qw-input readonly"
                     readOnly
                   />
                 </div>
               </div>
             </div>
 
-            <div className="emi-section">
-              <h4>EMI Details</h4>
-              <div className="form-grid">
-                <div className="cost-row">
-                  <label>EMI Period:</label>
+            <div className="qw-emi-card">
+              <div className="qw-emi-header">
+                <h4>Tenure & Monthly EMI Matrix</h4>
+              </div>
+              <div className="qw-emi-grid">
+                <div className="qw-input-group">
+                  <label>Loan Tenure Period:</label>
                   <select
                     name="emiYears"
                     value={formData.emiYears}
                     onChange={handleInputChange}
-                    className="form-control"
+                    className="qw-select"
                   >
-                    <option value="None">None</option>
+                    <option value="None">None (Outright / Cash)</option>
                     {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(year => (
                       <option key={year} value={year}>
-                        {year} {year === 1 ? 'Year' : 'Years'}
+                        {year} {year === 1 ? 'Year' : 'Years'} ({year * 12} Months)
                       </option>
                     ))}
                   </select>
                 </div>
-                <div className="cost-row">
-                  <label>Monthly EMI:</label>
-                  <input 
-                    type="number" 
-                    name="emiFor5Years"
-                    value={formData.emiFor5Years}
-                    onChange={handleInputChange}
-                    className="form-control readonly"
-                    readOnly
-                    placeholder={
-                      formData.emiYears === 'None' 
-                        ? 'Select EMI period first' 
-                        : !formData.emiInterestRate 
-                          ? 'Enter ROI/EMI Interest rate'
-                          : !formData.loanAmount
-                            ? 'Select bank and enter percentage'
-                            : 'EMI will be calculated automatically'
-                    }
-                  />
-                  {formData.emiYears !== 'None' && formData.emiFor5Years && (
-                    <small className="help-text">
-                      ₹{parseFloat(formData.emiFor5Years).toLocaleString('en-IN')}/month for {formData.emiYears} {parseInt(formData.emiYears) === 1 ? 'Year' : 'Years'}
-                    </small>
-                  )}
+                <div className="qw-emi-result-box">
+                  <span className="qw-emi-res-label">Monthly EMI Payable</span>
+                  <div className="qw-emi-res-val">
+                    {formData.emiFor5Years ? `₹${parseFloat(formData.emiFor5Years).toLocaleString('en-IN')}` : '—'}
+                    {formData.emiFor5Years && <span className="qw-emi-res-mo"> / month</span>}
+                  </div>
+                  <span className="qw-emi-res-sub">
+                    {formData.emiYears === 'None'
+                      ? 'Select tenure to calculate monthly installments'
+                      : !formData.emiInterestRate
+                        ? 'Requires ROI % in Step 1'
+                        : !formData.loanAmount
+                          ? 'Requires Bank % in Step 1'
+                          : `${formData.emiYears} Years tenure @ ${formData.emiInterestRate}% ROI p.a.`}
+                  </span>
                 </div>
               </div>
             </div>
@@ -1120,95 +1129,224 @@ const QuotationCreationPage: React.FC = () => {
 
   return (
     <div className="dashboard-container quotation-page-container">
-      <div className="dashboard-welcome quotation-welcome-compact">
-        <h1>Create Quotation</h1>
-        <p>Generate new vehicle quotations for customers</p>
-      </div>
-      
-      <div className="quotation-creator-wrapper-wide">
-        <div className="quotation-card-wide">
-          <h3>New Quotation</h3>
-          <p>Generate a comprehensive quotation for a vehicle sale</p>
+      {/* Header */}
+      <div className="qw-page-header">
+        <div className="qw-header-left">
+          <div className="qw-breadcrumb">
+            <Link to="/dashboard">Dashboard</Link>
+            <span>/</span>
+            <Link to="/dashboard/quotations">Quotations</Link>
+            <span>/</span>
+            <span>Create</span>
+          </div>
+          <h1>Vehicle Quotation Generator</h1>
+          <p>Configure commercial vehicle pricing, calculate taxes & financing schemes</p>
+        </div>
+        <div className="qw-header-actions">
           <button 
-            className="quotation-btn" 
+            className="qw-btn-header-secondary"
+            onClick={() => navigate('/dashboard/quotations')}
+          >
+            All Quotations
+          </button>
+          <button 
+            className="qw-btn-header-primary"
             onClick={toggleModal}
           >
-            Create Quotation
+            + Create Quotation
           </button>
         </div>
-        
-        <div className="quotation-help-card-wide">
-          <h3>About Quotations</h3>
-          <ul className="quotation-help-list">
-            <li>Fill in all required vehicle details</li>
-            <li>Select appropriate bank financing options</li>
-            <li>Calculate EMI and down payment automatically</li>
-            <li>Review and generate professional quotation</li>
+      </div>
+
+      {/* Quick Metrics Strip */}
+      <div className="qw-stats-strip">
+        <div className="qw-stat-pill">
+          <div className="qw-stat-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+          <div className="qw-stat-info">
+            <span className="qw-stat-val">6 Vehicle Models</span>
+            <span className="qw-stat-lbl">Commercial fleet ready</span>
+          </div>
+        </div>
+
+        <div className="qw-stat-pill green">
+          <div className="qw-stat-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M3 21h18"></path>
+              <path d="M5 21V7l8-4v18"></path>
+              <path d="M19 21V11l-6-4"></path>
+            </svg>
+          </div>
+          <div className="qw-stat-info">
+            <span className="qw-stat-val">5 Integrated Banks</span>
+            <span className="qw-stat-lbl">SBI, Union, MFin, Chola, AU</span>
+          </div>
+        </div>
+
+        <div className="qw-stat-pill purple">
+          <div className="qw-stat-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div className="qw-stat-info">
+            <span className="qw-stat-val">Automated EMI Matrix</span>
+            <span className="qw-stat-lbl">1 to 10 years tenure</span>
+          </div>
+        </div>
+
+        <div className="qw-stat-pill amber">
+          <div className="qw-stat-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+          </div>
+          <div className="qw-stat-info">
+            <span className="qw-stat-val">Instant GST Output</span>
+            <span className="qw-stat-lbl">Print & Share PDF</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Workspace Landing Grid */}
+      <div className="qw-landing-grid">
+        <div className="qw-action-card">
+          <div>
+            <div className="qw-card-top-tag">Commercial Sales Studio</div>
+            <h3>Generate New Quotation</h3>
+            <p>
+              Select vehicle variant from Gautam Motors commercial inventory, configure Ex-Showroom and RTO breakdown, choose lender calculation scheme, and create a certified quotation.
+            </p>
+            <div className="qw-popular-models">
+              <span className="qw-popular-lbl">Commercial Fleet Models</span>
+              <div className="qw-model-chips">
+                <span className="qw-chip">Ertiga Tour M CNG</span>
+                <span className="qw-chip">Wagon-R H3 CNG</span>
+                <span className="qw-chip">Toyota Rumion S CNG</span>
+                <span className="qw-chip">Hyundai Aura CNG</span>
+                <span className="qw-chip">Innova Crysta</span>
+              </div>
+            </div>
+          </div>
+          <button className="qw-btn-launch" onClick={toggleModal}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            Launch Quotation Wizard
+          </button>
+        </div>
+
+        <div className="qw-guide-card">
+          <h3>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2.5">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            Calculation & Banking Rules
+          </h3>
+          <ul className="qw-guide-list">
+            <li className="qw-guide-item">
+              <span className="qw-guide-bullet">✓</span>
+              <div><strong>SBI Bank Formula:</strong> Loan on Ex-Showroom + TCS + Insurance + Registration.</div>
+            </li>
+            <li className="qw-guide-item">
+              <span className="qw-guide-bullet">✓</span>
+              <div><strong>Union Bank Formula:</strong> Loan on Full On-Road Price across all components.</div>
+            </li>
+            <li className="qw-guide-item">
+              <span className="qw-guide-bullet">✓</span>
+              <div><strong>Mahindra, Chola & AU:</strong> Loan calculated strictly on Ex-Showroom price.</div>
+            </li>
+            <li className="qw-guide-item">
+              <span className="qw-guide-bullet">✓</span>
+              <div><strong>TCS Exemption Rule:</strong> Automatically calculated at 1% only when Ex-Showroom &gt; ₹10,00,000.</div>
+            </li>
+            <li className="qw-guide-item">
+              <span className="qw-guide-bullet">✓</span>
+              <div><strong>Live Margin & EMI:</strong> Instant recalculation of down payment with processing fees and discounts.</div>
+            </li>
           </ul>
         </div>
       </div>
 
       {/* Car Selection Modal */}
       {isModalOpen && (
-        <div className="quotation-modal-overlay">
-          <div className="quotation-modal">
-            <div className="quotation-modal-header">
-              <h2>Create New Quotation</h2>
-              <button className="close-modal-btn" onClick={toggleModal}>×</button>
+        <div className="qw-overlay" onClick={toggleModal}>
+          <div className="qw-modal qw-car-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="qw-modal-header">
+              <div>
+                <h2>Select Commercial Vehicle</h2>
+                <p>Choose fleet model and variant to start quotation</p>
+              </div>
+              <button className="qw-close-btn" onClick={toggleModal}>×</button>
             </div>
             
-            <div className="quotation-modal-body">
-              <div className="form-section">
-                <label>Select Car Brand</label>
-                <div className="custom-dropdown">
-                  <select 
-                    value={selectedBrand} 
-                    onChange={(e) => handleBrandSelect(e.target.value)}
-                    className="form-control"
-                  >
-                    <option value="">-- Select Brand --</option>
-                    {Object.keys(carVariants).map(brand => (
-                      <option key={brand} value={brand}>{brand}</option>
-                    ))}
-                  </select>
-                </div>
+            <div className="qw-modal-body">
+              <div className="qw-field">
+                <label>Commercial Car Brand</label>
+                <select 
+                  value={selectedBrand} 
+                  onChange={(e) => handleBrandSelect(e.target.value)}
+                  className="qw-select"
+                >
+                  <option value="">-- Choose Brand --</option>
+                  {Object.keys(carVariants).map(brand => (
+                    <option key={brand} value={brand}>{brand}</option>
+                  ))}
+                </select>
               </div>
 
               {selectedBrand && (
-                <div className="form-section">
-                  <label>Select Model Variant</label>
-                  <div className="variant-grid-selection">
-                    {carVariants[selectedBrand as CarBrand]?.map(variant => (
-                      <div 
-                        key={variant} 
-                        className={`variant-card ${selectedVariant === variant ? 'selected' : ''}`}
-                        onClick={() => handleVariantSelect(variant)}
-                      >
-                        <div className="variant-name">{variant}</div>
-                        <div className="variant-colors">
-                          {(() => {
-                            const brandColors = carColors[selectedBrand as keyof typeof carColors];
-                            if (!brandColors) return 0;
-                            const variantColors = brandColors[variant as keyof typeof brandColors] as string[] | undefined;
-                            return (variantColors?.length || 0);
-                          })()} colors available
+                <div className="qw-field" style={{ marginTop: '0.85rem' }}>
+                  <div className="qw-variants-header">
+                    <label>Available Commercial Variants</label>
+                    <span className="qw-variants-count">{carVariants[selectedBrand as CarBrand]?.length || 0} Models</span>
+                  </div>
+                  <div className="qw-variants-grid">
+                    {carVariants[selectedBrand as CarBrand]?.map(variant => {
+                      const brandColors = carColors[selectedBrand as keyof typeof carColors];
+                      const variantColors = brandColors ? (brandColors[variant as keyof typeof brandColors] as string[] | undefined) : [];
+                      const colorCount = variantColors?.length || 0;
+                      const isSelected = selectedVariant === variant;
+                      return (
+                        <div 
+                          key={variant} 
+                          className={`qw-variant-pill ${isSelected ? 'selected' : ''}`}
+                          onClick={() => handleVariantSelect(variant)}
+                        >
+                          <div className="qw-variant-info">
+                            <span className="qw-variant-title">{variant}</span>
+                            <span className="qw-variant-colors">{colorCount} colors available</span>
+                          </div>
+                          <div className="qw-variant-check">
+                            {isSelected ? '✓' : ''}
+                          </div>
                         </div>
-                        {selectedVariant === variant && <div className="variant-check">✓</div>}
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
             </div>
             
-            <div className="quotation-modal-footer">
-              <button className="cancel-btn" onClick={toggleModal}>Cancel</button>
+            <div className="qw-modal-footer">
+              <button className="qw-btn qw-btn-cancel" onClick={toggleModal}>Cancel</button>
               <button 
-                className="submit-btn" 
+                className="qw-btn qw-btn-primary" 
                 onClick={openQuotationModal}
                 disabled={!selectedBrand || !selectedVariant}
               >
-                Continue
+                Continue to Wizard →
               </button>
             </div>
           </div>
@@ -1217,38 +1355,69 @@ const QuotationCreationPage: React.FC = () => {
 
       {/* Enhanced Quotation Details Modal */}
       {isQuotationModalOpen && (
-        <div className="quotation-modal-overlay" onClick={(e) => e.target === e.currentTarget && closeQuotationModal()}>
-          <div className="quotation-modal quotation-details-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="quotation-modal-header">
-              <h2>Quotation Details - {selectedBrand} {selectedVariant}</h2>
-              <button className="close-modal-btn" onClick={closeQuotationModal}>×</button>
+        <div className="qw-overlay" onClick={(e) => e.target === e.currentTarget && closeQuotationModal()}>
+          <div className="qw-modal qw-details-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="qw-modal-header">
+              <div className="qw-header-title-box">
+                <h2>Quotation Details</h2>
+                <span className="qw-vehicle-tag">{selectedBrand} • {selectedVariant}</span>
+              </div>
+              <button className="qw-close-btn" onClick={closeQuotationModal}>×</button>
+            </div>
+
+            {/* Stepper Progress Bar */}
+            <div className="qw-stepper-wrap">
+              <div 
+                className={`qw-step-item ${currentStep === 1 ? 'active' : currentStep > 1 ? 'completed' : ''}`} 
+                onClick={() => currentStep > 1 && setCurrentStep(1)}
+              >
+                <span className="qw-step-circle">{currentStep > 1 ? '✓' : '1'}</span>
+                <span className="qw-step-label">Vehicle & Bank</span>
+              </div>
+              <div className={`qw-step-connector ${currentStep > 1 ? 'completed' : ''}`}></div>
+              <div 
+                className={`qw-step-item ${currentStep === 2 ? 'active' : currentStep > 2 ? 'completed' : ''}`} 
+                onClick={() => currentStep > 2 && setCurrentStep(2)}
+              >
+                <span className="qw-step-circle">{currentStep > 2 ? '✓' : '2'}</span>
+                <span className="qw-step-label">Cost Breakdown</span>
+              </div>
+              <div className={`qw-step-connector ${currentStep > 2 ? 'completed' : ''}`}></div>
+              <div className={`qw-step-item ${currentStep === 3 ? 'active' : ''}`}>
+                <span className="qw-step-circle">3</span>
+                <span className="qw-step-label">Loan & EMI</span>
+              </div>
             </div>
             
             {/* Error Display */}
             {errors.submit && (
-              <div className="error-banner">
-                <div className="error-icon">⚠️</div>
-                <div className="error-text">
-                  <strong>Error:</strong> {errors.submit}
+              <div className="qw-error-banner" style={{ margin: '0.75rem 1.25rem 0' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                  </svg>
+                  <span><strong>Error:</strong> {errors.submit}</span>
                 </div>
                 <button 
-                  className="error-close-btn"
                   onClick={() => setErrors({ ...errors, submit: '' })}
+                  style={{ background: 'none', border: 'none', color: '#991b1b', cursor: 'pointer', fontSize: '1.1rem' }}
                 >
                   ×
                 </button>
               </div>
             )}
             
-            <div className="quotation-modal-body">
+            <div className="qw-modal-body">
               {renderStepContent()}
             </div>
             
-            <div className="quotation-modal-footer">
-              <div className="footer-left">
+            <div className="qw-modal-footer">
+              <div className="qw-footer-left">
                 {currentStep > 1 && (
                   <button 
-                    className="prev-btn"
+                    className="qw-btn qw-btn-prev"
                     onClick={() => setCurrentStep(currentStep - 1)}
                   >
                     ← Previous
@@ -1256,37 +1425,25 @@ const QuotationCreationPage: React.FC = () => {
                 )}
               </div>
               
-              <div className="footer-right">
-                <button className="cancel-btn" onClick={closeQuotationModal}>
+              <div className="qw-footer-right">
+                <button className="qw-btn qw-btn-cancel" onClick={closeQuotationModal}>
                   Cancel
                 </button>
                 
                 {currentStep < 3 ? (
                   <button 
-                    className="next-btn"
+                    className="qw-btn qw-btn-primary"
                     onClick={() => setCurrentStep(currentStep + 1)}
                   >
-                    Next →
+                    Next Step →
                   </button>
                 ) : (
                   <button 
-                    className={`submit-btn ${isSubmitting ? 'loading' : ''} ${submitSuccess ? 'success' : ''}`}
+                    className={`qw-btn qw-btn-generate ${isSubmitting ? 'loading' : ''} ${submitSuccess ? 'success' : ''}`}
                     onClick={handleQuotationSubmit}
                     disabled={isSubmitting || submitSuccess}
                   >
-                    {isSubmitting ? (
-                      <>
-                        <span className="spinner-icon"></span>
-                        Processing...
-                      </>
-                    ) : submitSuccess ? (
-                      <>
-                        <span className="success-icon">✓</span>
-                        Quotation Generated!
-                      </>
-                    ) : (
-                      'Generate Quotation'
-                    )}
+                    {isSubmitting ? 'Processing...' : submitSuccess ? '✓ Generated!' : 'Generate Quotation'}
                   </button>
                 )}
               </div>
@@ -1297,53 +1454,51 @@ const QuotationCreationPage: React.FC = () => {
 
       {/* Success Modal */}
       {submitSuccess && quotationData && (
-        <div className="quotation-success-overlay">
-          <div className="quotation-success-modal">
-            <div className="quotation-modal-header">
-              <h2>Quotation Generated Successfully</h2>
+        <div className="qw-overlay">
+          <div className="qw-modal qw-success-modal">
+            <div className="qw-modal-header">
+              <h2>Quotation Generated</h2>
               <button 
-                className="close-modal-btn"
+                className="qw-close-btn"
                 onClick={() => navigate('/dashboard/quotations')}
               >×</button>
             </div>
             
-            <div className="quotation-modal-body">
-              <div className="quotation-success-message">
-                <div className="success-icon-large">✓</div>
-                <h3>Quotation #{quotationData.vendor_id}</h3>
-                <p className="quotation-date">Created on: {new Date(quotationData.created_at).toLocaleDateString('en-IN')}</p>
-              </div>
+            <div className="qw-success-body">
+              <div className="qw-success-check">✓</div>
+              <h3>Quotation #{quotationData.vendor_id}</h3>
+              <p style={{ fontSize: '0.78rem', color: '#64748b', margin: 0 }}>
+                Created on: {new Date(quotationData.created_at).toLocaleDateString('en-IN')}
+              </p>
               
-              <div className="quotation-details-summary">
-                <div className="quotation-detail-item">
+              <div className="qw-success-summary">
+                <div className="qw-summary-row">
                   <span>Car Model:</span>
                   <strong>{quotationData.car_model} {quotationData.model_variant}</strong>
                 </div>
-                <div className="quotation-detail-item">
+                <div className="qw-summary-row">
                   <span>On Road Price:</span>
                   <strong>₹{quotationData.on_the_road.toLocaleString('en-IN')}</strong>
                 </div>
-                <div className="quotation-detail-item">
+                <div className="qw-summary-row">
                   <span>Down Payment:</span>
                   <strong>₹{quotationData.final_down_payment.toLocaleString('en-IN')}</strong>
                 </div>
                 {quotationData.monthly_emi > 0 && (
-                  <div className="quotation-detail-item">
+                  <div className="qw-summary-row">
                     <span>Monthly EMI:</span>
-                    <strong>₹{quotationData.monthly_emi.toLocaleString('en-IN')}/month</strong>
-                    {quotationData.emi_years > 0 && <small>for {quotationData.emi_years} years</small>}
+                    <strong>₹{quotationData.monthly_emi.toLocaleString('en-IN')}/month ({quotationData.emi_years} yrs)</strong>
                   </div>
                 )}
               </div>
               
-              <div className="quotation-actions">
-                <button 
-                  className="view-quotation-btn"
-                  onClick={() => navigate(`/dashboard/quotations/${quotationData.vendor_id}`)}
-                >
-                  View Quotation
-                </button>
-              </div>
+              <button 
+                className="qw-btn qw-btn-primary"
+                style={{ width: '100%', height: '36px' }}
+                onClick={() => navigate(`/dashboard/quotations/${quotationData.vendor_id}`)}
+              >
+                View Quotation Details →
+              </button>
             </div>
           </div>
         </div>

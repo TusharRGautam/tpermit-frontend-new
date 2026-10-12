@@ -1,56 +1,67 @@
-/* Table Border Styles - Added for better data visibility */
+/* Table Border Styles - Ultra-Compact Professional Data View */
 .quotations-table-container table,
 .quotations-table,
 table.quotations-table {
   border-collapse: collapse;
-  border: 1px solid #dee2e6;
+  border: 1px solid #e2e8f0;
   width: 100%;
 }
 
 .quotations-table-container table th,
 .quotations-table th,
 table.quotations-table th {
-  border: 1px solid #dee2e6;
-  padding: 0.75rem;
-  background-color: #f8f9fa;
-  font-weight: 600;
+  border: 1px solid #e2e8f0;
+  padding: 0.38rem 0.55rem !important;
+  background-color: #f8fafc;
+  font-weight: 700;
+  font-size: 11px !important;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   text-align: left;
 }
 
 .quotations-table-container table td,
 .quotations-table td,
 table.quotations-table td {
-  border: 1px solid #dee2e6;
-  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  padding: 0.35rem 0.55rem !important;
+  font-size: 11.5px !important;
+  line-height: 1.3 !important;
+  color: #1e293b;
 }
 
 .quotations-table-container table tbody tr:hover,
 .quotations-table tbody tr:hover,
 table.quotations-table tbody tr:hover {
-  background-color: #f8f9fa;
-}
-
-/* User Request: Reduce text by ~5px (assuming base 16px -> 11-12px) */
-.quotations-table-container table td,
-.quotations-table-container table th,
-.quotations-table td, 
-.quotations-table th {
-    font-size: 12px !important;
-    padding: 0.5rem !important; /* Reduced padding for smaller text */
+  background-color: #f1f5f9;
 }
 
 /* Highlighted Name Style - Bold and Distinct */
 .highlighted-name {
-    font-weight: 700 !important;
-    color: #2c3e50;
-    font-size: 12px !important; /* Ensure match */
-    background-color: #ffc10740 !important; /* Yellow tint */
+  font-weight: 700 !important;
+  color: #0f172a;
+  font-size: 11.5px !important;
+  background-color: rgba(254, 240, 138, 0.4) !important;
 }
 
 /* Highlighted Company Style - Different Color */
 .highlighted-company {
-    font-weight: 700 !important;
-    color: #2c3e50;
-    font-size: 12px !important;
-    background-color: #0d6efd26 !important; /* Blue tint */
+  font-weight: 700 !important;
+  color: #0f172a;
+  font-size: 11.5px !important;
+  background-color: rgba(219, 234, 254, 0.4) !important;
+}
+
+/* Action buttons inside table */
+.quotations-table .actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.quotations-table .btn-action {
+  padding: 2px 6px !important;
+  font-size: 10.5px !important;
+  border-radius: 4px !important;
 }

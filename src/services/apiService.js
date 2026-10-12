@@ -3,11 +3,11 @@
 // OLD: Localhost configuration (commented out)
 // const API_BASE_URL = 'http://localhost:5000/api';
 
-// NEW: Production configuration with backend subdomain
+// Backend API configuration (Local: 5001, Prod: api.gautammotors.in)
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 
                      (window.location.origin.includes('localhost') ? 
-                     'http://localhost:5000/api' : 
-                     'https://backend.t-permit.com/api');
+                     'http://localhost:5001/api' : 
+                     'https://api.gautammotors.in/api');
 
 class ApiService {
   constructor() {

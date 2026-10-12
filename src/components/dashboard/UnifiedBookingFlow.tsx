@@ -438,7 +438,7 @@ const UnifiedBookingFlow = () => {
                             <div className="form-actions spaced" style={{ marginTop: '0.6rem' }}>
                                 <button className="btn btn-secondary" onClick={prevStep} style={{ padding: '0.4rem 1.2rem', fontSize: '0.9rem' }}>← Back</button>
                                 <button className="btn btn-success" onClick={handleSubmit} disabled={loading} style={{ padding: '0.4rem 1.2rem', fontSize: '0.9rem' }}>
-                                    {loading ? 'Generating...' : '✓ Generate All Documents'}
+                                    {loading ? 'Generating...' : 'Generate All Documents'}
                                 </button>
                             </div>
                         </div>

@@ -371,52 +371,52 @@ const BookingRelations: React.FC = () => {
                   <div className="flow-step customer-step">
                     <div className="step-header">
                       <div className="step-number">1</div>
-                      <h4>👤 Customer Information</h4>
+                      <h4>Customer Information</h4>
                     </div>
                     <div className="step-content">
                       <p className="primary-name">{relation.customer_name}</p>
-                      <p className="contact-detail">📧 {relation.customer_email}</p>
-                      <p className="contact-detail">📞 {relation.customer_phone}</p>
+                      <p className="contact-detail">Email: {relation.customer_email}</p>
+                      <p className="contact-detail">Phone: {relation.customer_phone}</p>
                       
                       {relation.customer_address && (
-                        <p className="location-detail">🏠 {relation.customer_address}</p>
+                        <p className="location-detail">Address: {relation.customer_address}</p>
                       )}
                       {relation.customer_city && relation.customer_state && (
                         <p className="location-detail">
-                          📍 {relation.customer_city}, {relation.customer_state}
+                          Location: {relation.customer_city}, {relation.customer_state}
                           {relation.customer_pincode && ` - ${relation.customer_pincode}`}
                         </p>
                       )}
 
                       {/* Document Status */}
                       <div className="document-status">
-                        <p className="status-title">📋 Document Status:</p>
+                        <p className="status-title">Document Status:</p>
                         <div className="status-indicators">
                           <span className={`status-chip ${relation.documents_submitted ? 'verified' : 'pending'}`}>
-                            {relation.documents_submitted ? '✓ Documents' : '⏳ Pending'}
+                            {relation.documents_submitted ? 'Documents Verified' : 'Documents Pending'}
                           </span>
                           <span className={`status-chip ${relation.kyc_verified ? 'verified' : 'pending'}`}>
-                            {relation.kyc_verified ? '✓ KYC' : '⏳ KYC'}
+                            {relation.kyc_verified ? 'KYC Verified' : 'KYC Pending'}
                           </span>
                           <span className={`status-chip ${relation.agreement_signed ? 'verified' : 'pending'}`}>
-                            {relation.agreement_signed ? '✓ Agreement' : '⏳ Agreement'}
+                            {relation.agreement_signed ? 'Agreement Signed' : 'Agreement Pending'}
                           </span>
                         </div>
                       </div>
 
                       {relation.customer_notes && (
-                        <p className="customer-notes">💬 {relation.customer_notes}</p>
+                        <p className="customer-notes">Notes: {relation.customer_notes}</p>
                       )}
                     </div>
                   </div>
 
-                  <div className="flow-arrow">→</div>
+                  <div className="flow-arrow">&rarr;</div>
 
                   {/* Step 2: Booked Car */}
                   <div className="flow-step car-step">
                     <div className="step-header">
                       <div className="step-number">2</div>
-                      <h4>🚗 Booked Vehicle</h4>
+                      <h4>Booked Vehicle</h4>
                     </div>
                     <div className="step-content">
                       <p className="primary-name">{relation.car_brand} {relation.car_model}</p>
@@ -435,13 +435,13 @@ const BookingRelations: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flow-arrow">→</div>
+                  <div className="flow-arrow">&rarr;</div>
 
                   {/* Step 3: Allocated Showroom */}
                   <div className="flow-step showroom-step">
                     <div className="step-header">
                       <div className="step-number">3</div>
-                      <h4>🏢 Showroom Allocation</h4>
+                      <h4>Showroom Allocation</h4>
                     </div>
                     <div className="step-content">
                       {/* Check multiple possible showroom fields */}
@@ -450,35 +450,35 @@ const BookingRelations: React.FC = () => {
                           <p className="primary-name">
                             {relation.showroom_location || relation.allocated_showroom_name || 'Showroom Allocated'}
                           </p>
-                          <div className="allocation-badge">✅ Allocated</div>
+                          <div className="allocation-badge">Allocated</div>
                           
                           {relation.sales_executive_name && (
-                            <p className="contact-detail">👨‍💼 {relation.sales_executive_name}</p>
+                            <p className="contact-detail">Executive: {relation.sales_executive_name}</p>
                           )}
                           {relation.sales_executive_phone && (
-                            <p className="contact-detail">📞 {relation.sales_executive_phone}</p>
+                            <p className="contact-detail">Phone: {relation.sales_executive_phone}</p>
                           )}
                           
                           {relation.allocated_contact_person && (
-                            <p className="contact-detail">🏢 {relation.allocated_contact_person}</p>
+                            <p className="contact-detail">Contact Person: {relation.allocated_contact_person}</p>
                           )}
                           {relation.allocated_contact_phone && (
-                            <p className="contact-detail">📞 {relation.allocated_contact_phone}</p>
+                            <p className="contact-detail">Contact Phone: {relation.allocated_contact_phone}</p>
                           )}
                           
                           {relation.allocated_showroom_address && (
-                            <p className="location-detail">📍 {relation.allocated_showroom_address}</p>
+                            <p className="location-detail">Showroom: {relation.allocated_showroom_address}</p>
                           )}
                           
                           {relation.delivery_location && (
-                            <p className="location-detail">📦 {relation.delivery_location}</p>
+                            <p className="location-detail">Delivery: {relation.delivery_location}</p>
                           )}
                           
                           {relation.allocation_method && (
-                            <p className="spec-detail">⚙️ {relation.allocation_method}</p>
+                            <p className="spec-detail">Method: {relation.allocation_method}</p>
                           )}
                           {relation.allocation_date && (
-                            <p className="spec-detail">📅 {new Date(relation.allocation_date).toLocaleDateString('en-IN', { 
+                            <p className="spec-detail">Date: {new Date(relation.allocation_date).toLocaleDateString('en-IN', { 
                               weekday: 'short', 
                               year: 'numeric', 
                               month: 'short', 
@@ -490,14 +490,14 @@ const BookingRelations: React.FC = () => {
                         <div className="allocation-pending">
                           {relation.customer_city && relation.customer_state ? (
                             <>
-                              <p className="primary-name">🔄 Auto-Allocation</p>
-                              <p className="location-detail">📍 {relation.customer_city}, {relation.customer_state}</p>
-                              <p className="spec-detail">🚗 {relation.car_brand}</p>
-                              <div className="pending-chip">⏳ In Progress</div>
+                              <p className="primary-name">Auto-Allocation</p>
+                              <p className="location-detail">Location: {relation.customer_city}, {relation.customer_state}</p>
+                              <p className="spec-detail">Brand: {relation.car_brand}</p>
+                              <div className="pending-chip">In Progress</div>
                             </>
                           ) : (
                             <>
-                              <p className="not-allocated">⚠️ Not Allocated</p>
+                              <p className="not-allocated">Not Allocated</p>
                               <p className="allocation-help">Awaiting customer location details</p>
                             </>
                           )}
@@ -506,13 +506,13 @@ const BookingRelations: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flow-arrow">→</div>
+                  <div className="flow-arrow">&rarr;</div>
 
                   {/* Step 4: Booking Status */}
                   <div className="flow-step status-step">
                     <div className="step-header">
                       <div className="step-number">4</div>
-                      <h4>📋 Status & Payment</h4>
+                      <h4>Status & Payment</h4>
                     </div>
                     <div className="step-content">
                       <div className="status-badges">
@@ -535,13 +535,13 @@ const BookingRelations: React.FC = () => {
 
                       {relation.preferred_delivery_date && (
                         <p className="delivery-date">
-                          🗓️ {new Date(relation.preferred_delivery_date).toLocaleDateString()}
+                          Delivery Date: {new Date(relation.preferred_delivery_date).toLocaleDateString()}
                         </p>
                       )}
 
                       {relation.finance_required && (
                         <div className="finance-indicator">
-                          <span className="finance-chip">💳 Finance</span>
+                          <span className="finance-chip">Finance</span>
                           {relation.finance_bank && <small>{relation.finance_bank}</small>}
                         </div>
                       )}
@@ -591,7 +591,7 @@ const BookingRelations: React.FC = () => {
                         className="confirm-booking-btn"
                         title="Confirm this booking"
                       >
-                        ✓ Confirm Booking
+                        Confirm Booking
                       </button>
                     )}
                   </div>

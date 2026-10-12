@@ -1,183 +1,1162 @@
-/* Dashboard Sidebar Styles */
+/* ========================================================
+   DASHBOARD SIDEBAR & PROFESSIONAL COMPACT LAYOUT
+   Clean, modern, emoji-free, 100% mobile-responsive, enterprise-grade
+   ======================================================== */
+
 .dashboard-layout {
   display: flex;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: #f8fafc;
+  width: 100%;
+  position: relative;
 }
 
-.dashboard-sidebar {
-  width: 260px;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
-  color: white;
-  box-shadow: 4px 0 12px rgba(0, 0, 0, 0.1);
+/* Backdrop for Mobile Drawer */
+.dashboard-backdrop {
   position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(3px);
+  z-index: 998;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ========================================================
+   SIDEBAR (COMPACT 220px)
+   ======================================================== */
+.dashboard-sidebar {
+  width: 220px;
+  background: #0f172a;
+  color: #f8fafc;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 999;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.12);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   overflow-y: auto;
-  z-index: 100;
+  border-right: 1px solid #1e293b;
 }
 
-.dashboard-logo {
-  padding: 1.5rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.dashboard-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.dashboard-sidebar::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+
+/* Sidebar Brand Header */
+.sidebar-header {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #1e293b;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  justify-content: space-between;
 }
 
-.logo-icon {
-  font-size: 2rem;
-}
-
-.logo-text h2 {
-  margin: 0;
-  font-size: 1rem;
-  font-weight: 700;
-  color: white;
-  text-shadow: none;
-  background: none;
-  -webkit-text-fill-color: white;
-}
-
-.logo-subtitle {
-  font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.7);
-  display: block;
-  margin-top: 0.15rem;
-}
-
-.dashboard-nav {
-  padding: 1rem 0;
-}
-
-.nav-section {
-  margin-bottom: 1.5rem;
-}
-
-.nav-section-title {
-  padding: 0.5rem 1.25rem;
-  font-size: 0.65rem;
-  font-weight: 700;
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: 1px;
-  margin-bottom: 0.25rem;
-}
-
-.nav-item {
+.sidebar-brand {
   display: flex;
   align-items: center;
-  padding: 0.6rem 1.25rem;
-  color: rgba(255, 255, 255, 0.8);
+  gap: 0.6rem;
   text-decoration: none;
-  transition: all 0.3s ease;
-  border-left: 3px solid transparent;
-  gap: 0.75rem;
-}
-
-.nav-item:hover {
-  background: rgba(255, 255, 255, 0.1);
   color: white;
-  border-left-color: #dc2626;
 }
 
-.nav-item.active {
-  background: rgba(220, 38, 38, 0.2);
+.brand-badge {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.78rem;
   color: white;
-  border-left-color: #dc2626;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
 }
 
-.nav-icon {
-  font-size: 1.1rem;
-  flex-shrink: 0;
+.brand-text {
+  display: flex;
+  flex-direction: column;
 }
 
-.nav-text {
-  font-size: 0.8rem;
+.brand-title {
+  font-weight: 800;
+  font-size: 0.80rem;
+  letter-spacing: 0.3px;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.brand-sub {
+  font-size: 0.62rem;
+  color: #94a3b8;
   font-weight: 500;
 }
 
-.nav-section-bottom {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 1rem 0;
+.mobile-close-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
 }
 
-/* Dashboard Content Area */
+.mobile-close-btn:hover {
+  color: #ffffff;
+}
+
+/* Sidebar Navigation Items */
+.sidebar-nav {
+  flex: 1;
+  padding: 0.6rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.nav-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.nav-group-title {
+  padding: 0.25rem 1rem;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.42rem 1rem;
+  color: #94a3b8;
+  text-decoration: none;
+  font-size: 0.76rem;
+  font-weight: 600;
+  transition: all 0.15s ease;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.sidebar-nav-item:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+  border-left-color: #dc2626;
+}
+
+.sidebar-nav-item.active {
+  color: #ffffff;
+  background: rgba(220, 38, 38, 0.12);
+  border-left-color: #dc2626;
+  font-weight: 700;
+}
+
+.sidebar-nav-item svg {
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.sidebar-pill {
+  margin-left: auto;
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 8px;
+  background: #334155;
+  color: #93c5fd;
+  text-transform: uppercase;
+}
+
+.sidebar-pill.crm {
+  background: #dc2626;
+  color: white;
+}
+
+/* Sidebar Footer Actions */
+.sidebar-footer {
+  padding: 0.65rem 0.85rem;
+  border-top: 1px solid #1e293b;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.sidebar-footer-link,
+.sidebar-logout-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.38rem 0.65rem;
+  border-radius: 5px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+}
+
+.sidebar-footer-link {
+  background: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
+}
+
+.sidebar-footer-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+}
+
+.sidebar-logout-btn {
+  background: rgba(220, 38, 38, 0.15);
+  color: #fca5a5;
+}
+
+.sidebar-logout-btn:hover {
+  background: #dc2626;
+  color: white;
+}
+
+/* ========================================================
+   DASHBOARD CONTENT AREA
+   ======================================================== */
 .dashboard-content {
-  margin-left: 260px;
+  margin-left: 220px;
   flex: 1;
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: calc(100% - 220px);
+  background: #f8fafc;
 }
 
-.dashboard-header {
-  background: white;
-  padding: 1rem 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+/* Top Navbar (Height 40px) */
+.dashboard-top-navbar {
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
+  padding: 0.35rem 1rem;
+  height: 40px;
+  min-height: 40px;
   display: flex;
-  justify-content: flex-end;
   align-items: center;
+  justify-content: space-between;
   position: sticky;
   top: 0;
   z-index: 90;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
 }
 
-.user-profile {
+.top-nav-left {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.65rem;
 }
 
-.user-avatar {
-  font-size: 1.5rem;
+.sidebar-hamburger-btn {
+  display: none;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #0f172a;
+  border-radius: 5px;
+  padding: 4px 6px;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
 }
 
-.logout-button {
+.sidebar-hamburger-btn:hover {
+  background: #e2e8f0;
+}
+
+.current-section-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  letter-spacing: 0.4px;
+}
+
+.top-nav-right {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+}
+
+.nav-action-pill {
+  padding: 3px 9px;
+  border-radius: 5px;
+  font-size: 0.70rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  background: #f1f5f9;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+}
+
+.nav-action-pill:hover {
+  background: #e2e8f0;
+}
+
+.nav-action-pill.highlight {
   background: #dc2626;
   color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  border-color: #dc2626;
 }
 
-.logout-button:hover {
+.nav-action-pill.highlight:hover {
   background: #b91c1c;
-  transform: translateY(-2px);
 }
 
-.logout-icon {
-  font-size: 1rem;
+.admin-user-pill {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: #f8fafc;
+  padding: 2px 8px;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
 }
 
+.user-initials {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #1e293b;
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-name-text {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Dashboard Main Content */
 .dashboard-main-content {
   flex: 1;
-  padding: 2rem;
-  background: #f8f9fa;
+  padding: 0.85rem 1.25rem;
+  background: #f8fafc;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* ========================================================
+   CARS MANAGEMENT ("SHOW CARS") COMPACT STYLES
+   ======================================================== */
+.cars-mgmt-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 100%;
+}
+
+.cars-mgmt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  background: white;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.cars-mgmt-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.15rem 0;
+  line-height: 1.2;
+}
+
+.cars-mgmt-subtitle {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin: 0;
+}
+
+.cars-mgmt-header-actions {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+
+.btn-primary-action,
+.btn-secondary-action {
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary-action {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-primary-action:hover {
+  background: #b91c1c;
+}
+
+.btn-secondary-action {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-secondary-action:hover {
+  background: #f1f5f9;
+}
+
+/* Compact Metrics Strip */
+.cars-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.65rem;
+}
+
+.cars-metric-card {
+  background: white;
+  border-radius: 8px;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.cars-metric-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.cars-metric-val {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0.15rem 0;
+  line-height: 1.1;
+}
+
+.cars-metric-desc {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+/* Compact Filter Bar */
+.cars-filter-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  background: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.brand-pill-group {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.brand-pill {
+  padding: 3px 9px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  color: #475569;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.brand-pill:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.brand-pill.active {
+  background: #0f172a;
+  color: white;
+  border-color: #0f172a;
+}
+
+.cars-search-wrap {
+  display: flex;
+  align-items: center;
+  position: relative;
+  min-width: 220px;
+}
+
+.cars-search-input {
+  width: 100%;
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: 1px solid #cbd5e1;
+  font-size: 0.74rem;
+  outline: none;
+}
+
+.cars-search-input:focus {
+  border-color: #dc2626;
+  box-shadow: 0 0 0 2px rgba(220, 38, 38, 0.1);
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.65rem;
+  cursor: pointer;
+}
+
+/* Compact Cars Grid */
+.cars-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+}
+
+.car-admin-card {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.car-admin-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.car-admin-badge-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 0.65rem 0 0.65rem;
+}
+
+.badge-brand {
+  font-size: 0.60rem;
+  font-weight: 700;
+  color: #475569;
+  background: #f1f5f9;
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+.badge-tpermit {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #b45309;
+  background: #fef3c7;
+  border: 1px solid #fde68a;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.car-admin-img-wrap {
+  height: 110px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem;
+}
+
+.car-admin-img {
+  max-height: 100px;
+  max-width: 90%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.08));
+}
+
+.car-admin-body {
+  padding: 0.60rem 0.75rem 0.75rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.car-admin-title-row {
+  margin-bottom: 0.25rem;
+}
+
+.car-admin-name {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.1rem 0;
+  line-height: 1.2;
+}
+
+.car-admin-cat {
+  font-size: 0.66rem;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.car-admin-tags {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.45rem;
+}
+
+.tag-pill {
+  font-size: 0.60rem;
+  font-weight: 600;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.car-admin-variants-list {
+  margin-bottom: 0.5rem;
+}
+
+.variants-label {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #64748b;
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.variant-chips-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+}
+
+.variant-chip {
+  font-size: 0.58rem;
+  background: #f1f5f9;
+  color: #334155;
+  padding: 1px 4px;
+  border-radius: 2px;
+  border: 1px solid #e2e8f0;
+}
+
+.car-admin-price-box {
+  background: #f8fafc;
+  border-radius: 5px;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #f1f5f9;
+  margin-bottom: 0.55rem;
+  margin-top: auto;
+}
+
+.price-box-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.68rem;
+  margin-bottom: 0.15rem;
+}
+
+.price-box-row.subtle {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 0.2rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0;
+  font-size: 0.64rem;
+  color: #64748b;
+}
+
+.p-label {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.p-val {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.down-val {
+  color: #dc2626;
+}
+
+.emi-val {
+  color: #2563eb;
+}
+
+.car-admin-card-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.btn-card-action {
+  flex: 1;
+  text-align: center;
+  padding: 4px 6px;
+  border-radius: 4px;
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-card-action.primary {
+  background: #0f172a;
+  color: white;
+}
+
+.btn-card-action.primary:hover {
+  background: #1e293b;
+}
+
+.btn-card-action.secondary {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-card-action.secondary:hover {
+  background: #b91c1c;
+}
+
+.btn-card-action.outline {
+  background: transparent;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+}
+
+.btn-card-action.outline:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+.no-cars-found {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 2rem 1rem;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+/* ========================================================
+   GLOBAL COMPACT OVERRIDES FOR ALL DASHBOARD PAGES
+   Enforces tight alignment, small professional text & padding
+   ======================================================== */
+.dashboard-main-content h1,
+.dashboard-main-content h2,
+.dashboard-main-content h3,
+.dashboard-layout h1,
+.dashboard-layout h2,
+.dashboard-layout h3 {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: initial !important;
+  text-shadow: none !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  display: block !important;
+}
+
+.dashboard-main-content h1,
+.dashboard-main-content .page-title {
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin-bottom: 0.25rem !important;
+  line-height: 1.2 !important;
+}
+
+.dashboard-main-content h2 {
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-bottom: 0.2rem !important;
+}
+
+.dashboard-main-content h3 {
+  font-size: 0.80rem !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+}
+
+.dashboard-main-content p {
+  font-size: 0.72rem !important;
+  color: #64748b !important;
+  line-height: 1.35 !important;
+}
+
+/* Global compact page headers & banners */
+.dashboard-main-content .page-header,
+.dashboard-main-content .booking-summary-section {
+  padding: 0.65rem 0.95rem !important;
+  margin-bottom: 0.65rem !important;
+  border-radius: 6px !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+}
+
+.dashboard-main-content .page-header h1 {
+  font-size: 1.15rem !important;
+  margin: 0 0 0.15rem 0 !important;
+}
+
+.dashboard-main-content .page-header p {
+  font-size: 0.72rem !important;
+  margin: 0 !important;
+}
+
+/* Compact dashboard welcome subheader inside list tables */
+.dashboard-main-content .dashboard-welcome {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 0.5rem !important;
+  padding: 0.5rem 0.85rem !important;
+  margin-bottom: 0.55rem !important;
+  border-radius: 6px !important;
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+}
+
+.dashboard-main-content .dashboard-welcome h1 {
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin: 0 !important;
+}
+
+.dashboard-main-content .dashboard-welcome p {
+  display: none !important;
+}
+
+.dashboard-main-content .dashboard-welcome .btn,
+.dashboard-main-content .dashboard-welcome button {
+  margin: 0 !important;
+  padding: 0.30rem 0.65rem !important;
+  font-size: 0.72rem !important;
+}
+
+/* Global compact stat cards */
+.dashboard-main-content .stat-cards,
+.dashboard-main-content .summary-cards {
+  gap: 0.55rem !important;
+  margin-bottom: 0.65rem !important;
+}
+
+.dashboard-main-content .stat-card,
+.dashboard-main-content .summary-card {
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 6px !important;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03) !important;
+}
+
+.dashboard-main-content .stat-content h3,
+.dashboard-main-content .card-content h3 {
+  font-size: 0.66rem !important;
+  margin-bottom: 0.15rem !important;
+}
+
+.dashboard-main-content .stat-icon {
+  font-size: 1.3rem !important;
+  width: 28px !important;
+  height: 28px !important;
+  margin-right: 0.5rem !important;
+}
+
+.dashboard-main-content .card-value {
+  font-size: 1.15rem !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+}
+
+/* Global compact forms, search bars & filters */
+.dashboard-main-content .filters-section,
+.dashboard-main-content .quotation-filters,
+.dashboard-main-content .filter-bar {
+  padding: 0.45rem 0.75rem !important;
+  margin-bottom: 0.65rem !important;
+  border-radius: 6px !important;
+  gap: 0.45rem !important;
+}
+
+.dashboard-main-content input,
+.dashboard-main-content select,
+.dashboard-main-content textarea {
+  padding: 0.32rem 0.55rem !important;
+  font-size: 0.74rem !important;
+  border-radius: 5px !important;
+  border: 1px solid #cbd5e1 !important;
+}
+
+.dashboard-main-content button,
+.dashboard-main-content .btn,
+.dashboard-main-content .btn-primary,
+.dashboard-main-content .btn-action {
+  padding: 0.32rem 0.65rem !important;
+  font-size: 0.72rem !important;
+  border-radius: 5px !important;
+}
+
+/* Global compact tables */
+.dashboard-main-content table th,
+.dashboard-main-content .quotations-table th,
+.dashboard-main-content .relations-table .table-header {
+  padding: 0.38rem 0.55rem !important;
+  font-size: 0.65rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.4px !important;
+}
+
+.dashboard-main-content table td,
+.dashboard-main-content .quotations-table td,
+.dashboard-main-content .relations-table .cell {
+  padding: 0.35rem 0.55rem !important;
+  font-size: 0.73rem !important;
+  line-height: 1.3 !important;
+}
+
+.dashboard-welcome-banner h1,
+.dashboard-welcome-banner .welcome-content h1,
+.all-documents-header-title {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* Compact mobile receipt and booking order cards */
+.dashboard-main-content .receipt-card {
+  border-radius: 6px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  border: 1px solid #e2e8f0 !important;
+  margin-bottom: 0.45rem !important;
+  background: #ffffff !important;
+}
+
+.dashboard-main-content .receipt-card-header {
+  padding: 0.4rem 0.65rem !important;
+  background: #0f172a !important;
+  border-radius: 5px 5px 0 0 !important;
+}
+
+.dashboard-main-content .receipt-card-number .label {
+  font-size: 0.58rem !important;
+  color: #94a3b8 !important;
+}
+
+.dashboard-main-content .receipt-card-number .receipt-number {
+  font-size: 0.76rem !important;
+  color: #ffffff !important;
+}
+
+.dashboard-main-content .receipt-card-date {
+  font-size: 0.62rem !important;
+  color: #94a3b8 !important;
+}
+
+.dashboard-main-content .receipt-card-body {
+  padding: 0.45rem 0.65rem !important;
+  gap: 0.25rem !important;
+}
+
+.dashboard-main-content .receipt-card-row {
+  padding-bottom: 0.2rem !important;
+  border-bottom: 1px solid #f1f5f9 !important;
+}
+
+.dashboard-main-content .receipt-card-row .label {
+  font-size: 0.65rem !important;
+  color: #64748b !important;
+  font-weight: 500 !important;
+}
+
+.dashboard-main-content .receipt-card-row .value,
+.dashboard-main-content .receipt-card-row .color-badge {
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.dashboard-main-content .receipt-card-actions {
+  padding: 0.35rem 0.65rem !important;
+  gap: 0.35rem !important;
+  border-top: 1px solid #f1f5f9 !important;
+  background: #f8fafc !important;
+}
+
+.dashboard-main-content .receipt-card-actions .btn-card-action {
+  padding: 0.25rem 0.55rem !important;
+  font-size: 0.68rem !important;
+  border-radius: 4px !important;
+  font-weight: 700 !important;
+}
+
+/* Remove 100vh restrictions causing massive page bounds */
+.dashboard-main-content .booking-relations,
+.dashboard-main-content .showroom-management {
+  min-height: auto !important;
+  padding: 0.5rem !important;
+  background: transparent !important;
+}
+
+/* ========================================================
+   GLOBAL MOBILE RESPONSIVENESS
+   ======================================================== */
+@media (max-width: 1200px) {
+  .cars-grid-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 992px) {
   .dashboard-sidebar {
-    width: 220px;
+    transform: translateX(-100%);
+    width: 250px;
+    z-index: 1000;
   }
-  
+
+  .dashboard-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .mobile-close-btn {
+    display: block;
+  }
+
   .dashboard-content {
-    margin-left: 220px;
+    margin-left: 0 !important;
+    width: 100% !important;
   }
-  
-  .nav-text {
-    font-size: 0.75rem;
+
+  .sidebar-hamburger-btn {
+    display: flex;
   }
-  
-  .logo-text h2 {
-    font-size: 0.9rem;
+
+  .cars-metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-main-content {
+    padding: 0.65rem 0.75rem;
+  }
+
+  .dashboard-top-navbar {
+    padding: 0.35rem 0.75rem;
+  }
+
+  .cars-mgmt-title {
+    font-size: 1.05rem;
+  }
+
+  .cars-grid-container {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .cars-metrics-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .cars-filter-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cars-search-wrap {
+    min-width: 100%;
+  }
+
+  .nav-action-pill {
+    padding: 3px 6px;
+    font-size: 0.66rem;
+  }
+
+  .user-name-text {
+    display: none;
+  }
+
+  /* Smooth table scrolling on mobile */
+  .table-responsive,
+  .leads-table-container,
+  .quotations-table-container,
+  .dashboard-table-wrap,
+  table {
+    display: block;
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .car-admin-card-actions {
+    flex-direction: column;
+  }
+
+  .btn-card-action {
+    width: 100%;
+  }
+
+  .cars-mgmt-header-actions {
+    width: 100%;
+  }
+
+  .btn-primary-action,
+  .btn-secondary-action {
+    flex: 1;
+    text-align: center;
   }
 }

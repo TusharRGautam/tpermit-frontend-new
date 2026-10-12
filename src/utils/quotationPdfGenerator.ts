@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 
-interface QuotationData {
+export interface QuotationData {
   vendor_id: string;
   car_model: string;
   model_variant: string;
@@ -31,151 +31,264 @@ interface QuotationData {
   final_down_payment: number;
   emi_years: number;
   monthly_emi: number;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 const getSelectedBank = (quotation: QuotationData) => {
-  if (quotation.sbi_bank > 0) return { name: 'State Bank of India', rate: quotation.sbi_bank };
-  if (quotation.union_bank > 0) return { name: 'Union Bank', rate: quotation.union_bank };
+  if (quotation.sbi_bank > 0) return { name: 'State Bank of India (SBI)', rate: quotation.sbi_bank };
+  if (quotation.union_bank > 0) return { name: 'Union Bank of India', rate: quotation.union_bank };
   if (quotation.mahindra_finance > 0) return { name: 'Mahindra Finance', rate: quotation.mahindra_finance };
   if (quotation.cholamandalam_bank > 0) return { name: 'Cholamandalam Bank', rate: quotation.cholamandalam_bank };
-  if (quotation.au_bank > 0) return { name: 'AU Bank', rate: quotation.au_bank };
-  return { name: 'None', rate: 0 };
+  if (quotation.au_bank > 0) return { name: 'AU Small Finance Bank', rate: quotation.au_bank };
+  return { name: 'Direct / Outright Purchase', rate: 0 };
 };
 
-const formatCurrency = (amount: number): string => {
-  return '₹' + amount.toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+/**
+ * Format currency with Indian comma system without Unicode symbols that break in jsPDF.
+ * Replaces '₹' with 'Rs. ' to prevent the '¹' superscript encoding bug in jsPDF standard fonts.
+ */
+export const formatCurrency = (amount: number | string | undefined | null): string => {
+  if (amount === undefined || amount === null || amount === '') return 'Rs. 0';
+  const num = Math.round(typeof amount === 'string' ? parseFloat(amount) || 0 : amount);
+  const isNegative = num < 0;
+  const absNum = Math.abs(num);
+  const str = absNum.toString();
+  let result = '';
+
+  if (str.length > 3) {
+    const lastThree = str.substring(str.length - 3);
+    const otherNumbers = str.substring(0, str.length - 3);
+    result = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + ',' + lastThree;
+  } else {
+    result = str;
+  }
+
+  return `${isNegative ? '- ' : ''}Rs. ${result}`;
 };
 
 export const generateQuotationPDF = (quotation: QuotationData) => {
-  const pdf = new jsPDF();
+  const pdf = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
+  });
+
   const selectedBank = getSelectedBank(quotation);
 
-  // Page dimensions
-  const pageWidth = pdf.internal.pageSize.getWidth();
-  let yPosition = 15;
+  // Exact A4 dimensions in mm
+  const pageWidth = 210;
+  const leftX = 15;
+  const tableWidth = 180; // 15 to 195 (leaving 15mm on both left and right)
+  const labelWidth = 112;
+  const valueWidth = 68;
+  const rightX = leftX + labelWidth; // 15 + 112 = 127
+  const rowHeight = 7.4; // Clean row height
 
-  // Colors
-  const headerColor = [144, 238, 144]; // Light green
-  const bankHeaderColor = [173, 216, 230]; // Light blue
-  const highlightColor = [255, 255, 153]; // Light yellow
-  const textColor = [0, 0, 0];
+  // Professional Color Palette
+  const headerGreen = [209, 250, 229]; // Clean mint green #d1fae5
+  const headerGreenBorder = [110, 231, 183];
+  const bankBlue = [224, 242, 254]; // Soft sky blue #e0f2fe
+  const highlightYellow = [254, 249, 195]; // Soft cream yellow #fef9c3
+  const zebraBg = [248, 250, 252]; // Slate 50
+  const borderColor = [226, 232, 240]; // Slate 200
 
-  // Helper function to add a row with background color
-  const addRow = (label: string, value: string, y: number, bgColor?: number[], isHighlight: boolean = false) => {
-    const leftX = 15;
-    const rightX = pageWidth / 2 + 5;
-    const rowHeight = 8;
+  let yPosition = 16;
 
-    // Background for left cell (label)
-    if (bgColor) {
-      pdf.setFillColor(bgColor[0], bgColor[1], bgColor[2]);
-      pdf.rect(leftX, y - 5, pageWidth / 2 - 10, rowHeight, 'F');
-    }
+  // --- TOP CORPORATE HEADER ---
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(15);
+  pdf.setTextColor(15, 23, 42);
+  pdf.text('GAUTAM MOTORS', leftX, yPosition);
 
-    // Background for right cell (value)
+  pdf.setFont('helvetica', 'normal');
+  pdf.setFontSize(8.5);
+  pdf.setTextColor(100, 116, 139);
+  pdf.text('Commercial Vehicle Fleet Sales & T-Permit Financing', leftX, yPosition + 4.5);
+
+  // Right-aligned Quotation Meta
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(9);
+  pdf.setTextColor(30, 41, 59);
+  pdf.text('OFFICIAL VEHICLE QUOTATION', leftX + tableWidth, yPosition, { align: 'right' });
+
+  pdf.setFont('helvetica', 'normal');
+  pdf.setFontSize(8);
+  pdf.setTextColor(100, 116, 139);
+  pdf.text(`Ref: ${quotation.vendor_id}`, leftX + tableWidth, yPosition + 4.5, { align: 'right' });
+
+  const dateStr = quotation.created_at ? new Date(quotation.created_at).toLocaleDateString('en-IN') : new Date().toLocaleDateString('en-IN');
+  pdf.text(`Date: ${dateStr}`, leftX + tableWidth, yPosition + 8.5, { align: 'right' });
+
+  yPosition += 13;
+
+  // --- HEADER ROW 1: CAR MODEL ---
+  pdf.setFillColor(headerGreen[0], headerGreen[1], headerGreen[2]);
+  pdf.rect(leftX, yPosition, tableWidth, 8.5, 'F');
+  pdf.setDrawColor(headerGreenBorder[0], headerGreenBorder[1], headerGreenBorder[2]);
+  pdf.setLineWidth(0.3);
+  pdf.rect(leftX, yPosition, tableWidth, 8.5);
+
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(9.5);
+  pdf.setTextColor(6, 95, 70);
+  pdf.text('car model :', leftX + 4, yPosition + 5.5);
+
+  const carModelText = `${(quotation.car_model || '').toUpperCase()} ${(quotation.model_variant || '').toUpperCase()}`;
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(10);
+  pdf.setTextColor(6, 78, 59);
+  pdf.text(carModelText, leftX + tableWidth - 4, yPosition + 5.5, { align: 'right' });
+
+  yPosition += 8.5;
+
+  // --- HEADER ROW 2: BANK & FINANCING ---
+  pdf.setFillColor(bankBlue[0], bankBlue[1], bankBlue[2]);
+  pdf.rect(leftX, yPosition, tableWidth, 7.5, 'F');
+  pdf.setDrawColor(borderColor[0], borderColor[1], borderColor[2]);
+  pdf.rect(leftX, yPosition, tableWidth, 7.5);
+
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(8.5);
+  pdf.setTextColor(3, 105, 161);
+  pdf.text('Financing Partner:', leftX + 4, yPosition + 5);
+
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(9);
+  pdf.setTextColor(7, 89, 133);
+  pdf.text(selectedBank.name, leftX + tableWidth - 4, yPosition + 5, { align: 'right' });
+
+  yPosition += 7.5;
+
+  // --- HEADER ROW 3: RATE OF INTEREST (ROI) ---
+  pdf.setFillColor(bankBlue[0], bankBlue[1], bankBlue[2]);
+  pdf.rect(leftX, yPosition, tableWidth, 7.5, 'F');
+  pdf.setDrawColor(borderColor[0], borderColor[1], borderColor[2]);
+  pdf.rect(leftX, yPosition, tableWidth, 7.5);
+
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(8.5);
+  pdf.setTextColor(3, 105, 161);
+  pdf.text('Applicable Rate of Interest:', leftX + 4, yPosition + 5);
+
+  pdf.setFont('helvetica', 'bold');
+  pdf.setFontSize(9);
+  pdf.setTextColor(7, 89, 133);
+  pdf.text(`ROI ${quotation.roi_emi_interest || 0}%`, leftX + tableWidth - 4, yPosition + 5, { align: 'right' });
+
+  yPosition += 7.5;
+
+  // --- HELPER FUNCTION TO DRAW TABLE ROWS WITH PROPER ALIGNMENT ---
+  const addRow = (
+    label: string,
+    value: string,
+    bgColor?: number[],
+    isHighlight: boolean = false,
+    isBold: boolean = false
+  ) => {
+    // Fill backgrounds
     if (isHighlight) {
-      pdf.setFillColor(highlightColor[0], highlightColor[1], highlightColor[2]);
-      pdf.rect(rightX, y - 5, pageWidth / 2 - 10, rowHeight, 'F');
+      // Highlight row (e.g. On the road, Down Payment, Final Down Payment)
+      pdf.setFillColor(highlightYellow[0], highlightYellow[1], highlightYellow[2]);
+      pdf.rect(leftX, yPosition, labelWidth, rowHeight, 'F');
+      pdf.rect(rightX, yPosition, valueWidth, rowHeight, 'F');
     } else if (bgColor) {
+      pdf.setFillColor(bgColor[0], bgColor[1], bgColor[2]);
+      pdf.rect(leftX, yPosition, labelWidth, rowHeight, 'F');
+      pdf.rect(rightX, yPosition, valueWidth, rowHeight, 'F');
+    } else {
       pdf.setFillColor(255, 255, 255);
-      pdf.rect(rightX, y - 5, pageWidth / 2 - 10, rowHeight, 'F');
+      pdf.rect(leftX, yPosition, labelWidth, rowHeight, 'F');
+      pdf.rect(rightX, yPosition, valueWidth, rowHeight, 'F');
     }
 
-    // Borders
-    pdf.setDrawColor(200, 200, 200);
-    pdf.rect(leftX, y - 5, pageWidth / 2 - 10, rowHeight);
-    pdf.rect(rightX, y - 5, pageWidth / 2 - 10, rowHeight);
+    // Grid Borders
+    pdf.setDrawColor(borderColor[0], borderColor[1], borderColor[2]);
+    pdf.setLineWidth(0.2);
+    pdf.rect(leftX, yPosition, labelWidth, rowHeight);
+    pdf.rect(rightX, yPosition, valueWidth, rowHeight);
 
-    // Text
-    pdf.setTextColor(textColor[0], textColor[1], textColor[2]);
-    pdf.setFontSize(10);
-    pdf.text(label, leftX + 2, y);
-    pdf.text(value, rightX + 2, y);
+    // Left Cell Text (Description)
+    pdf.setTextColor(isHighlight ? 15 : 51, isHighlight ? 23 : 65, isHighlight ? 42 : 85);
+    pdf.setFontSize(isHighlight ? 9.5 : 9);
+    pdf.setFont('helvetica', isBold || isHighlight ? 'bold' : 'normal');
+    pdf.text(label, leftX + 4, yPosition + 4.9);
+
+    // Right Cell Text (Amount - STRICTLY RIGHT ALIGNED)
+    pdf.setTextColor(isHighlight ? 15 : 15, isHighlight ? 23 : 23, isHighlight ? 42 : 42);
+    pdf.setFontSize(isHighlight ? 9.5 : 9);
+    pdf.setFont('helvetica', isBold || isHighlight ? 'bold' : 'normal');
+    pdf.text(value, rightX + valueWidth - 4, yPosition + 4.9, { align: 'right' });
+
+    yPosition += rowHeight;
   };
 
-  // Header - Car Model
-  pdf.setFillColor(headerColor[0], headerColor[1], headerColor[2]);
-  pdf.rect(15, yPosition - 5, pageWidth - 30, 10, 'F');
-  pdf.setDrawColor(200, 200, 200);
-  pdf.rect(15, yPosition - 5, pageWidth - 30, 10);
-  pdf.setFontSize(12);
-  pdf.setFont('helvetica', 'bold');
-  pdf.text('car model :', 20, yPosition);
-  pdf.text(`${quotation.car_model.toUpperCase()} ${quotation.model_variant.toUpperCase()}`, pageWidth - 20, yPosition, { align: 'right' });
-  yPosition += 12;
+  // --- SECTION 1: COST BREAKDOWN ---
+  addRow('Cost of the vehicle EX Showroom', formatCurrency(quotation.ex_showroom));
 
-  // Bank Header
-  pdf.setFillColor(bankHeaderColor[0], bankHeaderColor[1], bankHeaderColor[2]);
-  pdf.rect(15, yPosition - 5, pageWidth - 30, 8, 'F');
-  pdf.rect(15, yPosition - 5, pageWidth - 30, 8);
-  pdf.setFontSize(10);
-  pdf.setFont('helvetica', 'normal');
-  pdf.text(selectedBank.name, pageWidth - 20, yPosition, { align: 'right' });
-  yPosition += 10;
-
-  // ROI Header
-  pdf.setFillColor(bankHeaderColor[0], bankHeaderColor[1], bankHeaderColor[2]);
-  pdf.rect(15, yPosition - 5, pageWidth - 30, 8, 'F');
-  pdf.rect(15, yPosition - 5, pageWidth - 30, 8);
-  pdf.text(`ROI ${quotation.roi_emi_interest}%`, pageWidth - 20, yPosition, { align: 'right' });
-  yPosition += 10;
-
-  // Cost breakdown
-  addRow('Cost of the vehicle EX Showroom', formatCurrency(quotation.ex_showroom), yPosition);
-  yPosition += 8;
-
-  addRow('Registration', formatCurrency(quotation.registration), yPosition);
-  yPosition += 8;
-
-  addRow('Insurance', formatCurrency(quotation.insurance), yPosition);
-  yPosition += 8;
-
-  addRow('GPS', formatCurrency(quotation.gps), yPosition);
-  yPosition += 8;
-
-  addRow('Speed Governor', formatCurrency(quotation.speed_governor), yPosition);
-  yPosition += 8;
-
-  // On the road - highlighted
-  addRow('On the road', formatCurrency(quotation.on_the_road), yPosition, undefined, true);
-  yPosition += 10;
-
-  // Loan details
-  addRow('Loan Amount', formatCurrency(quotation.loan_amount), yPosition);
-  yPosition += 8;
-
-  addRow('Margin (Down payment)', formatCurrency(quotation.margin_down_payment), yPosition);
-  yPosition += 8;
-
-  addRow('Process fee', formatCurrency(quotation.process_fee), yPosition);
-  yPosition += 8;
-
-  addRow('Stamp duty', formatCurrency(quotation.stamp_duty), yPosition);
-  yPosition += 8;
-
-  addRow('Handling Loan Services and Document Charge', formatCurrency(quotation.handling_document_charge), yPosition);
-  yPosition += 8;
-
-  // Down Payment - highlighted
-  addRow('Down Payment', formatCurrency(quotation.down_payment), yPosition, undefined, true);
-  yPosition += 10;
-
-  // Offers - highlighted
-  addRow('Offers', formatCurrency(quotation.offers), yPosition, undefined, true);
-  yPosition += 10;
-
-  // Final Down Payment - highlighted
-  addRow('Final Down Payment', formatCurrency(quotation.final_down_payment), yPosition, undefined, true);
-  yPosition += 10;
-
-  // EMI details
-  if (quotation.emi_years > 0 && quotation.monthly_emi > 0) {
-    addRow(`${quotation.emi_years} years (${quotation.emi_years * 12} Months)`, formatCurrency(quotation.monthly_emi), yPosition, bankHeaderColor);
+  if (quotation.tcs > 0) {
+    addRow('TCS (1%)', formatCurrency(quotation.tcs));
   }
 
-  // Save the PDF
-  const fileName = `Quotation_${quotation.car_model.replace(/\s+/g, '_')}_${quotation.vendor_id}.pdf`;
+  addRow('Registration', formatCurrency(quotation.registration));
+  addRow('Insurance', formatCurrency(quotation.insurance));
+
+  if (quotation.number_plate_crtm_autocard > 0) {
+    addRow('Number Plate + CRTM + Autocard', formatCurrency(quotation.number_plate_crtm_autocard));
+  }
+
+  addRow('GPS', formatCurrency(quotation.gps));
+
+  if (quotation.fastag > 0) {
+    addRow('Fastag', formatCurrency(quotation.fastag));
+  }
+
+  addRow('Speed Governor', formatCurrency(quotation.speed_governor));
+
+  if (quotation.accessories > 0) {
+    addRow('Accessories', formatCurrency(quotation.accessories));
+  }
+
+  // On the Road (Highlighted)
+  addRow('On the road', formatCurrency(quotation.on_the_road), undefined, true, true);
+
+  // --- SECTION 2: LOAN & DOWN PAYMENT BREAKDOWN ---
+  addRow('Loan Amount', formatCurrency(quotation.loan_amount));
+  addRow('Margin (Down payment)', formatCurrency(quotation.margin_down_payment));
+  addRow('Process fee', formatCurrency(quotation.process_fee));
+  addRow('Stamp duty', formatCurrency(quotation.stamp_duty));
+  addRow('Handling Loan Services and Document Charge', formatCurrency(quotation.handling_document_charge));
+
+  if (quotation.loan_suraksha_insurance > 0) {
+    addRow('Loan Suraksha / Insurance', formatCurrency(quotation.loan_suraksha_insurance));
+  }
+
+  // Down Payment (Highlighted)
+  addRow('Down Payment', formatCurrency(quotation.down_payment), undefined, true, true);
+
+  // Offers (Highlighted)
+  addRow('Offers', formatCurrency(quotation.offers), undefined, true, true);
+
+  // Final Down Payment (Highlighted)
+  addRow('Final Down Payment', formatCurrency(quotation.final_down_payment), undefined, true, true);
+
+  // --- SECTION 3: EMI MATRIX ---
+  if (quotation.emi_years > 0 && quotation.monthly_emi > 0) {
+    const emiLabel = `${quotation.emi_years} years (${quotation.emi_years * 12} Months)`;
+    addRow(emiLabel, formatCurrency(quotation.monthly_emi), bankBlue, false, true);
+  }
+
+  // --- FOOTER & DISCLAIMER ---
+  yPosition += 6;
+  pdf.setFont('helvetica', 'normal');
+  pdf.setFontSize(7.5);
+  pdf.setTextColor(148, 163, 184);
+  pdf.text('* This is a computer-generated quotation issued by Gautam Motors and is valid for 15 days.', leftX, yPosition);
+  pdf.text('Prices and financing schemes are subject to showroom delivery terms and bank loan sanction.', leftX, yPosition + 3.8);
+
+  // Save the PDF with clean file name
+  const safeModel = (quotation.car_model || 'Vehicle').replace(/[^a-zA-Z0-9_-]/g, '_');
+  const safeId = (quotation.vendor_id || 'ID').replace(/[^a-zA-Z0-9_-]/g, '_');
+  const fileName = `Quotation_${safeModel}_${safeId}.pdf`;
   pdf.save(fileName);
 };

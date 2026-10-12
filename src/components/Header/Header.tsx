@@ -178,42 +178,6 @@ const Header: React.FC = () => {
             </Link>
           </li>
           <li>
-            <Link
-              to="/my-bookings"
-              className={location.pathname === '/my-bookings' ? 'active' : ''}
-              onClick={handleMobileLinkClick}
-            >
-              MY BOOKINGS
-            </Link>
-          </li>
-          <li>
-            <Link
-              to="/cart"
-              className={`mobile-cart-link ${location.pathname === '/cart' ? 'active' : ''}`}
-              onClick={handleMobileLinkClick}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 17.6 16.6 18 16 18H8C7.4 18 7 17.6 7 17V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="9" cy="20" r="1" stroke="currentColor" strokeWidth="2"/>
-                <circle cx="20" cy="20" r="1" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-              CART {totalItems > 0 && `(${totalItems})`}
-            </Link>
-          </li>
-          <li>
-            <Link 
-              to="/" 
-              className="mobile-book-now"
-              onClick={handleMobileLinkClick}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              BOOK NOW
-            </Link>
-          </li>
-          <li>
             <Link 
               to="/about-us" 
               className={location.pathname === '/about-us' ? 'active' : ''}
@@ -221,6 +185,16 @@ const Header: React.FC = () => {
             >
               ABOUT US
             </Link>
+          </li>
+          <li>
+            <a href="tel:+918652089525" className="mobile-call-link" onClick={handleMobileLinkClick}>
+              <i className="fa fa-phone" style={{ marginRight: '8px' }}></i> CALL US
+            </a>
+          </li>
+          <li>
+            <a href="https://wa.me/918652089525" target="_blank" rel="noopener noreferrer" className="mobile-wa-link" onClick={handleMobileLinkClick}>
+              <i className="fa fa-whatsapp" style={{ marginRight: '8px' }}></i> WHATSAPP
+            </a>
           </li>
           <li className="mobile-contact-item">
             <a href="#footer" onClick={scrollToFooter} className="contact-button mobile-contact">
@@ -232,34 +206,14 @@ const Header: React.FC = () => {
 
       <div className="right-space">
         <div className="header-actions">
-          <Link
-            to="/my-bookings"
-            className={`my-bookings-button ${location.pathname === '/my-bookings' ? 'active' : ''}`}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M9 2H4v20h16V2h-5M9 2v4h6V2M9 2h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M9 11h6M9 15h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-            </svg>
-            MY BOOKINGS
-          </Link>
-          <Link to="/cart" className="cart-button">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 3H5L5.4 5M7 13H17L21 5H5.4M7 13L5.4 5M7 13L4.7 15.3C4.3 15.7 4.6 16.5 5.1 16.5H17M17 13V17C17 17.6 16.6 18 16 18H8C7.4 18 7 17.6 7 17V13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <circle cx="9" cy="20" r="1" stroke="currentColor" strokeWidth="2"/>
-              <circle cx="20" cy="20" r="1" stroke="currentColor" strokeWidth="2"/>
-            </svg>
-            <span className="cart-text">CART</span>
-            {totalItems > 0 && (
-              <span className="cart-badge">{totalItems}</span>
-            )}
-          </Link>
-          <Link to="/" className="book-now-header">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 2L2 7v10c0 5.55 3.84 9.74 9 11 5.16-1.26 9-5.45 9-11V7l-10-5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-            BOOK NOW
-          </Link>
+          <a href="tel:+918652089525" className="header-call-btn" title="Call Us">
+            <i className="fa fa-phone"></i>
+            <span>CALL US</span>
+          </a>
+          <a href="https://wa.me/918652089525" target="_blank" rel="noopener noreferrer" className="header-wa-btn" title="WhatsApp">
+            <i className="fa fa-whatsapp"></i>
+            <span>WHATSAPP</span>
+          </a>
           <a href="#footer" onClick={scrollToFooter} className="contact-button">
             CONTACT US
           </a>

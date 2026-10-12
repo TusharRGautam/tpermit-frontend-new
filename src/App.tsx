@@ -100,10 +100,9 @@ const AppContent = () => {
           <Route path="/" element={null} />
           <Route path="/car/:carId" element={<CarDetailWithInvoices />} />
           <Route path="/new-cars" element={<NewCars />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/my-bookings" element={<MyBookings />} />
-          {/* <Route path="/about-us" element={<AboutUs />} /> */}
+          <Route path="/cart" element={<Navigate to="/" replace />} />
+          <Route path="/checkout" element={<Navigate to="/" replace />} />
+          <Route path="/my-bookings" element={<Navigate to="/" replace />} />
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

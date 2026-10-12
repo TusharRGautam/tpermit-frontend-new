@@ -95,10 +95,10 @@ const InvoiceViewPage: React.FC = () => {
           </div>
           <div className="invoice-preview-actions">
             <button className="invoice-preview-btn download" onClick={handleDownload}>
-              <span>📥</span> Download PDF
+              Download PDF
             </button>
             <Link to={`/dashboard/invoice/edit/${invoice.id}`} className="invoice-preview-btn edit">
-              <span>✏️</span> Edit Invoice
+              Edit Invoice
             </Link>
           </div>
         </div>

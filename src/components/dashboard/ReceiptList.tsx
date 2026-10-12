@@ -228,7 +228,7 @@ const ReceiptList: React.FC = () => {
         <p>View, search, and manage all payment receipts</p>
         <button
           className="btn btn-primary"
-          onClick={() => navigate('/dashboard/receipt/new')}
+          onClick={() => navigate('/dashboard/receipt')}
           style={{ marginTop: '1rem' }}
         >
           + Create New Receipt
@@ -433,25 +433,25 @@ const ReceiptList: React.FC = () => {
                     onClick={() => handleViewDetails(receipt)}
                     className="btn-card-action btn-view"
                   >
-                    👁️ View
+                    View
                   </button>
                   <button
                     onClick={() => handleDownloadReceipt(receipt)}
                     className="btn-card-action btn-download"
                   >
-                    📥 Download
+                    Download
                   </button>
                   <button
                     onClick={() => handleEditClick(receipt)}
                     className="btn-card-action btn-view"
                   >
-                    ✏️ Edit
+                    Edit
                   </button>
                   <button
                     onClick={() => handleDeleteClick(receipt)}
                     className="btn-card-action btn-delete"
                   >
-                    🗑️ Delete
+                    Delete
                   </button>
                 </div>
               </div>

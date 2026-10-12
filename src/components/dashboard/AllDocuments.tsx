@@ -8,54 +8,88 @@ const AllDocuments = () => {
     const [activeTab, setActiveTab] = useState('booking');
 
     const tabs = [
-        { id: 'booking', label: 'Booking Orders', icon: '📋', color: '#667eea' },
-        { id: 'receipt', label: 'Payment Receipts', icon: '🧾', color: '#10b981' },
-        { id: 'proforma', label: 'Proforma Invoices', icon: '📄', color: '#f59e0b' }
+        { id: 'booking', label: 'Booking Orders', color: '#dc2626' },
+        { id: 'receipt', label: 'Payment Receipts', color: '#16a34a' },
+        { id: 'proforma', label: 'Proforma Invoices', color: '#2563eb' }
     ];
 
     const activeTabData = tabs.find(t => t.id === activeTab);
 
+    const renderTabIcon = (tabId: string, strokeColor = 'currentColor', size = 20) => {
+        if (tabId === 'booking') {
+            return (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+                </svg>
+            );
+        }
+        if (tabId === 'receipt') {
+            return (
+                <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+                    <line x1="2" y1="10" x2="22" y2="10"></line>
+                </svg>
+            );
+        }
+        return (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={strokeColor} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+        );
+    };
+
     return (
-        <div className="dashboard-container" style={{ maxWidth: '100%', margin: '0 auto', padding: '1.5rem' }}>
-            {/* Enhanced Header */}
+        <div className="dashboard-container" style={{ maxWidth: '100%', margin: '0 auto', padding: '0.25rem 0' }}>
+            {/* Enhanced Compact Header */}
             <div style={{
-                background: `linear-gradient(135deg, ${activeTabData?.color || '#667eea'} 0%, ${activeTabData?.color || '#764ba2'}dd 100%)`,
-                borderRadius: '16px',
-                padding: '2rem 2.5rem',
-                marginBottom: '2rem',
-                boxShadow: '0 10px 25px rgba(0, 0, 0, 0.08)',
+                background: '#0f172a',
+                borderRadius: '8px',
+                padding: '0.65rem 1.15rem',
+                marginBottom: '0.65rem',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+                border: '1px solid #1e293b',
                 position: 'relative',
                 overflow: 'hidden'
             }}>
-                {/* Background Pattern */}
-                <div style={{
-                    position: 'absolute',
-                    top: 0,
-                    right: 0,
-                    width: '300px',
-                    height: '100%',
-                    background: 'radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px)',
-                    backgroundSize: '20px 20px',
-                    opacity: 0.3
-                }} />
-
                 <div style={{ position: 'relative', zIndex: 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                            <span style={{ fontSize: '2.5rem' }}>{activeTabData?.icon}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.65rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                            <div style={{
+                                width: '30px',
+                                height: '30px',
+                                borderRadius: '6px',
+                                background: 'rgba(255, 255, 255, 0.15)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                    <polyline points="14 2 14 8 20 8"></polyline>
+                                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                                    <polyline points="10 9 9 9 8 9"></polyline>
+                                </svg>
+                            </div>
                             <div>
                                 <h1 style={{
-                                    fontSize: '2rem',
-                                    fontWeight: '700',
-                                    color: 'white',
+                                    fontSize: '1.10rem',
+                                    fontWeight: '800',
+                                    color: '#ffffff',
                                     margin: 0,
-                                    letterSpacing: '-0.02em'
+                                    lineHeight: 1.2,
+                                    background: 'none',
+                                    WebkitTextFillColor: '#ffffff'
                                 }}>All Documents</h1>
                                 <p style={{
-                                    fontSize: '0.95rem',
-                                    color: 'rgba(255, 255, 255, 0.95)',
-                                    margin: '0.25rem 0 0 0'
-                                }}>View and manage all your business documents</p>
+                                    fontSize: '0.68rem',
+                                    color: '#94a3b8',
+                                    margin: '0.1rem 0 0 0'
+                                }}>View and manage all booking orders, payment receipts, and proformas</p>
                             </div>
                         </div>
 
@@ -65,41 +99,38 @@ const AllDocuments = () => {
                                 background: 'rgba(255, 255, 255, 0.2)',
                                 backdropFilter: 'blur(10px)',
                                 border: '1px solid rgba(255, 255, 255, 0.3)',
-                                borderRadius: '12px',
-                                padding: '0.75rem 1.25rem',
+                                borderRadius: '5px',
+                                padding: '0.35rem 0.75rem',
                                 color: 'white',
                                 textDecoration: 'none',
                                 fontWeight: '600',
-                                fontSize: '0.9rem',
+                                fontSize: '0.74rem',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.5rem',
+                                gap: '0.4rem',
                                 transition: 'all 0.2s ease'
                             }}
-                            onMouseEnter={(e) => {
-                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.3)';
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                            }}
-                            onMouseLeave={(e) => {
-                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.2)';
-                                e.currentTarget.style.transform = 'none';
-                            }}
                         >
-                            <span>🏠</span> Back to Dashboard
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="19" y1="12" x2="5" y2="12"></line>
+                                <polyline points="12 19 5 12 12 5"></polyline>
+                            </svg>
+                            Back to Dashboard
                         </a>
                     </div>
                 </div>
             </div>
 
-            {/* Enhanced Tab Navigation */}
+            {/* Compact Tab Navigation */}
             <div style={{
                 background: 'white',
-                borderRadius: '12px',
-                padding: '0.75rem',
-                marginBottom: '2rem',
-                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                borderRadius: '8px',
+                padding: '0.4rem',
+                marginBottom: '0.65rem',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
+                border: '1px solid #e2e8f0',
                 display: 'flex',
-                gap: '0.5rem',
+                gap: '0.4rem',
                 flexWrap: 'wrap'
             }}>
                 {tabs.map(tab => (
@@ -108,95 +139,80 @@ const AllDocuments = () => {
                         onClick={() => setActiveTab(tab.id)}
                         style={{
                             flex: '1',
-                            minWidth: '200px',
-                            padding: '1rem 1.5rem',
-                            fontSize: '1rem',
-                            fontWeight: activeTab === tab.id ? '600' : '500',
+                            minWidth: '150px',
+                            padding: '0.45rem 0.85rem',
+                            fontSize: '0.78rem',
+                            fontWeight: activeTab === tab.id ? '700' : '500',
                             color: activeTab === tab.id ? 'white' : '#64748b',
-                            background: activeTab === tab.id ? `linear-gradient(135deg, ${tab.color} 0%, ${tab.color}dd 100%)` : 'transparent',
-                            border: activeTab === tab.id ? 'none' : '2px solid #e2e8f0',
-                            borderRadius: '10px',
+                            background: activeTab === tab.id ? tab.color : 'transparent',
+                            border: activeTab === tab.id ? 'none' : '1px solid #e2e8f0',
+                            borderRadius: '6px',
                             cursor: 'pointer',
-                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                            transition: 'all 0.15s ease',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '0.75rem',
-                            boxShadow: activeTab === tab.id ? `0 4px 12px ${tab.color}40` : 'none',
-                            transform: activeTab === tab.id ? 'translateY(-2px)' : 'none'
-                        }}
-                        onMouseEnter={(e) => {
-                            if (activeTab !== tab.id) {
-                                e.currentTarget.style.borderColor = tab.color;
-                                e.currentTarget.style.color = tab.color;
-                                e.currentTarget.style.transform = 'translateY(-1px)';
-                            }
-                        }}
-                        onMouseLeave={(e) => {
-                            if (activeTab !== tab.id) {
-                                e.currentTarget.style.borderColor = '#e2e8f0';
-                                e.currentTarget.style.color = '#64748b';
-                                e.currentTarget.style.transform = 'none';
-                            }
+                            gap: '0.5rem'
                         }}
                     >
-                        <span style={{ fontSize: '1.5rem' }}>{tab.icon}</span>
+                        <span style={{ display: 'flex', alignItems: 'center' }}>
+                            {renderTabIcon(tab.id, activeTab === tab.id ? 'white' : '#64748b', 15)}
+                        </span>
                         <span>{tab.label}</span>
                         {activeTab === tab.id && (
                             <span style={{
                                 marginLeft: 'auto',
                                 background: 'rgba(255, 255, 255, 0.3)',
-                                padding: '0.25rem 0.75rem',
-                                borderRadius: '12px',
-                                fontSize: '0.875rem',
-                                fontWeight: '600'
+                                padding: '1px 5px',
+                                borderRadius: '6px',
+                                fontSize: '0.62rem',
+                                fontWeight: '700'
                             }}>Active</span>
                         )}
                     </button>
                 ))}
             </div>
 
-            {/* Content Area with Card Design */}
+            {/* Content Area with Compact Card Design */}
             <div style={{
                 background: 'white',
-                borderRadius: '16px',
-                padding: '2rem',
-                minHeight: '500px',
-                boxShadow: '0 4px 16px rgba(0, 0, 0, 0.06)',
-                border: '1px solid #f1f5f9'
+                borderRadius: '8px',
+                padding: '0.75rem 1rem',
+                boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
+                border: '1px solid #e2e8f0'
             }}>
                 {/* Tab Content Header */}
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    marginBottom: '1.5rem',
-                    paddingBottom: '1rem',
-                    borderBottom: '2px solid #f1f5f9'
+                    marginBottom: '0.65rem',
+                    paddingBottom: '0.5rem',
+                    borderBottom: '1px solid #f1f5f9'
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                         <div style={{
-                            width: '48px',
-                            height: '48px',
-                            borderRadius: '12px',
-                            background: `linear-gradient(135deg, ${activeTabData?.color || '#667eea'}20, ${activeTabData?.color || '#667eea'}10)`,
+                            width: '28px',
+                            height: '28px',
+                            borderRadius: '6px',
+                            background: `${activeTabData?.color || '#dc2626'}15`,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            fontSize: '1.75rem'
+                            color: activeTabData?.color || '#dc2626'
                         }}>
-                            {activeTabData?.icon}
+                            {renderTabIcon(activeTab, activeTabData?.color || '#dc2626', 16)}
                         </div>
                         <div>
                             <h2 style={{
                                 margin: 0,
-                                fontSize: '1.5rem',
+                                fontSize: '0.92rem',
                                 fontWeight: '700',
-                                color: '#1e293b'
+                                color: '#0f172a'
                             }}>{activeTabData?.label}</h2>
                             <p style={{
-                                margin: '0.25rem 0 0 0',
-                                fontSize: '0.875rem',
+                                margin: '0.1rem 0 0 0',
+                                fontSize: '0.68rem',
                                 color: '#64748b'
                             }}>
                                 {activeTab === 'booking' && 'Manage customer vehicle booking orders'}
@@ -208,7 +224,7 @@ const AllDocuments = () => {
                 </div>
 
                 {/* List Content */}
-                <div style={{ animation: 'fadeIn 0.3s ease-in' }}>
+                <div>
                     {activeTab === 'booking' && <BookingOrderList />}
                     {activeTab === 'receipt' && <ReceiptList />}
                     {activeTab === 'proforma' && <ProformaInvoiceList />}

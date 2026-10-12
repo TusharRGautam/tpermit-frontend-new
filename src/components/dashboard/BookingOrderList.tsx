@@ -147,7 +147,7 @@ const BookingOrderList: React.FC = () => {
                 <p>View, search, and manage all booking orders</p>
                 <button
                     className="btn btn-primary"
-                    onClick={() => navigate('/dashboard/booking-order/new')}
+                    onClick={() => navigate('/dashboard/booking-order')}
                     style={{ marginTop: '1rem' }}
                 >
                     + Create New Booking Order
@@ -305,19 +305,19 @@ const BookingOrderList: React.FC = () => {
                                         onClick={() => handleDownloadPDF(order)}
                                         className="btn-card-action btn-download"
                                     >
-                                        📥 Download
+                                        Download
                                     </button>
                                     <button
                                         onClick={() => handleEditClick(order)}
                                         className="btn-card-action btn-view"
                                     >
-                                        ✏️ Edit
+                                        Edit
                                     </button>
                                     <button
                                         onClick={() => handleDelete(order.id)}
                                         className="btn-card-action btn-delete"
                                     >
-                                        🗑️ Delete
+                                        Delete
                                     </button>
                                 </div>
                             </div>

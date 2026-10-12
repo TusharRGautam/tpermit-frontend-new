@@ -2,10 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import './CarDetailWithInvoices.css';
 import quotationService from '../../services/quotationService';
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import { generateQuotationPDF, QuotationData } from '../../utils/quotationPdfGenerator';
 import * as XLSX from 'xlsx';
-import BookingModal from '../BookingModal/BookingModal';
 
 interface CarVariant {
   id: number;
@@ -21,38 +19,7 @@ interface CarVariant {
   quotationData?: any; // Store the original quotation data
 }
 
-interface QuotationData {
-  vendor_id: string;
-  car_model: string;
-  model_variant: string;
-  roi_emi_interest: number;
-  sbi_bank: number;
-  union_bank: number;
-  mahindra_finance: number;
-  cholamandalam_bank: number;
-  au_bank: number;
-  ex_showroom: number;
-  tcs: number;
-  registration: number;
-  insurance: number;
-  number_plate_crtm_autocard: number;
-  gps: number;
-  fastag: number;
-  speed_governor: number;
-  accessories: number;
-  on_the_road: number;
-  loan_amount: number;
-  margin_down_payment: number;
-  process_fee: number;
-  stamp_duty: number;
-  handling_document_charge: number;
-  loan_suraksha_insurance: number;
-  down_payment: number;
-  offers: number;
-  final_down_payment: number;
-  emi_years: number;
-  monthly_emi: number;
-}
+
 
 interface BankOption {
   name: string;
@@ -330,128 +297,48 @@ const CarDetailWithInvoices: React.FC = () => {
     try {
       setIsDownloading(true);
 
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      let yPosition = 20;
-
-      // Company Header
-      pdf.setFontSize(18);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('GAUTAM MOTORS & FINANCE', pageWidth / 2, yPosition, { align: 'center' });
-
-      yPosition += 7;
-      pdf.setFontSize(10);
-      pdf.setFont('helvetica', 'normal');
-      pdf.text('DIVA EAST', pageWidth / 2, yPosition, { align: 'center' });
-
-      yPosition += 5;
-      pdf.text('Contact: Rakesh Gautam - 8652089525', pageWidth / 2, yPosition, { align: 'center' });
-
-      yPosition += 5;
-
-      yPosition += 10;
-      pdf.setLineWidth(0.5);
-      pdf.line(15, yPosition, pageWidth - 15, yPosition);
-
-      yPosition += 10;
-
-      // Prepare table data
-      const quotationData = selectedVariant.quotationData;
-      const exShowroom = quotationData?.ex_showroom || 0;
-      const showTCS = exShowroom > 1000000;
-      const tcs = showTCS ? Math.round(exShowroom * 0.01) : 0;
-
-      const onTheRoad = quotationData?.on_the_road || 0;
-
-      const tableData: any[] = [
-        ['car model :', selectedVariant.modelName],
-        ['', selectedVariant.bankName],
-        ['', `ROI ${selectedVariant.roi}`],
-        ['Cost of the vehicle EX Showroom', `Rs.${exShowroom.toLocaleString('en-IN')}`],
-      ];
-
-      if (showTCS) {
-        tableData.push(['TCS', `Rs.${tcs.toLocaleString('en-IN')}`]);
+      if (selectedVariant.quotationData) {
+        generateQuotationPDF(selectedVariant.quotationData);
+        return;
       }
 
-      tableData.push(
-        ['Registration', `Rs.${(quotationData?.registration || 0).toLocaleString('en-IN')}`],
-        ['Insurance', `Rs.${(quotationData?.insurance || 0).toLocaleString('en-IN')}`],
-        ['Number Plate + CRTM + Autocard', `Rs.${(quotationData?.number_plate_crtm_autocard || 0).toLocaleString('en-IN')}`],
-        ['GPS', `Rs.${(quotationData?.gps || 0).toLocaleString('en-IN')}`],
-        ['Fastag', `Rs.${(quotationData?.fastag || 0).toLocaleString('en-IN')}`],
-        ['Speed Governor', `Rs.${(quotationData?.speed_governor || 0).toLocaleString('en-IN')}`],
-        ['On the road', `Rs.${onTheRoad.toLocaleString('en-IN')}`],
-        ['Loan Amount', `Rs.${(quotationData?.loan_amount || 0).toLocaleString('en-IN')}`],
-        ['Margin (Down payment)', `Rs.${(quotationData?.margin_down_payment || 0).toLocaleString('en-IN')}`],
-        ['Process fee', `Rs.${(quotationData?.process_fee || 0).toLocaleString('en-IN')}`],
-        ['Stamp duty', `Rs.${(quotationData?.stamp_duty || 0).toLocaleString('en-IN')}`],
-        ['Handling Loan Services and Document Charge', `Rs.${(quotationData?.handling_document_charge || 0).toLocaleString('en-IN')}`],
-        ['Down Payment', `Rs.${(quotationData?.down_payment || 0).toLocaleString('en-IN')}`],
-        ['Offers', `Rs.${(quotationData?.offers || 0).toLocaleString('en-IN')}`],
-        ['Final Down Payment', `Rs.${(quotationData?.final_down_payment || 0).toLocaleString('en-IN')}`],
-        [`${quotationData?.emi_years || 5} years (${(quotationData?.emi_years || 5) * 12} Months)`, `Rs.${Math.round(quotationData?.monthly_emi || 0).toLocaleString('en-IN')}`]
-      );
+      // Fallback if raw quotation data is not loaded
+      const fallbackQuotation: QuotationData = {
+        vendor_id: `QT-${Date.now().toString().slice(-6)}`,
+        car_model: selectedVariant.modelName || carModel || 'Vehicle',
+        model_variant: selectedVariant.name || '',
+        roi_emi_interest: parseFloat(selectedVariant.roi?.replace(/[^0-9.]/g, '') || '0') || 0,
+        sbi_bank: selectedVariant.bankName?.toLowerCase().includes('state bank') ? 1 : 0,
+        union_bank: selectedVariant.bankName?.toLowerCase().includes('union') ? 1 : 0,
+        mahindra_finance: selectedVariant.bankName?.toLowerCase().includes('mahindra') ? 1 : 0,
+        cholamandalam_bank: selectedVariant.bankName?.toLowerCase().includes('chola') ? 1 : 0,
+        au_bank: selectedVariant.bankName?.toLowerCase().includes('au') ? 1 : 0,
+        ex_showroom: parseFloat(selectedVariant.price?.replace(/[^0-9.]/g, '') || '0') || 0,
+        tcs: 0,
+        registration: 39500,
+        insurance: 39500,
+        number_plate_crtm_autocard: 0,
+        gps: 18500,
+        fastag: 0,
+        speed_governor: 0,
+        accessories: 0,
+        on_the_road: parseFloat(selectedVariant.price?.replace(/[^0-9.]/g, '') || '0') || 0,
+        loan_amount: 0,
+        margin_down_payment: 0,
+        process_fee: 16500,
+        stamp_duty: 6500,
+        handling_document_charge: 30300,
+        loan_suraksha_insurance: 0,
+        down_payment: parseFloat(selectedVariant.downPayment?.replace(/[^0-9.]/g, '') || '0') || 0,
+        offers: 0,
+        final_down_payment: parseFloat(selectedVariant.downPayment?.replace(/[^0-9.]/g, '') || '0') || 0,
+        emi_years: 5,
+        monthly_emi: parseFloat(selectedVariant.monthlyPayment?.replace(/[^0-9.]/g, '') || '0') || 0,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
 
-      // Use autoTable to create the table
-      autoTable(pdf, {
-        startY: yPosition,
-        head: [],
-        body: tableData,
-        theme: 'grid',
-        styles: {
-          fontSize: 10,
-          cellPadding: 4,
-          lineColor: [0, 0, 0],
-          lineWidth: 0.5,
-          textColor: [0, 0, 0],
-          fontStyle: 'bold'
-        },
-        columnStyles: {
-          0: { cellWidth: 100, halign: 'left' },
-          1: { cellWidth: 80, halign: 'left', fontStyle: 'bold' }
-        },
-        headStyles: {
-          fillColor: [255, 255, 255],
-          textColor: [0, 0, 0],
-          fontStyle: 'bold'
-        },
-        bodyStyles: {
-          fillColor: [255, 255, 255]
-        },
-        alternateRowStyles: {
-          fillColor: [245, 245, 245]
-        },
-        didParseCell: function(data: any) {
-          // Highlight specific rows
-          if (data.row.index === 0) {
-            data.cell.styles.fillColor = [255, 255, 200]; // Light yellow for car model
-            data.cell.styles.fontStyle = 'bold';
-          }
-          if (tableData[data.row.index] && tableData[data.row.index][0] === 'On the road') {
-            data.cell.styles.fillColor = [255, 235, 150]; // Yellow for on-road
-            data.cell.styles.fontStyle = 'bold';
-          }
-          if (tableData[data.row.index] && tableData[data.row.index][0] === 'Down Payment') {
-            data.cell.styles.fillColor = [255, 235, 150]; // Yellow for down payment
-            data.cell.styles.fontStyle = 'bold';
-          }
-          if (tableData[data.row.index] && tableData[data.row.index][0] === 'Offers') {
-            data.cell.styles.fillColor = [200, 255, 200]; // Light green for offers
-            data.cell.styles.fontStyle = 'bold';
-            data.cell.styles.textColor = [255, 0, 0]; // Red text for offers
-          }
-          if (tableData[data.row.index] && tableData[data.row.index][0].includes('years')) {
-            data.cell.styles.fillColor = [200, 220, 255]; // Light blue for EMI
-            data.cell.styles.fontStyle = 'bold';
-            data.cell.styles.textColor = [255, 0, 0]; // Red text for EMI
-          }
-        }
-      });
-
-      const fileName = `T-Permit_Quotation_${selectedVariant.modelName.replace(/\s+/g, '_')}_${selectedVariant.bankName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
-      pdf.save(fileName);
-
+      generateQuotationPDF(fallbackQuotation);
     } catch (error) {
       console.error('Error generating PDF:', error);
       alert('Failed to generate PDF. Please try again.');
@@ -480,25 +367,25 @@ const CarDetailWithInvoices: React.FC = () => {
         ['Bank', selectedVariant.bankName],
         ['ROI', selectedVariant.roi],
         ['', ''],
-        ['Cost of the vehicle EX Showroom', `₹${exShowroom.toLocaleString('en-IN') || selectedVariant.price}`],
+        ['Cost of the vehicle EX Showroom', `Rs. ${exShowroom.toLocaleString('en-IN') || selectedVariant.price}`],
         // Only include TCS row if Ex-Showroom > ₹10,00,000
-        ...(showTCS ? [['TCS', `₹${Math.round(calculatedTCS).toLocaleString('en-IN')}`]] : []),
-        ['Registration', `₹${quotationData?.registration?.toLocaleString('en-IN') || '39,500'}`],
-        ['Insurance', `₹${quotationData?.insurance?.toLocaleString('en-IN') || '39,500'}`],
-        ['Number Plate + CRTM + Autocard', `₹${quotationData?.number_plate_crtm_autocard?.toLocaleString('en-IN') || '0'}`],
-        ['GPS', `₹${quotationData?.gps?.toLocaleString('en-IN') || '18,500'}`],
-        ['Fastag', `₹${quotationData?.fastag?.toLocaleString('en-IN') || '0'}`],
-        ['Speed Governor', `₹${quotationData?.speed_governor?.toLocaleString('en-IN') || '0'}`],
-        ['On the road', `₹${quotationData?.on_the_road?.toLocaleString('en-IN') || '0'}`],
-        ['Loan Amount', `₹${quotationData?.loan_amount?.toLocaleString('en-IN') || '10,10,000'}`],
-        ['Margin (Down payment)', `₹${quotationData?.margin_down_payment?.toLocaleString('en-IN') || '2,01,105'}`],
-        ['Process fee', `₹${quotationData?.process_fee?.toLocaleString('en-IN') || '16,500'}`],
-        ['Stamp duty', `₹${quotationData?.stamp_duty?.toLocaleString('en-IN') || '6,500'}`],
-        ['Handling Loan Services and Document Charge', `₹${quotationData?.handling_document_charge?.toLocaleString('en-IN') || '30,300'}`],
-        ['Down Payment', `₹${quotationData?.down_payment?.toLocaleString('en-IN') || selectedVariant.downPayment}`],
-        ['Offers', `₹${quotationData?.offers?.toLocaleString('en-IN') || '100'}`],
-        ['Final Down Payment', `₹${quotationData?.final_down_payment?.toLocaleString('en-IN') || selectedVariant.downPayment}`],
-        [`${quotationData?.emi_years || 5} years (${(quotationData?.emi_years || 5) * 12} Months)`, `₹${Math.round(quotationData?.monthly_emi || 0).toLocaleString('en-IN')}`]
+        ...(showTCS ? [['TCS', `Rs. ${Math.round(calculatedTCS).toLocaleString('en-IN')}`]] : []),
+        ['Registration', `Rs. ${quotationData?.registration?.toLocaleString('en-IN') || '39,500'}`],
+        ['Insurance', `Rs. ${quotationData?.insurance?.toLocaleString('en-IN') || '39,500'}`],
+        ['Number Plate + CRTM + Autocard', `Rs. ${quotationData?.number_plate_crtm_autocard?.toLocaleString('en-IN') || '0'}`],
+        ['GPS', `Rs. ${quotationData?.gps?.toLocaleString('en-IN') || '18,500'}`],
+        ['Fastag', `Rs. ${quotationData?.fastag?.toLocaleString('en-IN') || '0'}`],
+        ['Speed Governor', `Rs. ${quotationData?.speed_governor?.toLocaleString('en-IN') || '0'}`],
+        ['On the road', `Rs. ${quotationData?.on_the_road?.toLocaleString('en-IN') || '0'}`],
+        ['Loan Amount', `Rs. ${quotationData?.loan_amount?.toLocaleString('en-IN') || '10,10,000'}`],
+        ['Margin (Down payment)', `Rs. ${quotationData?.margin_down_payment?.toLocaleString('en-IN') || '2,01,105'}`],
+        ['Process fee', `Rs. ${quotationData?.process_fee?.toLocaleString('en-IN') || '16,500'}`],
+        ['Stamp duty', `Rs. ${quotationData?.stamp_duty?.toLocaleString('en-IN') || '6,500'}`],
+        ['Handling Loan Services and Document Charge', `Rs. ${quotationData?.handling_document_charge?.toLocaleString('en-IN') || '30,300'}`],
+        ['Down Payment', `Rs. ${quotationData?.down_payment?.toLocaleString('en-IN') || selectedVariant.downPayment}`],
+        ['Offers', `Rs. ${quotationData?.offers?.toLocaleString('en-IN') || '100'}`],
+        ['Final Down Payment', `Rs. ${quotationData?.final_down_payment?.toLocaleString('en-IN') || selectedVariant.downPayment}`],
+        [`${quotationData?.emi_years || 5} years (${(quotationData?.emi_years || 5) * 12} Months)`, `Rs. ${Math.round(quotationData?.monthly_emi || 0).toLocaleString('en-IN')}`]
       ];
 
       const worksheet = XLSX.utils.aoa_to_sheet(data);
@@ -727,11 +614,11 @@ const CarDetailWithInvoices: React.FC = () => {
                     <td className="highlight-cell">{selectedVariant.modelName}</td>
                   </tr>
                   <tr>
-                    <td></td>
+                    <td>Financing Partner</td>
                     <td>{selectedVariant.bankName}</td>
                   </tr>
                   <tr className="roi-row">
-                    <td></td>
+                    <td>Applicable Interest Rate</td>
                     <td>ROI {selectedVariant.roi}</td>
                   </tr>
                   <tr>
@@ -856,16 +743,6 @@ const CarDetailWithInvoices: React.FC = () => {
         </div>
       </div>
 
-      {/* BookingModal */}
-      {selectedVariant && (
-        <BookingModal
-          isOpen={isBookingModalOpen}
-          onClose={() => setIsBookingModalOpen(false)}
-          carName={selectedVariant.modelName}
-          carImage={selectedVariant.image}
-          variants={bookingModalVariants}
-        />
-      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 .bank-logos-section {
-  padding: 3rem 0;
+  padding: 1.5rem 0;
   background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
 }
 
@@ -11,211 +11,163 @@
 }
 
 .bank-logos-section .section-subtitle {
-  font-size: 2.5rem;
+  font-size: 1.6rem;
   color: #2c3e50;
-  margin-bottom: 3rem;
+  margin-bottom: 1.25rem;
   font-weight: 700;
   text-align: center;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.75px;
 }
 
+/* 5 Equal Columns for 5 Banks on Desktop */
 .bank-logos-section .brands-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  margin-top: 2rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.85rem;
+  margin-top: 1rem;
 }
 
 .brand-logo-card {
   background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 0.85rem 0.75rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
   transition: all 0.3s ease;
-  border: 2px solid #f0f0f0;
+  border: 1.5px solid #f0f0f0;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
 .brand-logo-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-  border-color: #667eea;
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: #dc2626;
 }
 
 .brand-logo-card .brand-logo {
-  width: 140px;
-  height: 80px;
-  padding: 0.5rem;
+  width: 90px;
+  height: 48px;
+  padding: 0.35rem;
   background-color: #f8f9fa;
-  border-radius: 12px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.6rem;
 }
 
 .brand-logo-card .brand-logo img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
 }
 
 .brand-logo-card .bank-name {
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: 0.88rem;
+  font-weight: 700;
   color: #2c3e50;
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 0.6rem 0;
   text-align: center;
+  line-height: 1.2;
 }
 
 .bank-rates {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 0.5rem;
   width: 100%;
+  margin-top: auto;
 }
 
 .rate-item {
   display: flex;
   flex-direction: column;
-  padding: 1rem;
+  padding: 0.45rem 0.25rem;
   background: #f8f9fa;
-  border-radius: 10px;
+  border-radius: 8px;
   text-align: center;
 }
 
 .rate-label {
-  font-size: 0.75rem;
+  font-size: 0.62rem;
   color: #6c757d;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
+  margin-bottom: 0.2rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
 }
 
 .rate-value {
-  font-size: 1.3rem;
+  font-size: 0.92rem;
   font-weight: 700;
-  padding: 0.5rem;
-  border-radius: 8px;
+  padding: 0.25rem;
+  border-radius: 6px;
+  line-height: 1;
 }
 
 .rate-value.interest-rate {
-  color: #667eea;
-  background: linear-gradient(135deg, #667eea15, #764ba215);
-  border: 2px solid #667eea30;
+  color: #4f46e5;
+  background: rgba(79, 70, 229, 0.1);
+  border: 1px solid rgba(79, 70, 229, 0.25);
 }
 
 .rate-value.approval-rate {
-  color: #28a745;
-  background: linear-gradient(135deg, #28a74515, #20c99715);
-  border: 2px solid #28a74530;
+  color: #16a34a;
+  background: rgba(22, 163, 74, 0.1);
+  border: 1px solid rgba(22, 163, 74, 0.25);
 }
 
-/* Responsive Design */
-@media (max-width: 1024px) {
-  .bank-logos-section .section-subtitle {
-    font-size: 2.2rem;
-  }
-
+/* ========================================================
+   RESPONSIVE BREAKPOINTS - BANK LOGOS
+   ======================================================== */
+@media (max-width: 1100px) {
   .bank-logos-section .brands-container {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .brand-logo-card {
-    padding: 1.5rem;
-  }
-
-  .rate-value {
-    font-size: 1.1rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.85rem;
   }
 }
 
 @media (max-width: 768px) {
   .bank-logos-section {
-    padding: 2.5rem 0;
+    padding: 1.25rem 0;
   }
 
   .bank-logos-section .section-subtitle {
-    font-size: 2rem;
-  }
-
-  .bank-logos-section .brands-container {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-
-  .brand-logo-card {
-    padding: 1.5rem;
-    max-width: 400px;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .brand-logo-card .brand-logo {
-    width: 120px;
-    height: 70px;
-  }
-
-  .bank-rates {
-    gap: 0.8rem;
-  }
-
-  .rate-item {
-    padding: 0.8rem;
-  }
-
-  .rate-label {
-    font-size: 0.7rem;
-  }
-
-  .rate-value {
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 576px) {
-  .bank-logos-section {
-    padding: 2rem 0;
-  }
-
-  .bank-logos-section .section-subtitle {
-    font-size: 1.8rem;
-  }
-
-  .brand-logo-card {
-    padding: 1.2rem;
-  }
-
-  .brand-logo-card .brand-logo {
-    width: 100px;
-    height: 60px;
-  }
-
-  .brand-logo-card .bank-name {
-    font-size: 1rem;
+    font-size: 1.4rem;
     margin-bottom: 1rem;
   }
 
-  .bank-rates {
-    gap: 0.6rem;
+  .bank-logos-section .brands-container {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
   }
 
-  .rate-item {
-    padding: 0.6rem;
+  .brand-logo-card {
+    padding: 0.75rem 0.6rem;
   }
 
-  .rate-label {
-    font-size: 0.65rem;
+  .brand-logo-card .brand-logo {
+    width: 80px;
+    height: 42px;
   }
 
   .rate-value {
-    font-size: 0.95rem;
-    padding: 0.4rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .bank-logos-section .brands-container {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .brand-logo-card {
+    max-width: 320px;
+    margin: 0 auto;
+    width: 100%;
   }
 }

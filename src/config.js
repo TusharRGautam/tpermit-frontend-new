@@ -1,16 +1,12 @@
-// Application configuration
+// Dynamic API configuration: localhost -> 5001, production -> api.gautammotors.in
+const isLocal = typeof window !== 'undefined' && (
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname === '[::1]'
+);
 
-// API configuration -- For Loca
-// export const API_CONFIG = {
-//   // Production configuration with api.gautammotors.in domain
-//   BASE_URL: 'http://localhost:5001/api',
-//   TIMEOUT: 10000, // 10 seconds
-// };
-
-// API configuration -- For Production
 export const API_CONFIG = {
-  // Production configuration with api.gautammotors.in domain
-  BASE_URL: 'https://api.gautammotors.in/api',
+  BASE_URL: isLocal ? 'http://localhost:5001/api' : 'https://api.gautammotors.in/api',
   TIMEOUT: 10000, // 10 seconds
 };
 

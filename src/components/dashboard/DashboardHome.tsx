@@ -8,7 +8,7 @@ const DashboardHome: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 500);
+    }, 400);
 
     return () => clearTimeout(timer);
   }, []);
@@ -24,28 +24,54 @@ const DashboardHome: React.FC = () => {
 
   return (
     <div className="dashboard-home-container">
+      {/* Welcome banner */}
       <div className="dashboard-welcome-banner">
         <div className="welcome-content">
-          <h1>Welcome to T-Permit Dashboard</h1>
-          <p>Manage your leads, quotations, bookings, payments, and more from one central place</p>
+          <h1>Gautam Motors Admin Portal</h1>
+          <p>Commercial T-Permit fleet management, quotations, bookings, leads and invoicing</p>
+        </div>
+        <div className="welcome-quick-links">
+          <Link to="/dashboard/cars" className="btn-welcome-action">
+            Show Cars
+          </Link>
+          <Link to="/dashboard/leads" className="btn-welcome-action secondary">
+            Meta Leads
+          </Link>
         </div>
       </div>
 
-      {/* Meta Campaign Leads Card */}
+      {/* Meta Campaign Leads Section */}
       <div className="dashboard-section">
         <div className="section-header">
-          <h2>📢 Meta Campaign Leads</h2>
+          <h2>Meta Campaign Leads</h2>
           <span className="section-description">Manage incoming ad campaign leads in real-time</span>
         </div>
         <div className="action-cards-row">
           <Link to="/dashboard/leads" className="action-card featured">
-            <div className="featured-badge">🔥 CRM</div>
-            <div className="card-icon-large">📢</div>
+            <div className="featured-badge">CRM</div>
             <div className="card-info">
-              <h3>All Leads</h3>
-              <p>View and manage all Meta ad campaign leads</p>
+              <h3>All Leads Management</h3>
+              <p>View, filter, update status, and manage all Meta ad campaign leads</p>
             </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
+          </Link>
+        </div>
+      </div>
+
+      {/* Vehicles / Show Cars Section */}
+      <div className="dashboard-section">
+        <div className="section-header">
+          <h2>Vehicle Inventory</h2>
+          <span className="section-description">Commercial T-Permit cars, models, and pricing</span>
+        </div>
+        <div className="action-cards-row">
+          <Link to="/dashboard/cars" className="action-card primary">
+            <div className="featured-badge">Fleet</div>
+            <div className="card-info">
+              <h3>Show Cars</h3>
+              <p>View all T-Permit commercial vehicles, down payments, and EMI structures</p>
+            </div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
         </div>
       </div>
@@ -53,142 +79,139 @@ const DashboardHome: React.FC = () => {
       {/* Quotations Section */}
       <div className="dashboard-section">
         <div className="section-header">
-          <h2>📝 Quotations</h2>
+          <h2>Quotations</h2>
           <span className="section-description">Create and manage vehicle quotations</span>
         </div>
         <div className="action-cards-row">
           <Link to="/dashboard/quotation" className="action-card primary">
-            <div className="card-icon-large">✏️</div>
             <div className="card-info">
               <h3>New Quotation</h3>
-              <p>Create a new vehicle quotation</p>
+              <p>Create a customized vehicle quotation with loan terms</p>
             </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
           <Link to="/dashboard/quotations" className="action-card primary">
-            <div className="card-icon-large">📄</div>
             <div className="card-info">
               <h3>All Quotations</h3>
-              <p>View and manage all quotations</p>
+              <p>View and manage all generated quotations</p>
             </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
         </div>
       </div>
 
-      {/* Booking & Payments Section */}
+      {/* Document Downloads & Records Section */}
       <div className="dashboard-section">
         <div className="section-header">
-          <h2>📋 Bookings & Payments</h2>
-          <span className="section-description">Comprehensive booking and payment management</span>
+          <h2>Document Downloads & Records</h2>
+          <span className="section-description">Search, view, and directly download official signed PDFs</span>
         </div>
         <div className="action-cards-row">
-          <Link to="/dashboard/unified-entry" className="action-card featured">
-            <div className="featured-badge">⭐ Unified</div>
-            <div className="card-icon-large">✨</div>
+          <Link to="/dashboard/booking-orders" className="action-card featured">
+            <div className="featured-badge">PDF</div>
             <div className="card-info">
-              <h3>Create All Documents</h3>
-              <p>Order, Receipt & Proforma in one flow</p>
+              <h3>Booking Orders Download</h3>
+              <p>View all commercial vehicle bookings and download signed order PDFs</p>
             </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
+          </Link>
+          <Link to="/dashboard/receipts" className="action-card featured">
+            <div className="featured-badge">PDF</div>
+            <div className="card-info">
+              <h3>Payment Receipts Download</h3>
+              <p>Browse payment records and download official stamped receipts</p>
+            </div>
+            <div className="card-arrow">&rarr;</div>
+          </Link>
+          <Link to="/dashboard/proforma-invoices" className="action-card primary">
+            <div className="featured-badge">PDF</div>
+            <div className="card-info">
+              <h3>Proforma Invoices Download</h3>
+              <p>Download official Velox Motors & Modi Hyundai proforma PDFs</p>
+            </div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
           <Link to="/dashboard/all-documents" className="action-card secondary">
-            <div className="card-icon-large">📁</div>
             <div className="card-info">
-              <h3>View All Documents</h3>
-              <p>Browse all orders, receipts & proformas</p>
+              <h3>All Documents (Unified View)</h3>
+              <p>Tabbed records overview of orders, receipts, and proformas</p>
             </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
         </div>
       </div>
 
-      {/* Single Document Section */}
+      {/* Single Document Generation */}
       <div className="dashboard-section">
         <div className="section-header">
-          <h2>📄 Single Document</h2>
-          <span className="section-description">Create individual documents separately</span>
+          <h2>Individual Documents</h2>
+          <span className="section-description">Generate specific forms and receipts</span>
         </div>
         <div className="action-cards-row">
           <Link to="/dashboard/booking-order" className="action-card secondary">
-            <div className="card-icon-large">📋</div>
             <div className="card-info">
               <h3>Create Booking Order</h3>
               <p>Individual booking order creation</p>
             </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
           <Link to="/dashboard/receipt" className="action-card secondary">
-            <div className="card-icon-large">🧾</div>
             <div className="card-info">
-              <h3>Create Receipt</h3>
-              <p>Generate payment receipt</p>
+              <h3>Create Payment Receipt</h3>
+              <p>Generate customer payment receipt</p>
             </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
           <Link to="/dashboard/reciept/proforma-invoice?company=Velox" className="action-card secondary">
-            <div className="card-icon-large">📄</div>
             <div className="card-info">
-              <h3>Create Velox Motors Proforma</h3>
-              <p>Create proforma invoice</p>
+              <h3>Velox Motors Proforma</h3>
+              <p>Generate Velox Motors proforma invoice</p>
             </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
           <Link to="/dashboard/reciept/proforma-invoice?company=Modi" className="action-card secondary">
-            <div className="card-icon-large">📄</div>
             <div className="card-info">
-              <h3>Create Modi Hyundai Proforma</h3>
-              <p>Create proforma invoice</p>
+              <h3>Modi Hyundai Proforma</h3>
+              <p>Generate Modi Hyundai proforma invoice</p>
             </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
         </div>
       </div>
 
-      {/* Management Section */}
+      {/* Administration & Relations */}
       <div className="dashboard-section">
         <div className="section-header">
-          <h2>⚙️ Management</h2>
-          <span className="section-description">Manage your inventory and relationships</span>
+          <h2>Administration</h2>
+          <span className="section-description">Manage partners and relation tracking</span>
         </div>
         <div className="action-cards-row">
           <Link to="/dashboard/showrooms" className="action-card success">
-            <div className="card-icon-large">🏢</div>
             <div className="card-info">
-              <h3>Showrooms</h3>
-              <p>Manage showroom locations</p>
+              <h3>Showroom Partners</h3>
+              <p>Manage partner showroom addresses and locations</p>
             </div>
-            <div className="card-arrow">→</div>
-          </Link>
-          <Link to="/dashboard/cars" className="action-card success">
-            <div className="card-icon-large">🚙</div>
-            <div className="card-info">
-              <h3>Vehicles</h3>
-              <p>Manage vehicle inventory</p>
-            </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
           <Link to="/dashboard/booking-relations" className="action-card success">
-            <div className="card-icon-large">🔗</div>
             <div className="card-info">
-              <h3>Booking Relations</h3>
-              <p>View booking relationships</p>
+              <h3>Document Relations</h3>
+              <p>View linked relationships between orders and invoices</p>
             </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
         </div>
       </div>
 
-      {/* Website Link */}
+      {/* Public Site Link */}
       <div className="dashboard-section">
         <div className="action-cards-row single">
           <Link to="/" className="action-card website">
-            <div className="card-icon-large">🌐</div>
             <div className="card-info">
-              <h3>Visit Website</h3>
-              <p>Go to main T-Permit website</p>
+              <h3>Visit Public Website</h3>
+              <p>Return to Gautam Motors public homepage</p>
             </div>
-            <div className="card-arrow">→</div>
+            <div className="card-arrow">&rarr;</div>
           </Link>
         </div>
       </div>

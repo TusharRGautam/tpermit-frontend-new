@@ -200,7 +200,7 @@ const ProformaInvoiceList = () => {
                     />
                 </div>
                 <div className="action-section">
-                    <button className="refresh-btn" onClick={fetchInvoices}>🔄 Refresh</button>
+                    <button className="refresh-btn" onClick={fetchInvoices}>Refresh</button>
                     <button className="create-quotation-btn" onClick={() => navigate('/dashboard/unified-entry')}>+ New Entry</button>
                 </div>
             </div>

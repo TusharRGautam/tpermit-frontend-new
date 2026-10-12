@@ -468,24 +468,30 @@ const ShowroomManagement: React.FC = () => {
                   onClick={() => startEditShowroom(showroom)}
                   title="Edit Showroom"
                 >
-                  ✏️
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
                 </button>
                 <button 
                   className="delete-button"
                   onClick={() => showroom.id && handleDeleteShowroom(showroom.id)}
                   title="Delete Showroom"
                 >
-                  🗑️
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
                 </button>
               </div>
             </div>
             
             <div className="showroom-details">
-              <p><strong>📍 Address:</strong> {showroom.showroom_address}</p>
-              <p><strong>🌏 State:</strong> {showroom.state}</p>
-              <p><strong>🏙️ City:</strong> {showroom.address_city}</p>
+              <p><strong>Address:</strong> {showroom.showroom_address}</p>
+              <p><strong>State:</strong> {showroom.state}</p>
+              <p><strong>City:</strong> {showroom.address_city}</p>
               {showroom.showroom_city && showroom.showroom_city !== showroom.address_city && (
-                <p><strong>🎯 Showroom City:</strong> {showroom.showroom_city}</p>
+                <p><strong>Showroom City:</strong> {showroom.showroom_city}</p>
               )}
             </div>
 
@@ -506,9 +512,9 @@ const ShowroomManagement: React.FC = () => {
                     <div key={contact.id} className="contact-item">
                       <div className="contact-info">
                         <p><strong>{contact.contact_person_name}</strong></p>
-                        {contact.designation && <p className="designation">💼 {contact.designation}</p>}
-                        {contact.phone_number && <p>📞 {contact.phone_number}</p>}
-                        {contact.email_address && <p>📧 {contact.email_address}</p>}
+                        {contact.designation && <p className="designation">Designation: {contact.designation}</p>}
+                        {contact.phone_number && <p>Phone: {contact.phone_number}</p>}
+                        {contact.email_address && <p>Email: {contact.email_address}</p>}
                       </div>
                       <div className="contact-actions">
                         <button 
@@ -516,14 +522,20 @@ const ShowroomManagement: React.FC = () => {
                           onClick={() => startEditContact(contact)}
                           title="Edit Contact"
                         >
-                          ✏️
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                          </svg>
                         </button>
                         <button 
                           className="delete-contact-button"
                           onClick={() => contact.id && handleDeleteContact(contact.id)}
                           title="Delete Contact"
                         >
-                          🗑️
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                          </svg>
                         </button>
                       </div>
                     </div>

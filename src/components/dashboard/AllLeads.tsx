@@ -409,11 +409,17 @@ const AllLeads: React.FC = () => {
       <div className="leads-page-header">
         <div className="leads-page-title">
           <div className="leads-title-row">
-            <span className="leads-title-icon">🎯</span>
+            <span className="leads-title-icon" style={{ display: 'inline-flex', alignItems: 'center' }}>
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <circle cx="12" cy="12" r="6"></circle>
+                <circle cx="12" cy="12" r="2"></circle>
+              </svg>
+            </span>
             <h1>Meta Campaign Leads</h1>
             <span className="live-dot" title="Live polling active" />
             <span className={`sync-status-label ${isSyncActive ? 'meta-active-badge' : 'meta-stopped-badge'}`}>
-              {isSyncActive ? '📘 Meta Auto-Sync Active' : '📕 Meta Sync Stopped'}
+              {isSyncActive ? 'Meta Auto-Sync Active' : 'Meta Sync Paused'}
             </span>
             {isSyncing && <span className="sync-status-label">Syncing...</span>}
           </div>
@@ -432,7 +438,7 @@ const AllLeads: React.FC = () => {
             {isSyncActive ? 'Sync: Running' : 'Sync: Stopped'}
           </button>
           <button className="btn-leads btn-leads-outline" onClick={() => fetchLeads(false)} disabled={isSyncing}>
-            ↻ Reload
+            Reload
           </button>
           <button 
             className="btn-leads btn-leads-primary btn-sync" 
@@ -440,10 +446,10 @@ const AllLeads: React.FC = () => {
             disabled={isSyncing || !isSyncActive}
             title={!isSyncActive ? "Historical sync is disabled when Sync is Stopped" : "Sync history from Meta ads"}
           >
-            {isSyncing ? '⟳ Syncing...' : '⟳ Sync History'}
+            {isSyncing ? 'Syncing...' : 'Sync History'}
           </button>
           <button className="btn-leads btn-leads-secondary" onClick={() => setIsSimulatorOpen(true)}>
-            ⚡ Simulate Lead
+            Simulate Lead
           </button>
         </div>
       </div>
@@ -462,28 +468,48 @@ const AllLeads: React.FC = () => {
       {/* Metric Cards */}
       <div className="leads-metrics-strip">
         <div className="metric-card metric-card-total">
-          <div className="metric-icon-wrap">📊</div>
+          <div className="metric-icon-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
           <div className="metric-body">
             <div className="metric-value">{leadsLoading ? '—' : totalCount}</div>
             <div className="metric-label">Total Leads</div>
           </div>
         </div>
         <div className="metric-card metric-card-new">
-          <div className="metric-icon-wrap">✨</div>
+          <div className="metric-icon-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 15 15"></polyline>
+            </svg>
+          </div>
           <div className="metric-body">
             <div className="metric-value">{leadsLoading ? '—' : newCount}</div>
             <div className="metric-label">New</div>
           </div>
         </div>
         <div className="metric-card metric-card-hot">
-          <div className="metric-icon-wrap">🔥</div>
+          <div className="metric-icon-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </div>
           <div className="metric-body">
             <div className="metric-value">{leadsLoading ? '—' : hotCount}</div>
             <div className="metric-label">Hot Leads</div>
           </div>
         </div>
         <div className="metric-card metric-card-converted">
-          <div className="metric-icon-wrap">🏆</div>
+          <div className="metric-icon-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+          </div>
           <div className="metric-body">
             <div className="metric-value">{leadsLoading ? '—' : convertedCount}</div>
             <div className="metric-label">Converted</div>
@@ -495,7 +521,15 @@ const AllLeads: React.FC = () => {
       <div className="sheets-sync-card">
         <div className="sheets-card-header">
           <div className="sheets-card-title-group">
-            <div className="sheets-icon-wrap">📊</div>
+            <div className="sheets-icon-wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="3" y1="9" x2="21" y2="9"></line>
+                <line x1="3" y1="15" x2="21" y2="15"></line>
+                <line x1="9" y1="3" x2="9" y2="21"></line>
+                <line x1="15" y1="3" x2="15" y2="21"></line>
+              </svg>
+            </div>
             <div>
               <h3>Google Sheets Auto-Sync</h3>
               <p className="sheets-card-desc">Automatically import leads from a public Google Spreadsheet every 30 seconds.</p>
@@ -582,7 +616,7 @@ const AllLeads: React.FC = () => {
         <input
           type="search"
           className="filter-search"
-          placeholder="🔍  Search name, phone, email, vehicle..."
+          placeholder="Search name, phone, email, vehicle..."
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
         />
@@ -602,7 +636,7 @@ const AllLeads: React.FC = () => {
         </select>
         <label className="filter-checkbox-label">
           <input type="checkbox" checked={showHotOnly} onChange={e => setShowHotOnly(e.target.checked)} />
-          🔥 Hot Only
+          Hot Leads Only
         </label>
         <span className="filter-count-badge">{filteredLeads.length} of {totalCount} shown</span>
       </div>
@@ -684,11 +718,20 @@ const AllLeads: React.FC = () => {
                       <td className="col-contact">
                         <div className="contact-cell">
                           <a href={`tel:${lead.mobile_number}`} className="contact-link phone-pill">
-                            <span className="phone-icon">📞</span> {lead.mobile_number}
+                            <span className="phone-icon" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                              </svg>
+                            </span> {lead.mobile_number}
                           </a>
                           {lead.email_address && (
                             <a href={`mailto:${lead.email_address}`} className="contact-email">
-                              <span className="email-icon">✉️</span> {lead.email_address}
+                              <span className="email-icon" style={{ display: 'inline-flex', alignItems: 'center' }}>
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                  <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                              </span> {lead.email_address}
                             </a>
                           )}
                         </div>
@@ -701,7 +744,7 @@ const AllLeads: React.FC = () => {
                             {lead.campaign_name || <span className="muted">—</span>}
                           </span>
                           <span className={`cell-source-badge ${lead.lead_source === 'Google Sheets' ? 'source-sheets' : lead.lead_source === 'Facebook Meta' ? 'source-meta' : 'source-direct'}`}>
-                            {lead.lead_source === 'Google Sheets' ? '📊 Sheets' : lead.lead_source === 'Facebook Meta' ? '📘 Meta' : lead.lead_source || 'Direct'}
+                            {lead.lead_source === 'Google Sheets' ? 'Sheets' : lead.lead_source === 'Facebook Meta' ? 'Meta' : lead.lead_source || 'Direct'}
                           </span>
                         </div>
                       </td>

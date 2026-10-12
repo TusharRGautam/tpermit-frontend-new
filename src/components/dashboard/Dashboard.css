@@ -445,7 +445,7 @@ input[type="number"] {
   border-color: #667eea;
 }
 
-.step-header {
+.flow-step .step-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: 0.5rem 0.7rem;
@@ -474,7 +474,7 @@ input[type="number"] {
   line-height: 1.2;
 }
 
-.step-content {
+.flow-step .step-content {
   padding: 0.7rem 0.5rem;
   min-height: 120px;
   display: flex;
@@ -4408,13 +4408,13 @@ input[readonly] {
 
 /* Enhanced Modal Width */
 .quotation-modal {
-  max-width: 90vw !important;
-  width: 90vw !important;
+  max-width: 580px !important;
+  width: 92% !important;
 }
 
 .quotation-modal.quotation-details-modal {
-  max-width: 1400px;
-  width: 90vw;
+  max-width: 820px !important;
+  width: 94% !important;
 }
 
 /* Responsive Design for Quotation Page */
@@ -4557,9 +4557,9 @@ input[readonly] {
 }
 
 .quotation-details-modal {
-  max-width: 95vw;
+  max-width: 820px;
   max-height: 95vh;
-  width: 1400px;
+  width: 94%;
 }
 
 .quotation-modal-header {
@@ -4919,8 +4919,8 @@ input[readonly] {
 /* Desktop - ensure proper width and 2-column layout */
 @media (min-width: 901px) {
   .quotation-modal.quotation-details-modal {
-    width: 1400px;
-    max-width: 90vw;
+    width: 820px;
+    max-width: 94vw;
   }
 
   .form-grid,
