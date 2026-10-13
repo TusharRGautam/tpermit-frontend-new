@@ -60,6 +60,7 @@ export const VeloxReceiptCreatePage: React.FC = () => {
   const [saving, setSaving] = useState<boolean>(false);
   const [downloading, setDownloading] = useState<boolean>(false);
   const [successMsg, setSuccessMsg] = useState<string>('');
+  const [mobileTab, setMobileTab] = useState<'form' | 'preview'>('form');
 
   // Total amount computed from items
   const totalAmount = items.reduce((sum, item) => sum + (Number(item.amount) || 0), 0);
@@ -353,10 +354,28 @@ export const VeloxReceiptCreatePage: React.FC = () => {
         </div>
       )}
 
+      {/* Mobile Tab Switcher */}
+      <div className="velox-mobile-view-tabs">
+        <button
+          type="button"
+          className={`velox-tab-btn ${mobileTab === 'form' ? 'active' : ''}`}
+          onClick={() => setMobileTab('form')}
+        >
+          <span>📝</span> Edit Form
+        </button>
+        <button
+          type="button"
+          className={`velox-tab-btn ${mobileTab === 'preview' ? 'active' : ''}`}
+          onClick={() => setMobileTab('preview')}
+        >
+          <span>📄</span> Live Paper & Stamp
+        </button>
+      </div>
+
       {/* Main Grid: Form on Left (1.1fr), Live Paper on Right (0.9fr) */}
       <div className="velox-create-grid">
         {/* LEFT COLUMN: BUILDER FORM */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div className={`velox-form-col ${mobileTab === 'preview' ? 'mobile-hidden' : ''}`} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           
           {/* Header Metadata Section */}
           <div className="velox-card">
@@ -384,6 +403,7 @@ export const VeloxReceiptCreatePage: React.FC = () => {
                 <label>Receipt Date *</label>
                 <input
                   type="text"
+                  inputMode="numeric"
                   className="velox-input"
                   value={receiptDate}
                   onChange={(e) => setReceiptDate(e.target.value)}
@@ -396,6 +416,7 @@ export const VeloxReceiptCreatePage: React.FC = () => {
                 <label>Customer ID *</label>
                 <input
                   type="text"
+                  inputMode="numeric"
                   className="velox-input"
                   value={customerId}
                   onChange={(e) => setCustomerId(e.target.value)}
@@ -562,116 +583,236 @@ export const VeloxReceiptCreatePage: React.FC = () => {
               </button>
             </div>
 
-            <div style={{ overflowX: 'auto' }}>
-              <table className="velox-items-table">
-                <thead>
-                  <tr>
-                    <th style={{ width: '38px', textAlign: 'center' }}>Srl.</th>
-                    <th style={{ minWidth: '95px' }}>Mode</th>
-                    <th style={{ minWidth: '95px' }}>DD/CC/CHQ No.</th>
-                    <th style={{ minWidth: '95px' }}>Date</th>
-                    <th style={{ minWidth: '80px' }}>Favouring</th>
-                    <th style={{ minWidth: '80px' }}>Drawn On</th>
-                    <th style={{ minWidth: '100px' }}>Deposit Bank</th>
-                    <th style={{ minWidth: '100px' }}>Amount (₹)</th>
-                    <th style={{ width: '35px', textAlign: 'center' }}></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {items.map((item, index) => (
-                    <tr key={item.id}>
-                      <td style={{ textAlign: 'center', fontWeight: 700 }}>{item.srl}</td>
-                      <td>
-                        <select
-                          className="velox-select"
-                          style={{ padding: '0.25rem 0.35rem', fontSize: '0.78rem' }}
-                          value={item.mode}
-                          onChange={(e) => updateItemRow(index, 'mode', e.target.value)}
-                        >
-                          <option value="CASH">CASH</option>
-                          <option value="CHEQUE">CHEQUE</option>
-                          <option value="DD">DD</option>
-                          <option value="NEFT">NEFT</option>
-                          <option value="RTGS">RTGS</option>
-                          <option value="UPI">UPI</option>
-                          <option value="CARD">CARD</option>
-                        </select>
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={item.dd_chq_no}
-                          onChange={(e) => updateItemRow(index, 'dd_chq_no', e.target.value)}
-                          placeholder="."
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={item.date}
-                          onChange={(e) => updateItemRow(index, 'date', e.target.value)}
-                          placeholder="DD/MM/YYYY"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={item.favouring}
-                          onChange={(e) => updateItemRow(index, 'favouring', e.target.value)}
-                          placeholder="."
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={item.drawn_on}
-                          onChange={(e) => updateItemRow(index, 'drawn_on', e.target.value)}
-                          placeholder="."
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={item.deposit_bank}
-                          onChange={(e) => updateItemRow(index, 'deposit_bank', e.target.value)}
-                          placeholder="Sbi Bank"
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="number"
-                          value={item.amount || ''}
-                          onChange={(e) => updateItemRow(index, 'amount', e.target.value)}
-                          placeholder="0.00"
-                          style={{ fontWeight: 700, textAlign: 'right' }}
-                        />
-                      </td>
-                      <td style={{ textAlign: 'center' }}>
-                        {items.length > 1 && (
-                          <button
-                            type="button"
-                            onClick={() => removeItemRow(index)}
-                            style={{
-                              background: '#fee2e2',
-                              border: 'none',
-                              color: '#ef4444',
-                              borderRadius: '4px',
-                              width: '24px',
-                              height: '24px',
-                              cursor: 'pointer',
-                              fontWeight: 'bold',
-                              lineHeight: '1'
-                            }}
-                            title="Remove Row"
-                          >
-                            ×
-                          </button>
-                        )}
-                      </td>
+            {/* Desktop Table View */}
+            <div className="velox-items-desktop">
+              <div style={{ overflowX: 'auto' }}>
+                <table className="velox-items-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '38px', textAlign: 'center' }}>Srl.</th>
+                      <th style={{ minWidth: '95px' }}>Mode</th>
+                      <th style={{ minWidth: '95px' }}>DD/CC/CHQ No.</th>
+                      <th style={{ minWidth: '95px' }}>Date</th>
+                      <th style={{ minWidth: '80px' }}>Favouring</th>
+                      <th style={{ minWidth: '80px' }}>Drawn On</th>
+                      <th style={{ minWidth: '100px' }}>Deposit Bank</th>
+                      <th style={{ minWidth: '100px' }}>Amount (₹)</th>
+                      <th style={{ width: '35px', textAlign: 'center' }}></th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {items.map((item, index) => (
+                      <tr key={item.id}>
+                        <td style={{ textAlign: 'center', fontWeight: 700 }}>{item.srl}</td>
+                        <td>
+                          <select
+                            className="velox-select"
+                            style={{ padding: '0.25rem 0.35rem', fontSize: '0.78rem' }}
+                            value={item.mode}
+                            onChange={(e) => updateItemRow(index, 'mode', e.target.value)}
+                          >
+                            <option value="CASH">CASH</option>
+                            <option value="CHEQUE">CHEQUE</option>
+                            <option value="DD">DD</option>
+                            <option value="NEFT">NEFT</option>
+                            <option value="RTGS">RTGS</option>
+                            <option value="UPI">UPI</option>
+                            <option value="CARD">CARD</option>
+                          </select>
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            value={item.dd_chq_no}
+                            onChange={(e) => updateItemRow(index, 'dd_chq_no', e.target.value)}
+                            placeholder="."
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            value={item.date}
+                            onChange={(e) => updateItemRow(index, 'date', e.target.value)}
+                            placeholder="DD/MM/YYYY"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            value={item.favouring}
+                            onChange={(e) => updateItemRow(index, 'favouring', e.target.value)}
+                            placeholder="."
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            value={item.drawn_on}
+                            onChange={(e) => updateItemRow(index, 'drawn_on', e.target.value)}
+                            placeholder="."
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="text"
+                            value={item.deposit_bank}
+                            onChange={(e) => updateItemRow(index, 'deposit_bank', e.target.value)}
+                            placeholder="Sbi Bank"
+                          />
+                        </td>
+                        <td>
+                          <input
+                            type="number"
+                            inputMode="decimal"
+                            step="any"
+                            value={item.amount || ''}
+                            onChange={(e) => updateItemRow(index, 'amount', e.target.value)}
+                            placeholder="0.00"
+                            style={{ fontWeight: 700, textAlign: 'right' }}
+                          />
+                        </td>
+                        <td style={{ textAlign: 'center' }}>
+                          {items.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removeItemRow(index)}
+                              style={{
+                                background: '#fee2e2',
+                                border: 'none',
+                                color: '#ef4444',
+                                borderRadius: '4px',
+                                width: '24px',
+                                height: '24px',
+                                cursor: 'pointer',
+                                fontWeight: 'bold',
+                                lineHeight: '1'
+                              }}
+                              title="Remove Row"
+                            >
+                              ×
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile Touch Cards View */}
+            <div className="velox-items-mobile">
+              {items.map((item, index) => (
+                <div key={item.id} className="velox-mobile-item-card">
+                  <div className="velox-mobile-item-card-header">
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                      <span className="velox-item-badge">#{item.srl}</span>
+                      <span style={{ fontWeight: 700, fontSize: '0.82rem', color: '#1e293b' }}>
+                        Payment Line #{item.srl}
+                      </span>
+                    </div>
+                    {items.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => removeItemRow(index)}
+                        className="velox-btn-remove-mobile"
+                        title="Delete entry"
+                      >
+                        🗑️ Delete
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="velox-mobile-card-grid">
+                    <div className="velox-field">
+                      <label>Payment Mode *</label>
+                      <select
+                        className="velox-select"
+                        value={item.mode}
+                        onChange={(e) => updateItemRow(index, 'mode', e.target.value)}
+                      >
+                        <option value="CASH">CASH</option>
+                        <option value="CHEQUE">CHEQUE</option>
+                        <option value="DD">DD</option>
+                        <option value="NEFT">NEFT</option>
+                        <option value="RTGS">RTGS</option>
+                        <option value="UPI">UPI</option>
+                        <option value="CARD">CARD</option>
+                      </select>
+                    </div>
+
+                    <div className="velox-field">
+                      <label>Amount (₹) *</label>
+                      <input
+                        type="number"
+                        inputMode="decimal"
+                        step="any"
+                        className="velox-input"
+                        value={item.amount || ''}
+                        onChange={(e) => updateItemRow(index, 'amount', e.target.value)}
+                        placeholder="0.00"
+                        style={{ fontWeight: 800, color: '#0f172a' }}
+                      />
+                    </div>
+
+                    <div className="velox-field">
+                      <label>Payment Date</label>
+                      <input
+                        type="text"
+                        inputMode="numeric"
+                        className="velox-input"
+                        value={item.date}
+                        onChange={(e) => updateItemRow(index, 'date', e.target.value)}
+                        placeholder="DD/MM/YYYY"
+                      />
+                    </div>
+
+                    <div className="velox-field">
+                      <label>DD / CC / CHQ No.</label>
+                      <input
+                        type="text"
+                        className="velox-input"
+                        value={item.dd_chq_no}
+                        onChange={(e) => updateItemRow(index, 'dd_chq_no', e.target.value)}
+                        placeholder="."
+                      />
+                    </div>
+
+                    <div className="velox-field">
+                      <label>Deposit Bank Name</label>
+                      <input
+                        type="text"
+                        className="velox-input"
+                        value={item.deposit_bank}
+                        onChange={(e) => updateItemRow(index, 'deposit_bank', e.target.value)}
+                        placeholder="e.g. Sbi Bank"
+                      />
+                    </div>
+
+                    <div className="velox-field">
+                      <label>Drawn On Bank</label>
+                      <input
+                        type="text"
+                        className="velox-input"
+                        value={item.drawn_on}
+                        onChange={(e) => updateItemRow(index, 'drawn_on', e.target.value)}
+                        placeholder="."
+                      />
+                    </div>
+
+                    <div className="velox-field velox-field-full">
+                      <label>Favouring (Optional)</label>
+                      <input
+                        type="text"
+                        className="velox-input"
+                        value={item.favouring}
+                        onChange={(e) => updateItemRow(index, 'favouring', e.target.value)}
+                        placeholder="."
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
             {/* Total Strip */}
@@ -693,16 +834,15 @@ export const VeloxReceiptCreatePage: React.FC = () => {
 
             {/* Amount In Words */}
             <div className="velox-field" style={{ marginTop: '0.75rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <label>Amount in words</label>
-                <label style={{ fontSize: '0.68rem', fontWeight: 500, color: '#6366f1', cursor: 'pointer' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                <label style={{ margin: 0 }}>Amount in words</label>
+                <label className="velox-toggle-pill">
                   <input
                     type="checkbox"
                     checked={manualWordsOverride}
                     onChange={(e) => setManualWordsOverride(e.target.checked)}
-                    style={{ marginRight: '4px', verticalAlign: 'middle' }}
                   />
-                  Manual Edit
+                  <span>Manual Edit</span>
                 </label>
               </div>
               <input
@@ -738,11 +878,19 @@ export const VeloxReceiptCreatePage: React.FC = () => {
             >
               {downloading ? 'Generating...' : '📥 Download PDF'}
             </button>
+            <button
+              type="button"
+              onClick={() => setMobileTab('preview')}
+              className="velox-btn-secondary"
+              style={{ padding: '0.65rem 1rem', background: '#ede9fe', borderColor: '#c7d2fe', color: '#4f46e5', fontWeight: 700 }}
+            >
+              📄 View Live Paper Preview →
+            </button>
           </div>
         </div>
 
         {/* RIGHT COLUMN: 1:1 AUTHENTIC LIVE PAPER PREVIEW */}
-        <div className="velox-preview-sticky-col">
+        <div className={`velox-preview-sticky-col ${mobileTab === 'form' ? 'mobile-hidden' : ''}`}>
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -969,8 +1117,29 @@ export const VeloxReceiptCreatePage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Quick Action on Mobile preview */}
+        <div className="velox-preview-quick-actions">
+          <button
+            type="button"
+            onClick={() => setMobileTab('form')}
+            className="velox-btn-secondary"
+            style={{ flex: 1, justifyContent: 'center', padding: '0.65rem' }}
+          >
+            ✏️ Back to Edit Form
+          </button>
+          <button
+            type="button"
+            onClick={handleDownloadPDF}
+            disabled={downloading}
+            className="velox-btn-primary"
+            style={{ flex: 1, justifyContent: 'center', padding: '0.65rem' }}
+          >
+            {downloading ? 'Generating...' : '📥 Download PDF'}
+          </button>
+        </div>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

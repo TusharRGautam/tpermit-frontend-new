@@ -300,14 +300,20 @@
   justify-content: center;
   gap: 0.4rem;
   background: #ede9fe;
-  color: #6366f1;
+  color: #4f46e5;
   font-size: 0.72rem;
   font-weight: 700;
-  padding: 0.45rem 0.75rem;
+  padding: 0.45rem 0.65rem;
   border-radius: 6px;
   margin-bottom: 0.6rem;
   border: 1px solid #ddd6fe;
   text-align: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  white-space: normal;
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 @media (max-width: 1100px) {
@@ -476,19 +482,329 @@
 .velox-form-actions-bottom {
   display: flex;
   gap: 0.75rem;
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   margin-bottom: 2rem;
 }
 
-@media (max-width: 640px) {
-  .velox-form-actions-bottom {
+/* Mobile View Tabs (Only on screens <= 1100px) */
+.velox-mobile-view-tabs {
+  display: none;
+}
+
+/* Payment Items Dual-View: Desktop Table vs Mobile Cards */
+.velox-items-desktop {
+  display: block;
+}
+
+.velox-items-mobile {
+  display: none;
+}
+
+.velox-mobile-item-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.85rem;
+  margin-bottom: 0.65rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.velox-mobile-item-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.65rem;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.velox-item-badge {
+  background: #4f46e5;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+}
+
+.velox-btn-remove-mobile {
+  background: #fee2e2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
+  padding: 0.25rem 0.55rem;
+  border-radius: 5px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.15s ease;
+}
+
+.velox-btn-remove-mobile:hover {
+  background: #fca5a5;
+}
+
+.velox-mobile-card-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.velox-field-full {
+  grid-column: 1 / -1 !important;
+}
+
+/* Custom select styling */
+.velox-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2364748b'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 0.95rem;
+  padding-right: 2.2rem;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+/* Removal of chrome spinners on number inputs */
+.velox-input[type="number"]::-webkit-inner-spin-button,
+.velox-input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.velox-input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* Checkbox Toggle Pill */
+.velox-toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #4f46e5;
+  cursor: pointer;
+  background: #ede9fe;
+  padding: 4px 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd6fe;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.velox-toggle-pill:hover {
+  background: #e0e7ff;
+}
+
+.velox-toggle-pill input[type="checkbox"] {
+  width: 15px !important;
+  height: 15px !important;
+  min-height: 15px !important;
+  max-height: 15px !important;
+  min-width: 15px !important;
+  max-width: 15px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  accent-color: #4f46e5 !important;
+  cursor: pointer !important;
+}
+
+/* Quick preview action bar */
+.velox-preview-quick-actions {
+  margin-top: 0.85rem;
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+/* Search Box container */
+.velox-search-box {
+  position: relative;
+  min-width: 280px;
+  flex: 1;
+  max-width: 420px;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 990px) {
+  .velox-create-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .velox-mobile-view-tabs {
+    display: flex;
+    background: #e2e8f0;
+    padding: 4px;
+    border-radius: 8px;
+    gap: 4px;
+    margin-bottom: 0.85rem;
+  }
+
+  .velox-tab-btn {
+    flex: 1;
+    padding: 0.65rem 0.75rem;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-size: 0.84rem;
+    font-weight: 700;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+
+  .velox-tab-btn.active {
+    background: #ffffff;
+    color: #4f46e5;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .velox-form-col.mobile-hidden,
+  .velox-preview-sticky-col.mobile-hidden {
+    display: none !important;
+  }
+
+  .velox-mobile-scroll-hint {
+    display: flex;
+  }
+
+  /* Automatically switch from table to mobile cards on tablets and phones */
+  .velox-items-desktop {
+    display: none !important;
+  }
+
+  .velox-items-mobile {
+    display: flex;
     flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .velox-container {
+    gap: 0.75rem;
+  }
+
+  .velox-header-bar {
+    padding: 0.75rem 0.85rem;
     gap: 0.6rem;
   }
+
+  .velox-header-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+  }
+
+  .velox-header-actions .velox-btn-primary,
+  .velox-header-actions .velox-btn-secondary {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.76rem;
+    padding: 0.5rem 0.4rem;
+    min-height: 40px;
+  }
+
+  .velox-card {
+    padding: 1rem 0.85rem !important;
+    border-radius: 8px;
+  }
+
+  .velox-section-title {
+    font-size: 0.88rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  /* CRITICAL FOR MOBILE: 16px font-size prevents iOS Safari auto-zoom! */
+  .velox-input,
+  .velox-select,
+  .velox-textarea {
+    font-size: 16px !important;
+    padding: 0.6rem 0.75rem !important;
+    min-height: 44px !important;
+    border-radius: 7px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+
+  .velox-textarea {
+    min-height: 72px !important;
+  }
+
+  .velox-field label {
+    font-size: 0.74rem;
+    margin-bottom: 4px;
+    letter-spacing: 0.2px;
+  }
+
+  .velox-form-grid,
+  .velox-form-grid.cols-3 {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem;
+  }
+
+  .velox-form-actions-bottom {
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
   .velox-form-actions-bottom button {
     width: 100%;
     justify-content: center;
+    padding: 0.75rem !important;
+    min-height: 44px;
+    font-size: 0.92rem !important;
+  }
+
+  .velox-preview-quick-actions {
+    flex-direction: column !important;
+  }
+
+  .velox-preview-quick-actions button {
+    width: 100% !important;
+    min-height: 44px;
+    font-size: 0.9rem !important;
+  }
+
+  .velox-search-box {
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
   }
 }
+
+/* Mobile Phones (<= 560px) */
+@media (max-width: 560px) {
+  .velox-mobile-card-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.65rem;
+  }
+
+  .velox-mobile-card-grid .velox-field {
+    grid-column: 1 / -1 !important;
+  }
+
+  .velox-header-bar h1 {
+    font-size: 1.05rem !important;
+  }
+
+  .velox-mobile-scroll-hint {
+    font-size: 0.7rem;
+    padding: 0.45rem 0.5rem;
+  }
+}
+
 
 

@@ -159,14 +159,14 @@ const VeloxReceiptsPage: React.FC = () => {
       {/* Search & Records Table */}
       <div className="velox-card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.65rem' }}>
-          <div style={{ position: 'relative', minWidth: '280px', flex: '1', maxWidth: '420px' }}>
+          <div className="velox-search-box">
             <input
               type="text"
               placeholder="Search by receipt no, customer name, financer..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="velox-input"
-              style={{ paddingLeft: '2rem' }}
+              style={{ paddingLeft: '2.1rem' }}
             />
             <span style={{ position: 'absolute', left: '0.65rem', top: '50%', transform: 'translateY(-50%)', color: '#94a3b8' }}>
               🔍
