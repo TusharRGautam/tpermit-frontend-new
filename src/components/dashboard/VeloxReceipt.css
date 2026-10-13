@@ -1,0 +1,494 @@
+/* Velox Receipt Management Styles */
+
+.velox-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  color: #1e293b;
+}
+
+.velox-header-bar {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 0.9rem 1.25rem;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.velox-header-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.velox-header-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  background: rgba(99, 102, 241, 0.1);
+  color: #4f46e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.velox-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .velox-header-bar {
+    padding: 0.75rem 0.85rem;
+  }
+  .velox-header-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.45rem;
+  }
+  .velox-header-actions .velox-btn-primary,
+  .velox-header-actions .velox-btn-secondary {
+    width: 100%;
+    justify-content: center;
+    font-size: 0.74rem;
+    padding: 0.45rem 0.35rem;
+    text-align: center;
+  }
+}
+
+.velox-btn-primary {
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  color: #ffffff !important;
+  border: none;
+  padding: 0.45rem 0.95rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.25);
+}
+
+.velox-btn-primary:hover {
+  background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+  transform: translateY(-1px);
+}
+
+.velox-btn-secondary {
+  background: #f8fafc;
+  color: #475569 !important;
+  border: 1px solid #cbd5e1;
+  padding: 0.45rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.velox-btn-secondary:hover {
+  background: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+/* Stats Strip */
+.velox-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 0.75rem;
+}
+
+.velox-stat-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.velox-stat-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.velox-stat-val {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.1;
+}
+
+.velox-stat-lbl {
+  font-size: 0.7rem;
+  color: #64748b;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-top: 2px;
+}
+
+/* Form & Editor Layout */
+.velox-create-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.25rem;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .velox-create-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.velox-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.velox-section-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.85rem 0;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.velox-form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+}
+
+.velox-form-grid.cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.velox-form-grid.cols-1 {
+  grid-template-columns: 1fr;
+}
+
+@media (max-width: 640px) {
+  .velox-form-grid,
+  .velox-form-grid.cols-3 {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.velox-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.velox-field label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.velox-input,
+.velox-select,
+.velox-textarea {
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.84rem;
+  color: #0f172a;
+  background: #ffffff;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.velox-input:focus,
+.velox-select:focus,
+.velox-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+.velox-textarea {
+  resize: vertical;
+  min-height: 54px;
+}
+
+/* Items Table in Form */
+.velox-items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+}
+
+.velox-items-table th {
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 700;
+  text-align: left;
+  padding: 0.45rem 0.5rem;
+  border: 1px solid #e2e8f0;
+}
+
+.velox-items-table td {
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #e2e8f0;
+  vertical-align: middle;
+}
+
+.velox-items-table input {
+  width: 100%;
+  padding: 0.3rem 0.4rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 0.78rem;
+  box-sizing: border-box;
+}
+
+/* Live Document Paper Preview */
+.velox-preview-sticky-col {
+  position: sticky;
+  top: 1rem;
+}
+
+@media (max-width: 1100px) {
+  .velox-preview-sticky-col {
+    position: static;
+  }
+}
+
+.velox-mobile-scroll-hint {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: #ede9fe;
+  color: #6366f1;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  margin-bottom: 0.6rem;
+  border: 1px solid #ddd6fe;
+  text-align: center;
+}
+
+@media (max-width: 1100px) {
+  .velox-mobile-scroll-hint {
+    display: flex;
+  }
+}
+
+.velox-paper-scroll-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 8px;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+}
+
+.velox-paper-preview {
+  background: #ffffff;
+  padding: 1.4rem 1.6rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #111827;
+  min-height: 480px;
+  min-width: 660px;
+  position: relative;
+  box-sizing: border-box;
+}
+
+.velox-paper-header {
+  text-align: center;
+  position: relative;
+  margin-bottom: 1.4rem;
+}
+
+.velox-paper-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin: 0;
+  color: #0f172a;
+}
+
+.velox-paper-rel {
+  position: absolute;
+  right: 0;
+  top: 0.3rem;
+  font-size: 0.75rem;
+  color: #475569;
+}
+
+.velox-paper-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1.25rem;
+  font-size: 0.82rem;
+  margin-bottom: 1.25rem;
+  line-height: 1.45;
+}
+
+.velox-meta-row {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 0.3rem;
+}
+
+.velox-meta-label {
+  font-weight: 700;
+  width: 105px;
+  flex-shrink: 0;
+  color: #1e293b;
+}
+
+.velox-meta-colon {
+  margin-right: 0.45rem;
+  font-weight: 700;
+}
+
+.velox-meta-val {
+  color: #0f172a;
+  word-break: break-word;
+}
+
+.velox-paper-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+  margin: 1rem 0;
+}
+
+.velox-paper-table th {
+  border-top: 1px solid #0f172a;
+  border-bottom: 1px solid #0f172a;
+  padding: 0.4rem 0.35rem;
+  font-weight: 700;
+  text-align: left;
+  color: #0f172a;
+}
+
+.velox-paper-table td {
+  padding: 0.4rem 0.35rem;
+  color: #0f172a;
+}
+
+.velox-paper-table .border-bottom {
+  border-bottom: 1px solid #0f172a;
+}
+
+.velox-sign-block {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.velox-sign-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: relative;
+  width: 220px;
+}
+
+.velox-sign-header {
+  font-weight: 800;
+  font-size: 0.84rem;
+  color: #0f172a;
+  letter-spacing: 0.2px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.velox-stamp-sign-wrap {
+  position: relative;
+  width: 220px;
+  height: 85px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 2px;
+  box-sizing: border-box;
+}
+
+.velox-stamp-sign-overlay {
+  position: absolute;
+  top: -22px;
+  right: -10px;
+  width: 155px;
+  height: auto;
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: multiply;
+}
+
+.velox-signatory-text {
+  font-size: 0.78rem;
+  color: #1e293b;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* Bottom Form Actions */
+.velox-form-actions-bottom {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 640px) {
+  .velox-form-actions-bottom {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .velox-form-actions-bottom button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+

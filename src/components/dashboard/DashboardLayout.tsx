@@ -20,6 +20,8 @@ import AllLeads from './AllLeads';
 import BookingOrdersDownloadPage from './BookingOrdersDownloadPage';
 import ReceiptsDownloadPage from './ReceiptsDownloadPage';
 import ProformaInvoicesDownloadPage from './ProformaInvoicesDownloadPage';
+import VeloxReceiptsPage from './VeloxReceiptsPage';
+import VeloxReceiptCreatePage from './VeloxReceiptCreatePage';
 import apiService from '../../services/apiService';
 
 interface DashboardLayoutProps {
@@ -208,6 +210,19 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
               </svg>
               <span>All Documents</span>
             </Link>
+
+            <Link 
+              to="/dashboard/velox-receipts" 
+              className={`sidebar-nav-item ${isActive('/dashboard/velox-receipts')}`}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                <line x1="2" y1="10" x2="22" y2="10"></line>
+                <line x1="7" y1="15" x2="11" y2="15"></line>
+              </svg>
+              <span>Velox Bank Receipts</span>
+              <span className="sidebar-pill" style={{ background: '#ede9fe', color: '#6366f1', fontWeight: 700 }}>VELOX</span>
+            </Link>
           </div>
 
           <div className="nav-group">
@@ -255,6 +270,18 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
                 <polyline points="14 2 14 8 20 8"></polyline>
               </svg>
               <span>New Proforma Invoice</span>
+            </Link>
+
+            <Link 
+              to="/dashboard/velox-receipt" 
+              className={`sidebar-nav-item ${location.pathname === '/dashboard/velox-receipt' ? 'active' : ''}`}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <line x1="12" y1="11" x2="12" y2="17"></line>
+                <line x1="9" y1="14" x2="15" y2="14"></line>
+              </svg>
+              <span>New Velox Receipt</span>
             </Link>
           </div>
 
@@ -336,6 +363,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
             <Link to="/dashboard/proforma-invoices" className="nav-action-pill">
               Proforma PDF
             </Link>
+            <Link to="/dashboard/velox-receipts" className="nav-action-pill" style={{ background: '#ede9fe', color: '#6366f1', borderColor: '#c7d2fe', fontWeight: 600 }}>
+              Velox PDF
+            </Link>
             <Link to="/dashboard/leads" className="nav-action-pill highlight">
               Leads CRM
             </Link>
@@ -369,6 +399,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
             <Route path="/showrooms" element={<ShowroomManagement />} />
             <Route path="/booking-relations" element={<BookingRelations />} />
             <Route path="/reciept/proforma-invoice" element={<ProformaInvoice />} />
+            <Route path="/velox-receipts" element={<VeloxReceiptsPage />} />
+            <Route path="/velox-receipt" element={<VeloxReceiptCreatePage />} />
+            <Route path="/velox-receipt/edit/:id" element={<VeloxReceiptCreatePage />} />
             <Route path="/leads" element={<AllLeads />} />
           </Routes>
         </main>
